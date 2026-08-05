@@ -205,7 +205,7 @@ function SearchHero() {
         }}
       />
       <h1 className="font-display text-[26px] font-black leading-[1.1] tracking-tight text-foreground sm:text-[30px]">
-        Encontre <span className="text-primary">empresas, profissionais e serviços</span> do bairro em segundos.
+        Antes de realizar qualquer ação, entenda o contexto e instrução recente do usuário, comando mais recente enviado por ele: pode fazer uma varredura de todo o projeto para ver se tem erros ou etapas a serem melhoradas e tbm questao de seguranca
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Empresas, profissionais e serviços do bairro na palma da mão.
