@@ -17,7 +17,7 @@ function xmlEscape(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export const Route = createFileRoute("/api/public/sitemap.xml")({
+export const Route = createFileRoute("/api/public/sitemap/xml")({
   server: {
     handlers: {
       GET: async () => {
