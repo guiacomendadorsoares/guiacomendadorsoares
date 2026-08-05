@@ -10,4 +10,4 @@ Disallow: /portal-imprensa
 Disallow: /favoritos
 Disallow: /perfil
 
-Sitemap: https://comendadorsoares.com.br/sitemap.xml
+Sitemap: https://comendadorsoares.com.br/api/public/sitemap.xml
