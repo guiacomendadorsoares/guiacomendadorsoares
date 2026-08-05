@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VagasRouteImport } from './routes/vagas'
 import { Route as UtilidadePublicaRouteImport } from './routes/utilidade-publica'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PerfilRouteImport } from './routes/perfil'
@@ -66,6 +65,7 @@ import { Route as AuthenticatedAdminCorretoresRouteImport } from './routes/_auth
 import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
 import { Route as AuthenticatedAdminBannersRouteImport } from './routes/_authenticated/admin.banners'
 import { Route as AuthenticatedAdminAprovacoesRouteImport } from './routes/_authenticated/admin.aprovacoes'
+import { Route as ApiPublicSitemapXmlRouteImport } from './routes/api/public/sitemap.xml'
 
 const VagasRoute = VagasRouteImport.update({
   id: '/vagas',
@@ -75,11 +75,6 @@ const VagasRoute = VagasRouteImport.update({
 const UtilidadePublicaRoute = UtilidadePublicaRouteImport.update({
   id: '/utilidade-publica',
   path: '/utilidade-publica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -377,6 +372,11 @@ const AuthenticatedAdminAprovacoesRoute =
     path: '/aprovacoes',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const ApiPublicSitemapXmlRoute = ApiPublicSitemapXmlRouteImport.update({
+  id: '/api/public/sitemap/xml',
+  path: '/api/public/sitemap/xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -390,7 +390,6 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/utilidade-publica': typeof UtilidadePublicaRoute
   '/vagas': typeof VagasRouteWithChildren
   '/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -435,6 +434,7 @@ export interface FileRoutesByFullPath {
   '/empresa/$id/reivindicar': typeof EmpresaIdReivindicarRoute
   '/guia/$categoria/$subcategoria': typeof GuiaCategoriaSubcategoriaRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/sitemap/xml': typeof ApiPublicSitemapXmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -448,7 +448,6 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/utilidade-publica': typeof UtilidadePublicaRoute
   '/vagas': typeof VagasRouteWithChildren
   '/minha-conta': typeof AuthenticatedMinhaContaRoute
@@ -492,6 +491,7 @@ export interface FileRoutesByTo {
   '/empresa/$id/reivindicar': typeof EmpresaIdReivindicarRoute
   '/guia/$categoria/$subcategoria': typeof GuiaCategoriaSubcategoriaRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/api/public/sitemap/xml': typeof ApiPublicSitemapXmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -507,7 +507,6 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/utilidade-publica': typeof UtilidadePublicaRoute
   '/vagas': typeof VagasRouteWithChildren
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
@@ -552,6 +551,7 @@ export interface FileRoutesById {
   '/empresa/$id/reivindicar': typeof EmpresaIdReivindicarRoute
   '/guia/$categoria/$subcategoria': typeof GuiaCategoriaSubcategoriaRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/api/public/sitemap/xml': typeof ApiPublicSitemapXmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -567,7 +567,6 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/planos'
     | '/reset-password'
-    | '/sitemap.xml'
     | '/utilidade-publica'
     | '/vagas'
     | '/admin'
@@ -612,6 +611,7 @@ export interface FileRouteTypes {
     | '/empresa/$id/reivindicar'
     | '/guia/$categoria/$subcategoria'
     | '/admin/'
+    | '/api/public/sitemap/xml'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -625,7 +625,6 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/planos'
     | '/reset-password'
-    | '/sitemap.xml'
     | '/utilidade-publica'
     | '/vagas'
     | '/minha-conta'
@@ -669,6 +668,7 @@ export interface FileRouteTypes {
     | '/empresa/$id/reivindicar'
     | '/guia/$categoria/$subcategoria'
     | '/admin'
+    | '/api/public/sitemap/xml'
   id:
     | '__root__'
     | '/'
@@ -683,7 +683,6 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/planos'
     | '/reset-password'
-    | '/sitemap.xml'
     | '/utilidade-publica'
     | '/vagas'
     | '/_authenticated/admin'
@@ -728,6 +727,7 @@ export interface FileRouteTypes {
     | '/empresa/$id/reivindicar'
     | '/guia/$categoria/$subcategoria'
     | '/_authenticated/admin/'
+    | '/api/public/sitemap/xml'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -743,7 +743,6 @@ export interface RootRouteChildren {
   PerfilRoute: typeof PerfilRoute
   PlanosRoute: typeof PlanosRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   UtilidadePublicaRoute: typeof UtilidadePublicaRoute
   VagasRoute: typeof VagasRouteWithChildren
   CuriosidadesIdRoute: typeof CuriosidadesIdRoute
@@ -754,6 +753,7 @@ export interface RootRouteChildren {
   GuiaIndexRoute: typeof GuiaIndexRoute
   NoticiasIndexRoute: typeof NoticiasIndexRoute
   ApiPublicAsaasWebhookRoute: typeof ApiPublicAsaasWebhookRoute
+  ApiPublicSitemapXmlRoute: typeof ApiPublicSitemapXmlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -770,13 +770,6 @@ declare module '@tanstack/react-router' {
       path: '/utilidade-publica'
       fullPath: '/utilidade-publica'
       preLoaderRoute: typeof UtilidadePublicaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -1157,6 +1150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAprovacoesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/api/public/sitemap/xml': {
+      id: '/api/public/sitemap/xml'
+      path: '/api/public/sitemap/xml'
+      fullPath: '/api/public/sitemap/xml'
+      preLoaderRoute: typeof ApiPublicSitemapXmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1300,7 +1300,6 @@ const rootRouteChildren: RootRouteChildren = {
   PerfilRoute: PerfilRoute,
   PlanosRoute: PlanosRoute,
   ResetPasswordRoute: ResetPasswordRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
   UtilidadePublicaRoute: UtilidadePublicaRoute,
   VagasRoute: VagasRouteWithChildren,
   CuriosidadesIdRoute: CuriosidadesIdRoute,
@@ -1311,17 +1310,8 @@ const rootRouteChildren: RootRouteChildren = {
   GuiaIndexRoute: GuiaIndexRoute,
   NoticiasIndexRoute: NoticiasIndexRoute,
   ApiPublicAsaasWebhookRoute: ApiPublicAsaasWebhookRoute,
+  ApiPublicSitemapXmlRoute: ApiPublicSitemapXmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
