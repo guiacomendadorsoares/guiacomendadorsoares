@@ -41,9 +41,10 @@ export function SiteFooter() {
             </ul>
           </div>
         </div>
-        <p className="border-t border-border pt-4 text-center text-xs">
-          © {new Date().getFullYear()} Guia Comendador Soares. Todos os direitos reservados.
-        </p>
+        <div className="border-t border-border pt-4 text-center text-xs space-y-1">
+          <p>© {new Date().getFullYear()} Guia Comendador Soares. Todos os direitos reservados.</p>
+          <p className="opacity-70 italic">by @soareshuboficial</p>
+        </div>
       </div>
     </footer>
   );
