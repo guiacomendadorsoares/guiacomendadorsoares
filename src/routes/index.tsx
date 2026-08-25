@@ -610,7 +610,6 @@ function UtilidadePublicaHighlight() {
 }
 
 /* ---------- New Fase 1 sections ---------- */
-
 function OpenNowSection() {
   const { data: items = [] } = useQuery({
     queryKey: ["home", "open-now"],
