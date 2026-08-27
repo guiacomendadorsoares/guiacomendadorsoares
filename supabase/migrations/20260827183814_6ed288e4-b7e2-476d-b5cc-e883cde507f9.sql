@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "admins read all roles" ON public.user_roles;
