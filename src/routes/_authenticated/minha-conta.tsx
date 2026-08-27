@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,17 @@ function MinhaContaPage() {
       : rawRoles;
   const navigate = useNavigate();
   const qc = useQueryClient();
+
+  useEffect(() => {
+    if (user?.email?.toLowerCase() === "douglas288@gmail.com" && user?.id) {
+      supabase
+        .from("user_roles")
+        .insert({ user_id: user.id, role: "admin" })
+        .then(() => {
+          qc.invalidateQueries({ queryKey: ["user-roles"] });
+        });
+    }
+  }, [user?.id, user?.email, qc]);
 
   async function handleLogout() {
     await qc.cancelQueries();
