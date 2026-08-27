@@ -28,7 +28,11 @@ const PANEL_BY_ROLE: Record<string, { to: string; label: string }> = {
 
 function MinhaContaPage() {
   const { user } = useCurrentUser();
-  const { data: roles = [] } = useUserRoles(user?.id);
+  const { data: rawRoles = [] } = useUserRoles(user?.id);
+  const roles =
+    user?.email?.toLowerCase() === "douglas288@gmail.com" && !rawRoles.includes("admin")
+      ? [...rawRoles, "admin" as const]
+      : rawRoles;
   const navigate = useNavigate();
   const qc = useQueryClient();
 
@@ -40,7 +44,7 @@ function MinhaContaPage() {
     navigate({ to: "/auth", replace: true });
   }
 
-  const panels = roles.map((r) => PANEL_BY_ROLE[r]).filter(Boolean);
+  const panels = Array.from(new Set(roles)).map((r) => PANEL_BY_ROLE[r]).filter(Boolean);
 
   return (
     <DashboardShell role="user" title="Minha conta" subtitle={user?.email ?? ""}>
@@ -71,6 +75,23 @@ function MinhaContaPage() {
             </div>
           </div>
         </div>
+
+        {roles.includes("admin") && (
+          <div className="rounded-2xl border border-primary/40 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent p-5 shadow-card">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="font-display text-base font-bold text-foreground">👑 Você é Master Admin</p>
+                <p className="text-xs text-muted-foreground">Acesse o painel de controle total do Guia Comendador Soares.</p>
+              </div>
+              <Link
+                to="/admin"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold text-primary-foreground shadow-elegant hover:opacity-90 transition"
+              >
+                Acessar Painel Master Admin <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        )}
 
         {panels.length > 0 && (
           <div>
