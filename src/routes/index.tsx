@@ -132,8 +132,10 @@ function HomePage() {
 function SmartHeader() {
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
+  const [welcome, setWelcome] = useState("Olá");
 
   useEffect(() => {
+    setWelcome(greeting());
     const onScroll = () => setScrolled(window.scrollY > 80);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -159,7 +161,7 @@ function SmartHeader() {
             {!scrolled ? (
               <>
                 <p className="font-display text-[13px] font-extrabold text-foreground animate-fade-in">
-                  {greeting()} <span aria-hidden>👋</span>
+                  {welcome} <span aria-hidden>👋</span>
                 </p>
                 <p className="flex items-center gap-1 truncate text-[10px] text-muted-foreground">
                   <MapPin className="h-2.5 w-2.5 shrink-0 text-primary" /> Você está em Comendador
