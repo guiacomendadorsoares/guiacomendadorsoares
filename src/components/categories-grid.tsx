@@ -17,30 +17,29 @@ import { useState } from "react";
 
 type Cat = {
   label: string;
-  to: string;
+  slug: string;
   icon: ComponentType<{ className?: string }>;
   from: string;
   to2: string;
 };
 
 const cats: Cat[] = [
-  { label: "Advogados", to: "/guia", icon: Scale, from: "#1f3a2e", to2: "#3b6b54" },
-  { label: "Academias", to: "/guia", icon: Dumbbell, from: "#1a4d3a", to2: "#34c781" },
-  { label: "Restaurantes", to: "/guia", icon: UtensilsCrossed, from: "#b8842b", to2: "#f0c068" },
-  { label: "Imóveis", to: "/imoveis", icon: Building2, from: "#1f3a2e", to2: "#4a8a6b" },
-  { label: "Empregos", to: "/vagas", icon: Briefcase, from: "#0f1a14", to2: "#3a5a48" },
-  { label: "Saúde", to: "/guia", icon: HeartPulse, from: "#1a4d3a", to2: "#5dd6a1" },
-  { label: "Educação", to: "/guia", icon: GraduationCap, from: "#b8842b", to2: "#e8b85a" },
-  { label: "Pet Shop", to: "/guia", icon: Dog, from: "#2a5444", to2: "#6ec79a" },
-  { label: "Beleza", to: "/guia", icon: Scissors, from: "#8a5e1f", to2: "#e8b85a" },
-  { label: "Serviços", to: "/guia", icon: Wrench, from: "#1f3a2e", to2: "#4a8a6b" },
-  { label: "Utilidade Pública", to: "/utilidade-publica", icon: LifeBuoy, from: "#7a1f1f", to2: "#d64545" },
+  { slug: "juridico-profissional", label: "Advogados", icon: Scale, from: "#1f3a2e", to2: "#3b6b54" },
+  { slug: "esportes-bem-estar", label: "Academias", icon: Dumbbell, from: "#1a4d3a", to2: "#34c781" },
+  { slug: "alimentacao", label: "Alimentação", icon: UtensilsCrossed, from: "#b8842b", to2: "#f0c068" },
+  { slug: "imobiliario", label: "Imóveis", icon: Building2, from: "#1f3a2e", to2: "#4a8a6b" },
+  { slug: "educacao", label: "Educação", icon: GraduationCap, from: "#b8842b", to2: "#e8b85a" },
+  { slug: "saude", label: "Saúde", icon: HeartPulse, from: "#1a4d3a", to2: "#5dd6a1" },
+  { slug: "pets", label: "Pet Shop", icon: Dog, from: "#2a5444", to2: "#6ec79a" },
+  { slug: "beleza-estetica", label: "Beleza", icon: Scissors, from: "#8a5e1f", to2: "#e8b85a" },
+  { slug: "servicos-gerais", label: "Serviços", icon: Wrench, from: "#1f3a2e", to2: "#4a8a6b" },
+  { slug: "servicos-publicos", label: "Utilidade Pública", icon: LifeBuoy, from: "#7a1f1f", to2: "#d64545" },
 ];
 
 type Ripple = { id: number; x: number; y: number };
 
 function CategoryTile({ cat }: { cat: Cat }) {
-  const { label, to, icon: Icon, from, to2 } = cat;
+  const { label, slug, icon: Icon, from, to2 } = cat;
   const [ripples, setRipples] = useState<Ripple[]>([]);
 
   function onPointerDown(e: MouseEvent<HTMLAnchorElement>) {
@@ -54,7 +53,8 @@ function CategoryTile({ cat }: { cat: Cat }) {
 
   return (
     <Link
-      to={to}
+      to="/guia/$categoria"
+      params={{ categoria: slug }}
       onMouseDown={onPointerDown}
       className="group flex flex-col items-center gap-1.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-2xl motion-reduce:transition-none"
     >
