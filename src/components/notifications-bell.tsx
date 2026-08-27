@@ -49,7 +49,7 @@ export function NotificationsBell({ variant = "card" }: { variant?: "card" | "gh
     staleTime: 30_000,
   });
 
-  const items = data ?? [];
+  const items = useMemo(() => data ?? [], [data]);
   const unread = useMemo(
     () => items.filter((b) => !readIds.includes(b.id)).length,
     [items, readIds],

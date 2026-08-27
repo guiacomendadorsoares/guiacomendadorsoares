@@ -126,7 +126,9 @@ function AdminUtilidadePublica() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="font-display text-2xl font-bold">Utilidade Pública</h2>
-          <p className="text-sm text-muted-foreground">Gerenciar contatos oficiais e serviços públicos</p>
+          <p className="text-sm text-muted-foreground">
+            Gerenciar contatos oficiais e serviços públicos
+          </p>
         </div>
         <Button onClick={() => setEditing({ ...EMPTY })}>
           <Plus className="h-4 w-4" /> Novo
@@ -144,7 +146,10 @@ function AdminUtilidadePublica() {
           <div className="grid gap-3 md:grid-cols-2">
             <div>
               <Label>Nome</Label>
-              <Input value={editing.name ?? ""} onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
+              <Input
+                value={editing.name ?? ""}
+                onChange={(e) => setEditing({ ...editing, name: e.target.value })}
+              />
             </div>
             <div>
               <Label>Categoria</Label>
@@ -177,23 +182,38 @@ function AdminUtilidadePublica() {
             </div>
             <div>
               <Label>Email</Label>
-              <Input value={editing.email ?? ""} onChange={(e) => setEditing({ ...editing, email: e.target.value })} />
+              <Input
+                value={editing.email ?? ""}
+                onChange={(e) => setEditing({ ...editing, email: e.target.value })}
+              />
             </div>
             <div>
               <Label>Site</Label>
-              <Input value={editing.website ?? ""} onChange={(e) => setEditing({ ...editing, website: e.target.value })} />
+              <Input
+                value={editing.website ?? ""}
+                onChange={(e) => setEditing({ ...editing, website: e.target.value })}
+              />
             </div>
             <div className="md:col-span-2">
               <Label>Endereço</Label>
-              <Input value={editing.address ?? ""} onChange={(e) => setEditing({ ...editing, address: e.target.value })} />
+              <Input
+                value={editing.address ?? ""}
+                onChange={(e) => setEditing({ ...editing, address: e.target.value })}
+              />
             </div>
             <div>
               <Label>Horário</Label>
-              <Input value={editing.hours ?? ""} onChange={(e) => setEditing({ ...editing, hours: e.target.value })} />
+              <Input
+                value={editing.hours ?? ""}
+                onChange={(e) => setEditing({ ...editing, hours: e.target.value })}
+              />
             </div>
             <div>
               <Label>Fonte (URL)</Label>
-              <Input value={editing.source ?? ""} onChange={(e) => setEditing({ ...editing, source: e.target.value })} />
+              <Input
+                value={editing.source ?? ""}
+                onChange={(e) => setEditing({ ...editing, source: e.target.value })}
+              />
             </div>
             <div className="md:col-span-2">
               <Label>Descrição</Label>
@@ -219,7 +239,10 @@ function AdminUtilidadePublica() {
               <Label>Emergência</Label>
             </div>
             <div className="flex items-center gap-2">
-              <Switch checked={editing.active ?? true} onCheckedChange={(v) => setEditing({ ...editing, active: v })} />
+              <Switch
+                checked={editing.active ?? true}
+                onCheckedChange={(v) => setEditing({ ...editing, active: v })}
+              />
               <Label>Ativo</Label>
             </div>
           </div>

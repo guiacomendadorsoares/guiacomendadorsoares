@@ -43,7 +43,9 @@ export async function listMyBusinesses(userId: string): Promise<MyBusiness[]> {
   // Businesses via membership
   const { data: memberships, error: mErr } = await (supabase as any)
     .from("business_members")
-    .select("business_id, role, is_primary_owner, status, businesses:business_id(id,name,category_label,status,cover_url)")
+    .select(
+      "business_id, role, is_primary_owner, status, businesses:business_id(id,name,category_label,status,cover_url)",
+    )
     .eq("user_id", userId)
     .eq("status", "active")
     .is("deleted_at", null);
@@ -121,7 +123,8 @@ export async function inviteMemberByEmail(params: {
     .ilike("email", email)
     .maybeSingle();
   if (error) throw error;
-  if (!prof?.user_id) throw new Error("Usuário não encontrado. Peça para essa pessoa criar uma conta primeiro.");
+  if (!prof?.user_id)
+    throw new Error("Usuário não encontrado. Peça para essa pessoa criar uma conta primeiro.");
 
   const { data: existing } = await (supabase as any)
     .from("business_members")
@@ -149,14 +152,18 @@ export async function inviteMemberByEmail(params: {
   }
 
   const { data: u } = await supabase.auth.getUser();
-  const { data: inserted, error: insErr } = await (supabase as any).from("business_members").insert({
-    business_id: params.businessId,
-    user_id: prof.user_id,
-    role: params.role,
-    status: "active",
-    is_primary_owner: false,
-    invited_by: u.user?.id ?? null,
-  }).select("id").maybeSingle();
+  const { data: inserted, error: insErr } = await (supabase as any)
+    .from("business_members")
+    .insert({
+      business_id: params.businessId,
+      user_id: prof.user_id,
+      role: params.role,
+      status: "active",
+      is_primary_owner: false,
+      invited_by: u.user?.id ?? null,
+    })
+    .select("id")
+    .maybeSingle();
   if (insErr) throw insErr;
   await logBusinessAudit({
     businessId: params.businessId,
@@ -278,7 +285,10 @@ export async function listBusinessAudit(businessId: string, limit = 100): Promis
     .select("user_id,email,full_name")
     .in("user_id", ids);
   const byId = new Map<string, any>((profs ?? []).map((p: any) => [p.user_id, p]));
-  return rows.map((r) => ({ ...r, actor: r.actor_user_id ? byId.get(r.actor_user_id) ?? null : null }));
+  return rows.map((r) => ({
+    ...r,
+    actor: r.actor_user_id ? (byId.get(r.actor_user_id) ?? null) : null,
+  }));
 }
 
 // ============= Ownership transfer =============

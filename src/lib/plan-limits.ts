@@ -18,16 +18,16 @@ export function useOwnerPlan(userId: string | null | undefined) {
         .eq("user_id", userId!)
         .maybeSingle();
       if (!data) return "free" as PlanSlug;
-      if (data.plan_status === "suspended" || data.plan_status === "canceled") return "free" as PlanSlug;
-      if (data.plan_expires_at && new Date(data.plan_expires_at) < new Date()) return "free" as PlanSlug;
+      if (data.plan_status === "suspended" || data.plan_status === "canceled")
+        return "free" as PlanSlug;
+      if (data.plan_expires_at && new Date(data.plan_expires_at) < new Date())
+        return "free" as PlanSlug;
       return (data.current_plan ?? "free") as PlanSlug;
     },
   });
   const slug: PlanSlug = profile.data ?? "free";
   const plan: Plan | null =
-    plans.data?.find((p) => p.slug === slug) ??
-    plans.data?.find((p) => p.slug === "free") ??
-    null;
+    plans.data?.find((p) => p.slug === slug) ?? plans.data?.find((p) => p.slug === "free") ?? null;
   return { slug, plan, loading: plans.isLoading || profile.isLoading };
 }
 
@@ -57,20 +57,32 @@ export function useUsageCounts(userId: string | null | undefined) {
     enabled: !!userId,
     queryFn: async () => {
       const [biz, props, jobs] = await Promise.all([
-        supabase.from("businesses").select("id", { count: "exact", head: true }).eq("submitted_by", userId!),
-        supabase.from("properties").select("id", { count: "exact", head: true }).eq("submitted_by", userId!),
-        supabase.from("jobs").select("id", { count: "exact", head: true })
+        supabase
+          .from("businesses")
+          .select("id", { count: "exact", head: true })
+          .eq("submitted_by", userId!),
+        supabase
+          .from("properties")
+          .select("id", { count: "exact", head: true })
+          .eq("submitted_by", userId!),
+        supabase
+          .from("jobs")
+          .select("id", { count: "exact", head: true })
           .eq("submitted_by", userId!)
           .gte("created_at", new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString()),
       ]);
       // pharmacy products belonging to user-owned businesses
-      const bizIds = (await supabase.from("businesses").select("id").eq("submitted_by", userId!)).data ?? [];
+      const bizIds =
+        (await supabase.from("businesses").select("id").eq("submitted_by", userId!)).data ?? [];
       let productCount = 0;
       if (bizIds.length) {
         const { count } = await supabase
           .from("pharmacy_products")
           .select("id", { count: "exact", head: true })
-          .in("business_id", bizIds.map((b: any) => b.id));
+          .in(
+            "business_id",
+            bizIds.map((b: any) => b.id),
+          );
         productCount = count ?? 0;
       }
       return {
@@ -86,7 +98,9 @@ export function useUsageCounts(userId: string | null | undefined) {
 export function useLimits() {
   const { plan, slug, loading } = useCurrentPlan();
   return {
-    slug, plan, loading,
+    slug,
+    plan,
+    loading,
     business: (plan?.features as any)?.business ?? {},
     properties: (plan?.features as any)?.properties ?? {},
     pharmacy: (plan?.features as any)?.pharmacy ?? {},

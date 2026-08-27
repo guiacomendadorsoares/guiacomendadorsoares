@@ -51,13 +51,18 @@ function MinhaContaPage() {
               <Shield className="h-5 w-5" />
             </span>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">{user?.user_metadata?.full_name ?? user?.email}</p>
+              <p className="truncate text-sm font-semibold">
+                {user?.user_metadata?.full_name ?? user?.email}
+              </p>
               <div className="mt-1 flex flex-wrap gap-1">
                 {roles.length === 0 ? (
                   <span className="text-xs text-muted-foreground">Sem perfis atribuídos</span>
                 ) : (
                   roles.map((r) => (
-                    <span key={r} className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium">
+                    <span
+                      key={r}
+                      className="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium"
+                    >
                       {r}
                     </span>
                   ))
@@ -141,7 +146,9 @@ function MyClaims({ userId }: { userId?: string }) {
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">{c.business?.name ?? "Empresa"}</p>
               <div className="mt-1 flex items-center gap-2">
-                <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_TONE[c.status as ClaimStatus] ?? "bg-muted"}`}>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${STATUS_TONE[c.status as ClaimStatus] ?? "bg-muted"}`}
+                >
                   {STATUS_LABEL[c.status as ClaimStatus] ?? c.status}
                 </span>
                 <span className="text-[11px] text-muted-foreground">
@@ -149,7 +156,9 @@ function MyClaims({ userId }: { userId?: string }) {
                 </span>
               </div>
               {c.status === "rejected" && c.rejection_reason && (
-                <p className="mt-1 text-[11px] text-muted-foreground">Motivo: {c.rejection_reason}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  Motivo: {c.rejection_reason}
+                </p>
               )}
             </div>
             <ArrowRight className="h-4 w-4 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-primary" />

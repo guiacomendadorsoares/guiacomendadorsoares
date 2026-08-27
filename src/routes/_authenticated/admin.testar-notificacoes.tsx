@@ -5,10 +5,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/_authenticated/admin/testar-notificacoes")({
   component: TestNotificationsPage,
   head: () => ({
-    meta: [
-      { title: "Testar Notificações" },
-      { name: "robots", content: "noindex, nofollow" },
-    ],
+    meta: [{ title: "Testar Notificações" }, { name: "robots", content: "noindex, nofollow" }],
   }),
 });
 
@@ -26,7 +23,9 @@ function TestNotificationsPage() {
         <Button onClick={() => toast("Notificação simples")}>Simples</Button>
         <Button
           variant="secondary"
-          onClick={() => toast.success("Tudo certo!", { description: "Operação concluída com sucesso." })}
+          onClick={() =>
+            toast.success("Tudo certo!", { description: "Operação concluída com sucesso." })
+          }
         >
           Sucesso
         </Button>

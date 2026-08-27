@@ -27,14 +27,17 @@ interface Props {
 
 function Recenter({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
-  useEffect(() => { map.setView([lat, lng], Math.max(map.getZoom(), 15)); }, [lat, lng, map]);
+  useEffect(() => {
+    map.setView([lat, lng], Math.max(map.getZoom(), 15));
+  }, [lat, lng, map]);
   return null;
 }
 
 export function LocationPicker({ lat, lng, address, onChange }: Props) {
   const [busy, setBusy] = useState(false);
   const markerRef = useRef<L.Marker | null>(null);
-  const hasCoords = typeof lat === "number" && typeof lng === "number" && !isNaN(lat) && !isNaN(lng);
+  const hasCoords =
+    typeof lat === "number" && typeof lng === "number" && !isNaN(lat) && !isNaN(lng);
   const center: [number, number] = hasCoords ? [lat!, lng!] : DEFAULT_CENTER;
 
   async function handleGeocode() {
@@ -62,7 +65,11 @@ export function LocationPicker({ lat, lng, address, onChange }: Props) {
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-2">
         <Button type="button" size="sm" variant="outline" onClick={handleGeocode} disabled={busy}>
-          {busy ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Search className="mr-1 h-3.5 w-3.5" />}
+          {busy ? (
+            <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+          ) : (
+            <Search className="mr-1 h-3.5 w-3.5" />
+          )}
           Buscar pelo endereço
         </Button>
         {hasCoords && (
@@ -72,7 +79,12 @@ export function LocationPicker({ lat, lng, address, onChange }: Props) {
         )}
       </div>
       <div className="h-64 w-full overflow-hidden rounded-lg border border-border">
-        <MapContainer center={center} zoom={hasCoords ? 16 : 13} className="h-full w-full" scrollWheelZoom>
+        <MapContainer
+          center={center}
+          zoom={hasCoords ? 16 : 13}
+          className="h-full w-full"
+          scrollWheelZoom
+        >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -84,7 +96,9 @@ export function LocationPicker({ lat, lng, address, onChange }: Props) {
                 position={[lat!, lng!]}
                 draggable
                 icon={icon}
-                ref={(m) => { markerRef.current = m; }}
+                ref={(m) => {
+                  markerRef.current = m;
+                }}
                 eventHandlers={{
                   dragend: () => {
                     const m = markerRef.current;

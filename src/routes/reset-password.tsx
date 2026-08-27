@@ -74,7 +74,10 @@ function ResetPasswordPage() {
   return (
     <div className="min-h-dvh grid place-items-center bg-gradient-to-br from-background via-background to-secondary px-4 py-10">
       <div className="w-full max-w-md rounded-3xl border border-border bg-card p-7 shadow-elegant">
-        <Link to="/auth" className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+        <Link
+          to="/auth"
+          className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+        >
           ← Voltar
         </Link>
         <h1 className="mt-4 font-display text-2xl font-bold">Redefinir senha</h1>

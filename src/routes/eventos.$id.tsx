@@ -24,7 +24,10 @@ export const Route = createFileRoute("/eventos/$id")({
     const name = e?.title ?? "Evento";
     const title = `${name} — Comendador Soares, Nova Iguaçu`.slice(0, 60);
     const rawDesc = (e?.summary ?? e?.description ?? "").trim();
-    const desc = (rawDesc || `Detalhes do evento ${name} em Comendador Soares, Nova Iguaçu.`).slice(0, 155);
+    const desc = (rawDesc || `Detalhes do evento ${name} em Comendador Soares, Nova Iguaçu.`).slice(
+      0,
+      155,
+    );
     const url = `https://comendadorsoares.com.br/eventos/${params.id}`;
     const image = e?.cover_url || undefined;
     const meta: Array<any> = [
@@ -67,9 +70,19 @@ export const Route = createFileRoute("/eventos/$id")({
               }
             : undefined,
           offers: e.is_free
-            ? { "@type": "Offer", price: "0", priceCurrency: "BRL", availability: "https://schema.org/InStock" }
+            ? {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "BRL",
+                availability: "https://schema.org/InStock",
+              }
             : e.price
-              ? { "@type": "Offer", price: e.price, priceCurrency: "BRL", availability: "https://schema.org/InStock" }
+              ? {
+                  "@type": "Offer",
+                  price: e.price,
+                  priceCurrency: "BRL",
+                  availability: "https://schema.org/InStock",
+                }
               : undefined,
           url,
         }),
@@ -108,7 +121,9 @@ function EventoDetalhe() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("events")
-        .select("id,title,summary,description,cover_url,location,starts_at,ends_at,price,is_free,url")
+        .select(
+          "id,title,summary,description,cover_url,location,starts_at,ends_at,price,is_free,url",
+        )
         .eq("id", id)
         .eq("status", "approved")
         .maybeSingle();
@@ -138,7 +153,10 @@ function EventoDetalhe() {
         <p className="text-sm text-destructive">Erro ao carregar evento.</p>
       ) : !data ? (
         <p className="text-sm text-muted-foreground">
-          Evento não encontrado. <Link to="/" className="text-primary underline">Voltar</Link>
+          Evento não encontrado.{" "}
+          <Link to="/" className="text-primary underline">
+            Voltar
+          </Link>
         </p>
       ) : (
         <article className="mx-auto flex w-full max-w-3xl flex-col gap-4">
@@ -161,7 +179,11 @@ function EventoDetalhe() {
             )}
             <span className="inline-flex items-center gap-1.5">
               <Ticket className="h-3.5 w-3.5 text-primary-vibrant" />
-              {data.is_free ? "Gratuito" : data.price ? `R$ ${Number(data.price).toFixed(2)}` : "Consultar"}
+              {data.is_free
+                ? "Gratuito"
+                : data.price
+                  ? `R$ ${Number(data.price).toFixed(2)}`
+                  : "Consultar"}
             </span>
           </div>
           {data.summary && <p className="text-base text-muted-foreground">{data.summary}</p>}

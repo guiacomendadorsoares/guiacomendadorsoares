@@ -84,15 +84,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-title", content: "Guia CS" },
       { name: "google-site-verification", content: "YDfNyMe3FOJ2PhWM_4h3KCryo34EWJoKMf7cJiu1p8U" },
       { title: "Guia Comendador Soares" },
-      { name: "description", content: "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade." },
+      {
+        name: "description",
+        content:
+          "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade.",
+      },
       { property: "og:title", content: "Guia Comendador Soares" },
-      { property: "og:description", content: "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade." },
+      {
+        property: "og:description",
+        content:
+          "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Guia Comendador Soares" },
-      { name: "twitter:description", content: "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3db3938c-544d-4f9c-bb5d-a4080c497e95/id-preview-346c0b6f--47b19aa7-da56-46b1-9709-5b21649cac32.lovable.app-1781279009363.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3db3938c-544d-4f9c-bb5d-a4080c497e95/id-preview-346c0b6f--47b19aa7-da56-46b1-9709-5b21649cac32.lovable.app-1781279009363.png" },
+      {
+        name: "twitter:description",
+        content:
+          "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3db3938c-544d-4f9c-bb5d-a4080c497e95/id-preview-346c0b6f--47b19aa7-da56-46b1-9709-5b21649cac32.lovable.app-1781279009363.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3db3938c-544d-4f9c-bb5d-a4080c497e95/id-preview-346c0b6f--47b19aa7-da56-46b1-9709-5b21649cac32.lovable.app-1781279009363.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -118,7 +138,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               name: "Guia Comendador Soares",
               url: "https://comendadorsoares.com.br",
               logo: "https://comendadorsoares.com.br/icons/icon-192.png",
-              description: "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade.",
+              description:
+                "O guia oficial do bairro Comendador Soares: comércio, vagas, imóveis e comunidade.",
               areaServed: { "@type": "Place", name: "Comendador Soares, Nova Iguaçu - RJ" },
             },
             {

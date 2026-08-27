@@ -72,11 +72,15 @@ function InlineBannerVideo({ slide, active }: { slide: Slide; active: boolean })
       tryPlay();
       video.addEventListener("loadedmetadata", tryPlay, { once: true });
       video.addEventListener("canplay", tryPlay, { once: true });
-      const onVis = () => { if (document.visibilityState === "visible") tryPlay(); };
+      const onVis = () => {
+        if (document.visibilityState === "visible") tryPlay();
+      };
       document.addEventListener("visibilitychange", onVis);
       return () => document.removeEventListener("visibilitychange", onVis);
     } else {
-      try { video.pause(); } catch {}
+      try {
+        video.pause();
+      } catch {}
     }
   }, [slide.src, active]);
 
@@ -160,15 +164,17 @@ export function HeroCarousel() {
         .order("sort_order")
         .order("created_at");
       if (error) throw error;
-      return (data ?? []).map((b: any): Slide => ({
-        eyebrow: b.eyebrow,
-        title: b.title,
-        cta: b.cta,
-        href: b.href ?? undefined,
-        src: b.media_url,
-        mediaType: b.media_type,
-        poster: b.poster_url ?? undefined,
-      }));
+      return (data ?? []).map(
+        (b: any): Slide => ({
+          eyebrow: b.eyebrow,
+          title: b.title,
+          cta: b.cta,
+          href: b.href ?? undefined,
+          src: b.media_url,
+          mediaType: b.media_type,
+          poster: b.poster_url ?? undefined,
+        }),
+      );
     },
   });
 
@@ -196,7 +202,6 @@ export function HeroCarousel() {
         com object-cover): 4:5 no mobile, 16:9 no tablet e 21:9 no desktop.
       */}
       <div className="relative w-full aspect-[16/9] sm:max-h-[560px]">
-
         {activeSlides.map((s, idx) => (
           <div
             key={idx}

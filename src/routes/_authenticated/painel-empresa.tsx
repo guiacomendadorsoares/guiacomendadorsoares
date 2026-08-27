@@ -10,20 +10,53 @@ import { PharmacyProductsManager } from "@/components/pharmacy-products-manager"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
-import { Building2, Loader2, Users, Plus, Trash2, ShieldCheck, ExternalLink, History, Crown } from "lucide-react";
+import {
+  Building2,
+  Loader2,
+  Users,
+  Plus,
+  Trash2,
+  ShieldCheck,
+  ExternalLink,
+  History,
+  Crown,
+} from "lucide-react";
 import { toast } from "sonner";
 import {
-  listMyBusinesses, listTeam, inviteMemberByEmail, updateMemberRole, removeMember,
-  canManageTeam, canEditBusiness, ROLE_LABEL, ROLE_DESC, ASSIGNABLE_ROLES,
-  listBusinessAudit, transferOwnership,
-  type MyBusiness, type MemberRole, type TeamMember,
+  listMyBusinesses,
+  listTeam,
+  inviteMemberByEmail,
+  updateMemberRole,
+  removeMember,
+  canManageTeam,
+  canEditBusiness,
+  ROLE_LABEL,
+  ROLE_DESC,
+  ASSIGNABLE_ROLES,
+  listBusinessAudit,
+  transferOwnership,
+  type MyBusiness,
+  type MemberRole,
+  type TeamMember,
 } from "@/lib/business-owner";
 
 export const Route = createFileRoute("/_authenticated/painel-empresa")({
@@ -42,14 +75,21 @@ function PainelEmpresa() {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = useMemo(
-    () => businesses?.find((b) => b.id === (selectedId ?? businesses?.[0]?.id)) ?? businesses?.[0] ?? null,
+    () =>
+      businesses?.find((b) => b.id === (selectedId ?? businesses?.[0]?.id)) ??
+      businesses?.[0] ??
+      null,
     [businesses, selectedId],
   );
 
   if (!ready || !user) return null;
 
   return (
-    <DashboardShell role="partner" title="Painel da Empresa" subtitle="Gerencie sua presença no Guia">
+    <DashboardShell
+      role="partner"
+      title="Painel da Empresa"
+      subtitle="Gerencie sua presença no Guia"
+    >
       <div className="space-y-6">
         <MyPlanCard kind="business" />
 
@@ -60,10 +100,13 @@ function PainelEmpresa() {
             <h2 className="font-display text-sm font-bold">Minhas empresas</h2>
           </div>
           {isLoading ? (
-            <div className="grid place-items-center py-6"><Loader2 className="h-4 w-4 animate-spin" /></div>
+            <div className="grid place-items-center py-6">
+              <Loader2 className="h-4 w-4 animate-spin" />
+            </div>
           ) : !businesses?.length ? (
             <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-              Nenhuma empresa vinculada ainda. Cadastre uma nova ou reivindique uma existente pelo Guia.
+              Nenhuma empresa vinculada ainda. Cadastre uma nova ou reivindique uma existente pelo
+              Guia.
             </p>
           ) : (
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -83,13 +126,19 @@ function PainelEmpresa() {
           <Tabs defaultValue="empresa" key={selected.id}>
             <TabsList className="flex-wrap">
               <TabsTrigger value="empresa">Dados</TabsTrigger>
-              <TabsTrigger value="equipe"><Users className="mr-1 h-3.5 w-3.5" /> Equipe</TabsTrigger>
+              <TabsTrigger value="equipe">
+                <Users className="mr-1 h-3.5 w-3.5" /> Equipe
+              </TabsTrigger>
               <TabsTrigger value="farmacia">💊 Farmácia</TabsTrigger>
               <TabsTrigger value="vagas">Vagas</TabsTrigger>
               <TabsTrigger value="eventos">Eventos</TabsTrigger>
-              <TabsTrigger value="auditoria"><History className="mr-1 h-3.5 w-3.5" /> Auditoria</TabsTrigger>
+              <TabsTrigger value="auditoria">
+                <History className="mr-1 h-3.5 w-3.5" /> Auditoria
+              </TabsTrigger>
               {selected.is_primary_owner && (
-                <TabsTrigger value="titularidade"><Crown className="mr-1 h-3.5 w-3.5" /> Titularidade</TabsTrigger>
+                <TabsTrigger value="titularidade">
+                  <Crown className="mr-1 h-3.5 w-3.5" /> Titularidade
+                </TabsTrigger>
               )}
             </TabsList>
 
@@ -137,13 +186,23 @@ function PainelEmpresa() {
   );
 }
 
-function BusinessTile({ b, active, onClick }: { b: MyBusiness; active: boolean; onClick: () => void }) {
+function BusinessTile({
+  b,
+  active,
+  onClick,
+}: {
+  b: MyBusiness;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`group flex items-center gap-3 rounded-xl border p-3 text-left transition ${
-        active ? "border-primary bg-primary/5 ring-2 ring-primary/40" : "border-border bg-background hover:border-primary/40"
+        active
+          ? "border-primary bg-primary/5 ring-2 ring-primary/40"
+          : "border-border bg-background hover:border-primary/40"
       }`}
     >
       <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-muted">
@@ -183,15 +242,21 @@ function BusinessTile({ b, active, onClick }: { b: MyBusiness; active: boolean; 
 function ReadOnlyNotice({ roleLabel }: { roleLabel: string }) {
   return (
     <div className="rounded-xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-      Seu papel <strong>{roleLabel}</strong> não permite editar os dados desta empresa. Peça ao proprietário
-      ou gerente para atualizar seu papel para <strong>Editor</strong> ou superior.
+      Seu papel <strong>{roleLabel}</strong> não permite editar os dados desta empresa. Peça ao
+      proprietário ou gerente para atualizar seu papel para <strong>Editor</strong> ou superior.
     </div>
   );
 }
 
 function TeamManager({
-  business, canManage, currentUserId,
-}: { business: MyBusiness; canManage: boolean; currentUserId: string }) {
+  business,
+  canManage,
+  currentUserId,
+}: {
+  business: MyBusiness;
+  canManage: boolean;
+  currentUserId: string;
+}) {
   const qc = useQueryClient();
   const queryKey = ["business-team", business.id];
   const { data: team, isLoading } = useQuery({
@@ -215,13 +280,20 @@ function TeamManager({
 
   const changeRole = useMutation({
     mutationFn: (p: { id: string; role: MemberRole }) => updateMemberRole(p.id, p.role),
-    onSuccess: () => { toast.success("Papel atualizado."); qc.invalidateQueries({ queryKey }); },
+    onSuccess: () => {
+      toast.success("Papel atualizado.");
+      qc.invalidateQueries({ queryKey });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const remove = useMutation({
     mutationFn: (id: string) => removeMember(id),
-    onSuccess: () => { toast.success("Membro removido."); setConfirmRemove(null); qc.invalidateQueries({ queryKey }); },
+    onSuccess: () => {
+      toast.success("Membro removido.");
+      setConfirmRemove(null);
+      qc.invalidateQueries({ queryKey });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -234,11 +306,16 @@ function TeamManager({
             <h3 className="font-display text-sm font-bold">Adicionar membro</h3>
           </div>
           <form
-            onSubmit={(e) => { e.preventDefault(); invite.mutate(); }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              invite.mutate();
+            }}
             className="grid gap-3 sm:grid-cols-[1fr_180px_auto]"
           >
             <div className="space-y-1.5">
-              <Label className="text-xs font-semibold text-muted-foreground">E-mail cadastrado</Label>
+              <Label className="text-xs font-semibold text-muted-foreground">
+                E-mail cadastrado
+              </Label>
               <Input
                 type="email"
                 value={email}
@@ -250,10 +327,14 @@ function TeamManager({
             <div className="space-y-1.5">
               <Label className="text-xs font-semibold text-muted-foreground">Papel</Label>
               <Select value={role} onValueChange={(v) => setRole(v as MemberRole)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   {ASSIGNABLE_ROLES.map((r) => (
-                    <SelectItem key={r} value={r}>{ROLE_LABEL[r]}</SelectItem>
+                    <SelectItem key={r} value={r}>
+                      {ROLE_LABEL[r]}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -276,7 +357,9 @@ function TeamManager({
           <h3 className="font-display text-sm font-bold">Equipe ({team?.length ?? 0})</h3>
         </div>
         {isLoading ? (
-          <div className="grid place-items-center py-6"><Loader2 className="h-4 w-4 animate-spin" /></div>
+          <div className="grid place-items-center py-6">
+            <Loader2 className="h-4 w-4 animate-spin" />
+          </div>
         ) : !team?.length ? (
           <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
             Nenhum membro vinculado ainda.
@@ -287,13 +370,20 @@ function TeamManager({
               const isSelf = m.user_id === currentUserId;
               const editable = canManage && !m.is_primary_owner && !isSelf;
               return (
-                <li key={m.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-border p-3">
+                <li
+                  key={m.id}
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-border p-3"
+                >
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-sm">
                       {m.profile?.full_name || m.profile?.email || "Sem nome"}
-                      {isSelf && <span className="ml-1.5 text-xs text-muted-foreground">(você)</span>}
+                      {isSelf && (
+                        <span className="ml-1.5 text-xs text-muted-foreground">(você)</span>
+                      )}
                     </p>
-                    <p className="truncate text-xs text-muted-foreground">{m.profile?.email ?? "—"}</p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {m.profile?.email ?? "—"}
+                    </p>
                     <div className="mt-1 flex flex-wrap items-center gap-1.5">
                       {m.is_primary_owner && (
                         <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-600">
@@ -306,12 +396,18 @@ function TeamManager({
                     {editable ? (
                       <Select
                         value={m.role}
-                        onValueChange={(v) => changeRole.mutate({ id: m.id, role: v as MemberRole })}
+                        onValueChange={(v) =>
+                          changeRole.mutate({ id: m.id, role: v as MemberRole })
+                        }
                       >
-                        <SelectTrigger className="h-9 w-[140px]"><SelectValue /></SelectTrigger>
+                        <SelectTrigger className="h-9 w-[140px]">
+                          <SelectValue />
+                        </SelectTrigger>
                         <SelectContent>
                           {ASSIGNABLE_ROLES.map((r) => (
-                            <SelectItem key={r} value={r}>{ROLE_LABEL[r]}</SelectItem>
+                            <SelectItem key={r} value={r}>
+                              {ROLE_LABEL[r]}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -324,7 +420,12 @@ function TeamManager({
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => setConfirmRemove({ id: m.id, name: m.profile?.full_name || m.profile?.email || "membro" })}
+                        onClick={() =>
+                          setConfirmRemove({
+                            id: m.id,
+                            name: m.profile?.full_name || m.profile?.email || "membro",
+                          })
+                        }
                         title="Remover"
                       >
                         <Trash2 className="h-4 w-4 text-destructive" />
@@ -342,7 +443,9 @@ function TeamManager({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remover {confirmRemove?.name} da equipe?</AlertDialogTitle>
-            <AlertDialogDescription>Esta pessoa perderá o acesso à empresa imediatamente.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Esta pessoa perderá o acesso à empresa imediatamente.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -371,7 +474,11 @@ const ACTION_LABEL: Record<string, string> = {
 function fmtValue(v: any): string {
   if (v == null) return "—";
   if (typeof v === "string") return v;
-  try { return JSON.stringify(v); } catch { return String(v); }
+  try {
+    return JSON.stringify(v);
+  } catch {
+    return String(v);
+  }
 }
 
 function AuditTimeline({ businessId }: { businessId: string }) {
@@ -387,7 +494,9 @@ function AuditTimeline({ businessId }: { businessId: string }) {
         <h3 className="font-display text-sm font-bold">Histórico de alterações</h3>
       </div>
       {isLoading ? (
-        <div className="grid place-items-center py-6"><Loader2 className="h-4 w-4 animate-spin" /></div>
+        <div className="grid place-items-center py-6">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
       ) : !data?.length ? (
         <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
           Nenhuma ação registrada ainda.
@@ -411,8 +520,16 @@ function AuditTimeline({ businessId }: { businessId: string }) {
                 </p>
                 {(row.previous_value || row.new_value) && (
                   <div className="mt-1.5 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
-                    {row.previous_value && <div><span className="font-semibold">Antes:</span> {fmtValue(row.previous_value)}</div>}
-                    {row.new_value && <div><span className="font-semibold">Depois:</span> {fmtValue(row.new_value)}</div>}
+                    {row.previous_value && (
+                      <div>
+                        <span className="font-semibold">Antes:</span> {fmtValue(row.previous_value)}
+                      </div>
+                    )}
+                    {row.new_value && (
+                      <div>
+                        <span className="font-semibold">Depois:</span> {fmtValue(row.new_value)}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -425,7 +542,13 @@ function AuditTimeline({ businessId }: { businessId: string }) {
 }
 
 // ============= Ownership Transfer =============
-function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; currentUserId: string }) {
+function OwnershipTransfer({
+  business,
+  currentUserId,
+}: {
+  business: MyBusiness;
+  currentUserId: string;
+}) {
   const qc = useQueryClient();
   const { data: team, isLoading } = useQuery({
     queryKey: ["business-team", business.id],
@@ -439,11 +562,12 @@ function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; 
   const [confirmTarget, setConfirmTarget] = useState<TeamMember | null>(null);
 
   const mut = useMutation({
-    mutationFn: (t: TeamMember) => transferOwnership({
-      businessId: business.id,
-      newOwnerUserId: t.user_id,
-      reason: reason.trim() || undefined,
-    }),
+    mutationFn: (t: TeamMember) =>
+      transferOwnership({
+        businessId: business.id,
+        newOwnerUserId: t.user_id,
+        reason: reason.trim() || undefined,
+      }),
     onSuccess: () => {
       toast.success("Titularidade transferida com sucesso.");
       setConfirmTarget(null);
@@ -463,12 +587,15 @@ function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; 
         <h3 className="font-display text-sm font-bold">Transferir titularidade</h3>
       </div>
       <p className="mb-4 text-sm text-muted-foreground">
-        Ao transferir, você deixa de ser o proprietário desta empresa e assume o papel de <strong>Gerente</strong>.
-        O novo titular terá controle total, incluindo o plano de assinatura. Esta ação é registrada na auditoria.
+        Ao transferir, você deixa de ser o proprietário desta empresa e assume o papel de{" "}
+        <strong>Gerente</strong>. O novo titular terá controle total, incluindo o plano de
+        assinatura. Esta ação é registrada na auditoria.
       </p>
 
       {isLoading ? (
-        <div className="grid place-items-center py-6"><Loader2 className="h-4 w-4 animate-spin" /></div>
+        <div className="grid place-items-center py-6">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
       ) : !candidates.length ? (
         <p className="rounded-xl border border-dashed border-border bg-background p-6 text-center text-sm text-muted-foreground">
           Adicione um membro à equipe antes de transferir a titularidade.
@@ -478,7 +605,9 @@ function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; 
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-muted-foreground">Novo proprietário</Label>
             <Select value={targetId} onValueChange={setTargetId}>
-              <SelectTrigger><SelectValue placeholder="Selecione um membro" /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione um membro" />
+              </SelectTrigger>
               <SelectContent>
                 {candidates.map((m) => (
                   <SelectItem key={m.id} value={m.user_id}>
@@ -490,7 +619,12 @@ function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; 
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs font-semibold text-muted-foreground">Motivo (opcional)</Label>
-            <Textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={2} placeholder="Ex.: venda da empresa, mudança de sócio…" />
+            <Textarea
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              rows={2}
+              placeholder="Ex.: venda da empresa, mudança de sócio…"
+            />
           </div>
           <div>
             <Button
@@ -501,7 +635,11 @@ function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; 
                 if (t) setConfirmTarget(t);
               }}
             >
-              {mut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Transferir titularidade"}
+              {mut.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Transferir titularidade"
+              )}
             </Button>
           </div>
         </div>
@@ -513,8 +651,8 @@ function OwnershipTransfer({ business, currentUserId }: { business: MyBusiness; 
             <AlertDialogTitle>Confirmar transferência?</AlertDialogTitle>
             <AlertDialogDescription>
               Você deixará de ser o proprietário de <strong>{business.name}</strong> e passará para
-              <strong> {confirmTarget?.profile?.full_name || confirmTarget?.profile?.email}</strong>.
-              Esta ação não pode ser desfeita sem o consentimento do novo titular.
+              <strong> {confirmTarget?.profile?.full_name || confirmTarget?.profile?.email}</strong>
+              . Esta ação não pode ser desfeita sem o consentimento do novo titular.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

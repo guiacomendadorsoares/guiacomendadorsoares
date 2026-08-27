@@ -20,9 +20,16 @@ export const Route = createFileRoute("/buscar")({
   head: () => ({
     meta: [
       { title: "Buscar Empresas — Guia Comendador Soares" },
-      { name: "description", content: "Encontre empresas, serviços e categorias no bairro Comendador Soares, em Nova Iguaçu." },
+      {
+        name: "description",
+        content:
+          "Encontre empresas, serviços e categorias no bairro Comendador Soares, em Nova Iguaçu.",
+      },
       { property: "og:title", content: "Buscar Empresas — Guia Comendador Soares" },
-      { property: "og:description", content: "Busque empresas e serviços por nome ou categoria no Guia Comendador Soares." },
+      {
+        property: "og:description",
+        content: "Busque empresas e serviços por nome ou categoria no Guia Comendador Soares.",
+      },
     ],
   }),
   component: BuscarPage,
@@ -81,7 +88,12 @@ function BuscarPage() {
           className="w-full bg-transparent text-base outline-none placeholder:text-muted-foreground"
         />
         {term && (
-          <button type="button" onClick={() => setTerm("")} aria-label="Limpar" className="text-muted-foreground">
+          <button
+            type="button"
+            onClick={() => setTerm("")}
+            aria-label="Limpar"
+            className="text-muted-foreground"
+          >
             <X className="h-4 w-4" />
           </button>
         )}
@@ -131,7 +143,9 @@ function BuscarPage() {
 
           <section>
             <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-              {isLoading ? "Buscando…" : `${matchedBusinesses.length} empresa${matchedBusinesses.length === 1 ? "" : "s"}`}
+              {isLoading
+                ? "Buscando…"
+                : `${matchedBusinesses.length} empresa${matchedBusinesses.length === 1 ? "" : "s"}`}
             </h2>
             {!isLoading && matchedBusinesses.length === 0 && matchedCategories.length === 0 ? (
               <EmptyState

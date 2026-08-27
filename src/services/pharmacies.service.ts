@@ -148,11 +148,14 @@ export async function fetchProductsByBusiness(businessId: string): Promise<Pharm
   return Promise.all((data ?? []).map(hydrateProduct));
 }
 
-export async function logSearchEvent(query: string, extra: {
-  productId?: string;
-  businessId?: string;
-  type?: "search" | "view" | "contact";
-} = {}) {
+export async function logSearchEvent(
+  query: string,
+  extra: {
+    productId?: string;
+    businessId?: string;
+    type?: "search" | "view" | "contact";
+  } = {},
+) {
   try {
     await supabase.from("pharmacy_search_events").insert({
       query: query.slice(0, 200),

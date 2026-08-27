@@ -100,7 +100,11 @@ function AdminNotificacoesPage() {
   if (!ready) return null;
 
   return (
-    <DashboardShell role="admin" title="Notificações" subtitle="Envie avisos e campanhas para todos os usuários">
+    <DashboardShell
+      role="admin"
+      title="Notificações"
+      subtitle="Envie avisos e campanhas para todos os usuários"
+    >
       <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         {/* Formulário */}
         <section className="rounded-xl border border-border bg-card p-5 shadow-card">
@@ -108,23 +112,51 @@ function AdminNotificacoesPage() {
           <div className="space-y-3">
             <div>
               <Label htmlFor="t">Título *</Label>
-              <Input id="t" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={120} placeholder="Ex: Promoção Black Friday" />
+              <Input
+                id="t"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                maxLength={120}
+                placeholder="Ex: Promoção Black Friday"
+              />
             </div>
             <div>
               <Label htmlFor="b">Mensagem</Label>
-              <Textarea id="b" value={body} onChange={(e) => setBody(e.target.value)} maxLength={500} rows={3} placeholder="Descrição curta da notificação" />
+              <Textarea
+                id="b"
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                maxLength={500}
+                rows={3}
+                placeholder="Descrição curta da notificação"
+              />
             </div>
             <div>
               <Label htmlFor="l">Link (opcional)</Label>
-              <Input id="l" value={link} onChange={(e) => setLink(e.target.value)} placeholder="/noticias ou https://..." />
+              <Input
+                id="l"
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="/noticias ou https://..."
+              />
             </div>
             <div>
               <Label htmlFor="i">URL da imagem (opcional)</Label>
-              <Input id="i" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://..." />
+              <Input
+                id="i"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://..."
+              />
             </div>
             <div>
               <Label htmlFor="e">Expira em (opcional)</Label>
-              <Input id="e" type="datetime-local" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
+              <Input
+                id="e"
+                type="datetime-local"
+                value={expiresAt}
+                onChange={(e) => setExpiresAt(e.target.value)}
+              />
             </div>
             <Button onClick={send} disabled={sending} className="w-full">
               <Send className="mr-2 h-4 w-4" />
@@ -143,22 +175,33 @@ function AdminNotificacoesPage() {
               {items.map((b) => (
                 <li key={b.id} className="rounded-lg border border-border p-3">
                   <div className="flex items-start gap-3">
-                    {b.image_url && <img src={b.image_url} alt="" className="h-12 w-12 rounded object-cover" />}
+                    {b.image_url && (
+                      <img src={b.image_url} alt="" className="h-12 w-12 rounded object-cover" />
+                    )}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <p className="truncate text-sm font-semibold">{b.title}</p>
-                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${b.active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${b.active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}
+                        >
                           {b.active ? "Ativa" : "Inativa"}
                         </span>
                       </div>
-                      {b.body && <p className="line-clamp-2 text-xs text-muted-foreground">{b.body}</p>}
+                      {b.body && (
+                        <p className="line-clamp-2 text-xs text-muted-foreground">{b.body}</p>
+                      )}
                       <p className="mt-1 text-[10px] text-muted-foreground">
                         {new Date(b.created_at).toLocaleString("pt-BR")}
-                        {b.expires_at && ` · expira ${new Date(b.expires_at).toLocaleDateString("pt-BR")}`}
+                        {b.expires_at &&
+                          ` · expira ${new Date(b.expires_at).toLocaleDateString("pt-BR")}`}
                       </p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Switch checked={b.active} onCheckedChange={() => toggleActive(b)} aria-label="Ativa" />
+                      <Switch
+                        checked={b.active}
+                        onCheckedChange={() => toggleActive(b)}
+                        aria-label="Ativa"
+                      />
                       <Button variant="ghost" size="icon" onClick={() => remove(b.id)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>

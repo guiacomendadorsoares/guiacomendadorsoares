@@ -18,7 +18,13 @@ export type AdminClaimRow = {
   reviewed_at: string | null;
   created_at: string;
   updated_at: string;
-  business?: { id: string; name: string; category_label: string | null; address: string | null; phone: string | null } | null;
+  business?: {
+    id: string;
+    name: string;
+    category_label: string | null;
+    address: string | null;
+    phone: string | null;
+  } | null;
 };
 
 export type AdminClaimDoc = {
@@ -92,7 +98,9 @@ export async function approveClaim(claim: AdminClaimRow): Promise<void> {
   });
   if (hasOwner) {
     await updateClaim(claim.id, { status: "already_claimed" });
-    throw new Error("Esta empresa já possui um proprietário vinculado. Marcada como já reivindicada.");
+    throw new Error(
+      "Esta empresa já possui um proprietário vinculado. Marcada como já reivindicada.",
+    );
   }
   // Create membership as primary owner
   const { error: memErr } = await (supabase as any).from("business_members").insert({
@@ -160,8 +168,11 @@ export async function transferOwnership(businessId: string, newUserId: string): 
     if (error) throw error;
   } else {
     const { error } = await (supabase as any).from("business_members").insert({
-      business_id: businessId, user_id: newUserId,
-      role: "proprietario", status: "active", is_primary_owner: true,
+      business_id: businessId,
+      user_id: newUserId,
+      role: "proprietario",
+      status: "active",
+      is_primary_owner: true,
     });
     if (error) throw error;
   }

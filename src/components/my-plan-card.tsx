@@ -9,27 +9,45 @@ type Kind = "business" | "properties" | "pharmacy";
 
 const LABELS: Record<Kind, Record<string, string>> = {
   business: {
-    whatsapp: "WhatsApp + botão", map: "Localização/Como chegar", gallery: "Galeria de fotos",
-    banner: "Banner", social: "Instagram e Facebook", website: "Site próprio",
-    promotions: "Promoções", products: "Catálogo de produtos", videos: "Vídeos",
-    verified_badge: "Selo Empresa Verificada", featured_category: "Destaque na categoria",
-    featured_home: "Destaque na Home", empresa_do_dia: "Empresa do Dia",
+    whatsapp: "WhatsApp + botão",
+    map: "Localização/Como chegar",
+    gallery: "Galeria de fotos",
+    banner: "Banner",
+    social: "Instagram e Facebook",
+    website: "Site próprio",
+    promotions: "Promoções",
+    products: "Catálogo de produtos",
+    videos: "Vídeos",
+    verified_badge: "Selo Empresa Verificada",
+    featured_category: "Destaque na categoria",
+    featured_home: "Destaque na Home",
+    empresa_do_dia: "Empresa do Dia",
     priority_search: "Prioridade nas buscas",
   },
   properties: {
-    videos: "Vídeos", whatsapp: "WhatsApp direto",
-    featured_search: "Destaque nas buscas", featured_home: "Destaque na Home",
+    videos: "Vídeos",
+    whatsapp: "WhatsApp direto",
+    featured_search: "Destaque nas buscas",
+    featured_home: "Destaque na Home",
     priority_search: "Melhor posicionamento",
   },
   pharmacy: {
-    promotions: "Produtos em promoção", featured_category: "Destaque em Farmácias",
-    featured_home: "Destaque na Home", priority_search: "Melhor posicionamento",
+    promotions: "Produtos em promoção",
+    featured_category: "Destaque em Farmácias",
+    featured_home: "Destaque na Home",
+    priority_search: "Melhor posicionamento",
   },
 };
 
 const NEXT: Record<string, string> = { free: "destaque", destaque: "ouro", ouro: "" };
 
-export function MyPlanCard({ kind = "business", usage }: { kind?: Kind; usage?: { used: number } }) {
+export function MyPlanCard({
+  kind = "business",
+  usage,
+}: {
+  kind?: Kind;
+  usage?: { used: number };
+}) {
   const { plan, slug, loading, allPlans } = useCurrentPlan();
   const { user } = useCurrentUser();
   const counts = useUsageCounts(user?.id);
@@ -37,10 +55,11 @@ export function MyPlanCard({ kind = "business", usage }: { kind?: Kind; usage?: 
   const features = (plan.features as any)?.[kind] ?? {};
   const nextSlug = NEXT[slug];
   const nextPlan = nextSlug ? allPlans.find((p) => p.slug === nextSlug) : null;
-  const nextFeatures = nextPlan ? (nextPlan.features as any)?.[kind] ?? {} : {};
+  const nextFeatures = nextPlan ? ((nextPlan.features as any)?.[kind] ?? {}) : {};
 
   const meters = buildMeters(kind, features, counts.data, usage);
-  const statColor = slug === "ouro" ? "gradient-brand text-primary-foreground" : "bg-secondary text-primary";
+  const statColor =
+    slug === "ouro" ? "gradient-brand text-primary-foreground" : "bg-secondary text-primary";
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
@@ -61,7 +80,9 @@ export function MyPlanCard({ kind = "business", usage }: { kind?: Kind; usage?: 
 
       {meters.length > 0 && (
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          {meters.map((m) => <UsageMeter key={m.label} {...m} />)}
+          {meters.map((m) => (
+            <UsageMeter key={m.label} {...m} />
+          ))}
         </div>
       )}
 
@@ -69,7 +90,10 @@ export function MyPlanCard({ kind = "business", usage }: { kind?: Kind; usage?: 
         {Object.entries(LABELS[kind]).map(([k, label]) => {
           const enabled = !!features[k];
           return (
-            <div key={k} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${enabled ? "border-primary/30 bg-primary/5" : "border-border bg-muted/30 text-muted-foreground"}`}>
+            <div
+              key={k}
+              className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${enabled ? "border-primary/30 bg-primary/5" : "border-border bg-muted/30 text-muted-foreground"}`}
+            >
               {enabled ? <Check className="h-4 w-4 text-primary" /> : <Lock className="h-4 w-4" />}
               <span>{label}</span>
             </div>
@@ -103,7 +127,9 @@ function UsageMeter({ label, used, max }: { label: string; used: number; max: nu
   const pct = max <= 0 ? (used > 0 ? 100 : 0) : max === -1 ? 0 : Math.min(100, (used / max) * 100);
   const full = max !== -1 && max > 0 && used >= max;
   return (
-    <div className={`rounded-lg border p-3 ${full ? "border-destructive/40 bg-destructive/5" : "border-border bg-secondary/40"}`}>
+    <div
+      className={`rounded-lg border p-3 ${full ? "border-destructive/40 bg-destructive/5" : "border-border bg-secondary/40"}`}
+    >
       <div className="flex items-baseline justify-between text-xs">
         <span className="font-semibold">{label}</span>
         <span className={full ? "text-destructive font-bold" : "text-muted-foreground"}>
@@ -111,7 +137,10 @@ function UsageMeter({ label, used, max }: { label: string; used: number; max: nu
         </span>
       </div>
       <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
-        <div className={`h-full ${full ? "bg-destructive" : "bg-primary"}`} style={{ width: `${pct}%` }} />
+        <div
+          className={`h-full ${full ? "bg-destructive" : "bg-primary"}`}
+          style={{ width: `${pct}%` }}
+        />
       </div>
     </div>
   );
@@ -120,12 +149,20 @@ function UsageMeter({ label, used, max }: { label: string; used: number; max: nu
 function buildMeters(
   kind: Kind,
   features: any,
-  counts: { businesses: number; properties: number; jobsThisMonth: number; products: number } | undefined,
+  counts:
+    | { businesses: number; properties: number; jobsThisMonth: number; products: number }
+    | undefined,
   usage?: { used: number },
 ) {
   const c = counts ?? { businesses: 0, properties: 0, jobsThisMonth: 0, products: 0 };
   if (kind === "properties") {
-    return [{ label: "Imóveis ativos", used: usage?.used ?? c.properties, max: features.max_listings ?? 0 }];
+    return [
+      {
+        label: "Imóveis ativos",
+        used: usage?.used ?? c.properties,
+        max: features.max_listings ?? 0,
+      },
+    ];
   }
   if (kind === "pharmacy") {
     return [{ label: "Produtos", used: c.products, max: features.max_products ?? 0 }];

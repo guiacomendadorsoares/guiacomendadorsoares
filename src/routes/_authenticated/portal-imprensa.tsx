@@ -11,10 +11,16 @@ export const Route = createFileRoute("/_authenticated/portal-imprensa")({
 function PortalImprensa() {
   const { ready } = useRequireAnyRole(["influencer", "editor", "admin"]);
   const { user } = useCurrentUser();
-  const isEditor = useHasRole("editor") || useHasRole("admin");
+  const isEditorRole = useHasRole("editor");
+  const isAdminRole = useHasRole("admin");
+  const isEditor = isEditorRole || isAdminRole;
   if (!ready || !user) return null;
   return (
-    <DashboardShell role="influencer" title="Portal de Imprensa" subtitle="Crie notícias, eventos e curiosidades">
+    <DashboardShell
+      role="influencer"
+      title="Portal de Imprensa"
+      subtitle="Crie notícias, eventos e curiosidades"
+    >
       <Tabs defaultValue="noticias">
         <TabsList>
           <TabsTrigger value="noticias">Notícias</TabsTrigger>

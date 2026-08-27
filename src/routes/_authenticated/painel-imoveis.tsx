@@ -31,13 +31,25 @@ function PainelImoveis() {
   if (!ready || !user) return null;
   const full = max !== -1 && count >= max;
   return (
-    <DashboardShell role="broker" title="Painel de Imóveis" subtitle="Cadastre e acompanhe seus imóveis">
+    <DashboardShell
+      role="broker"
+      title="Painel de Imóveis"
+      subtitle="Cadastre e acompanhe seus imóveis"
+    >
       <div className="space-y-6">
         <MyPlanCard kind="properties" usage={{ used: count }} />
         {full && (
           <div className="flex items-center justify-between gap-3 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-sm">
-            <span className="flex items-center gap-2"><Lock className="h-4 w-4 text-destructive" /> Você atingiu o limite do seu plano ({max} imóveis).</span>
-            <Link to="/planos" className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">Fazer upgrade</Link>
+            <span className="flex items-center gap-2">
+              <Lock className="h-4 w-4 text-destructive" /> Você atingiu o limite do seu plano (
+              {max} imóveis).
+            </span>
+            <Link
+              to="/planos"
+              className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground"
+            >
+              Fazer upgrade
+            </Link>
           </div>
         )}
         <ContentCrud table="properties" ownerOnly={user.id} forcePending />

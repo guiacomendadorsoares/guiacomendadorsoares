@@ -12,8 +12,8 @@ import { toast } from "sonner";
 import logoUrl from "@/assets/logo.png";
 
 function useDark() {
-  const [dark, setDark] = useState(() =>
-    typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
+  const [dark, setDark] = useState(
+    () => typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
   );
   useEffect(() => {
     const stored = localStorage.getItem("theme");
@@ -68,7 +68,9 @@ function Brand() {
     <Link to="/" className="flex items-center gap-2 px-3 py-4">
       <img src={logoUrl} alt="" className="h-10 w-10 object-contain" />
       <span className="font-display text-sm font-bold leading-tight">
-        Guia<br />Comendador Soares
+        Guia
+        <br />
+        Comendador Soares
       </span>
     </Link>
   );
@@ -136,7 +138,9 @@ export function DashboardShell({
           </Sheet>
 
           <div className="min-w-0">
-            <h1 className="truncate font-display text-lg font-bold leading-tight md:text-xl">{title}</h1>
+            <h1 className="truncate font-display text-lg font-bold leading-tight md:text-xl">
+              {title}
+            </h1>
             {subtitle && <p className="truncate text-xs text-muted-foreground">{subtitle}</p>}
           </div>
 
@@ -175,7 +179,9 @@ export function StatusBadge({ status }: { status: string }) {
     rejected: "Rejeitado",
   };
   return (
-    <span className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold ${map[status] ?? "bg-secondary"}`}>
+    <span
+      className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold ${map[status] ?? "bg-secondary"}`}
+    >
       {labels[status] ?? status}
     </span>
   );

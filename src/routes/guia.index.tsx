@@ -9,14 +9,19 @@ import { ACTIVE_CATEGORIES } from "@/lib/guia-taxonomy";
 import { fetchCategoryCounts, searchBusinesses } from "@/services/businesses.service";
 import { Search, Store, MapPin } from "lucide-react";
 
-
 export const Route = createFileRoute("/guia/")({
   head: () => ({
     meta: [
       { title: "Guia Comercial — Guia CS" },
-      { name: "description", content: "Encontre estabelecimentos, serviços e comércios em Comendador Soares." },
+      {
+        name: "description",
+        content: "Encontre estabelecimentos, serviços e comércios em Comendador Soares.",
+      },
       { property: "og:title", content: "Guia Comercial — Guia CS" },
-      { property: "og:description", content: "A vitrine digital do comércio de Comendador Soares." },
+      {
+        property: "og:description",
+        content: "A vitrine digital do comércio de Comendador Soares.",
+      },
     ],
   }),
   component: GuiaHome,
@@ -50,7 +55,10 @@ function GuiaHome() {
   });
 
   const sortedCategories = useMemo(
-    () => [...ACTIVE_CATEGORIES].sort((a, b) => (a.order ?? 999) - (b.order ?? 999) || a.label.localeCompare(b.label, "pt-BR")),
+    () =>
+      [...ACTIVE_CATEGORIES].sort(
+        (a, b) => (a.order ?? 999) - (b.order ?? 999) || a.label.localeCompare(b.label, "pt-BR"),
+      ),
     [],
   );
 
@@ -76,7 +84,9 @@ function GuiaHome() {
       {hasQuery ? (
         <section className="mb-6">
           <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            {searching ? "Buscando…" : `${searchResults.length} resultado${searchResults.length === 1 ? "" : "s"}`}
+            {searching
+              ? "Buscando…"
+              : `${searchResults.length} resultado${searchResults.length === 1 ? "" : "s"}`}
           </h2>
           {!searching && searchResults.length === 0 ? (
             <EmptyState
@@ -86,7 +96,9 @@ function GuiaHome() {
             />
           ) : (
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              {searchResults.map((b) => <GuiaBusinessCard key={b.id} b={b} />)}
+              {searchResults.map((b) => (
+                <GuiaBusinessCard key={b.id} b={b} />
+              ))}
             </div>
           )}
         </section>
@@ -101,7 +113,6 @@ function GuiaHome() {
           ))}
         </div>
       </section>
-
 
       {/* Anuncie */}
       <div className="mt-8 rounded-3xl border border-border bg-gradient-to-br from-primary/10 to-gold/10 p-5 text-center shadow-card">

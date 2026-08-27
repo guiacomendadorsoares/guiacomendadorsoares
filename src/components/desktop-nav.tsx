@@ -3,7 +3,12 @@ import { Home, Search, LayoutGrid, Heart, User } from "lucide-react";
 import type { ComponentType } from "react";
 import logoUrl from "@/assets/logo.png";
 
-type Item = { to: string; label: string; icon: ComponentType<{ className?: string }>; exact?: boolean };
+type Item = {
+  to: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  exact?: boolean;
+};
 
 const items: Item[] = [
   { to: "/", label: "Início", icon: Home, exact: true },
@@ -23,7 +28,10 @@ export function DesktopNav() {
     >
       <ul className="mx-auto flex max-w-6xl items-center gap-1 px-8 py-3 lg:px-12">
         <li className="mr-auto">
-          <Link to="/" className="flex items-center gap-2 font-display text-base font-extrabold text-foreground">
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-display text-base font-extrabold text-foreground"
+          >
             <img src={logoUrl} alt="" className="h-8 w-8 object-contain" />
             Guia CS
           </Link>

@@ -71,4 +71,3 @@ export function ListSkeleton({ count = 4, height = "h-24" }: { count?: number; h
     </div>
   );
 }
-

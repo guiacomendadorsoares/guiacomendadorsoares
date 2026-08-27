@@ -14,10 +14,14 @@ export const Route = createFileRoute("/onde-comer")({
       { title: "Onde Comer em Comendador Soares — Guia CS" },
       {
         name: "description",
-        content: "Restaurantes, hamburguerias, pizzarias, lanchonetes e delivery em Comendador Soares, Nova Iguaçu.",
+        content:
+          "Restaurantes, hamburguerias, pizzarias, lanchonetes e delivery em Comendador Soares, Nova Iguaçu.",
       },
       { property: "og:title", content: "Onde Comer em Comendador Soares — Guia CS" },
-      { property: "og:description", content: "Sabores do bairro: restaurantes, pizzarias e lanchonetes em Comendador Soares." },
+      {
+        property: "og:description",
+        content: "Sabores do bairro: restaurantes, pizzarias e lanchonetes em Comendador Soares.",
+      },
     ],
   }),
   component: OndeComerPage,
@@ -34,7 +38,10 @@ function OndeComerPage() {
 
   const cat = findCategory("alimentacao");
   const filters = useMemo(
-    () => [{ value: "todos", label: "Todos" }, ...(cat?.subcategories.map((s) => ({ value: s.slug, label: s.label })) ?? [])],
+    () => [
+      { value: "todos", label: "Todos" },
+      ...(cat?.subcategories.map((s) => ({ value: s.slug, label: s.label })) ?? []),
+    ],
     [cat],
   );
 

@@ -34,7 +34,10 @@ export const Route = createFileRoute("/empresa/$id/reivindicar")({
   head: () => ({
     meta: [
       { title: "Reivindicar empresa — Guia Comendador Soares" },
-      { name: "description", content: "Assuma a administração da sua empresa no Guia Comendador Soares." },
+      {
+        name: "description",
+        content: "Assuma a administração da sua empresa no Guia Comendador Soares.",
+      },
       { name: "robots", content: "noindex,nofollow" },
     ],
   }),
@@ -92,10 +95,7 @@ function ReivindicarPage() {
   const [files, setFiles] = useState<Partial<Record<DocType, File>>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const canSubmit = useMemo(
-    () => REQUIRED_DOCS.every((d) => files[d]),
-    [files],
-  );
+  const canSubmit = useMemo(() => REQUIRED_DOCS.every((d) => files[d]), [files]);
 
   if (!authChecked || bLoading) {
     return (
@@ -128,7 +128,10 @@ function ReivindicarPage() {
           <Button
             className="mt-4"
             onClick={() =>
-              navigate({ to: "/auth" as never, search: { next: `/empresa/${id}/reivindicar` } as never })
+              navigate({
+                to: "/auth" as never,
+                search: { next: `/empresa/${id}/reivindicar` } as never,
+              })
             }
           >
             Entrar / Cadastrar
@@ -145,10 +148,14 @@ function ReivindicarPage() {
           <AlertTriangle className="mx-auto h-10 w-10 text-amber-500" />
           <h2 className="mt-3 font-display text-lg font-bold">Empresa já vinculada</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Esta empresa já possui um proprietário verificado. Se acredita que houve engano, entre em
-            contato com o suporte.
+            Esta empresa já possui um proprietário verificado. Se acredita que houve engano, entre
+            em contato com o suporte.
           </p>
-          <Button className="mt-4" variant="outline" onClick={() => navigate({ to: "/empresa/$id", params: { id } })}>
+          <Button
+            className="mt-4"
+            variant="outline"
+            onClick={() => navigate({ to: "/empresa/$id", params: { id } })}
+          >
             Voltar à empresa
           </Button>
         </GlassCard>
@@ -161,12 +168,18 @@ function ReivindicarPage() {
       <Shell business={business}>
         <GlassCard className="p-6 text-center">
           <CheckCircle2 className="mx-auto h-10 w-10 text-primary-vibrant" />
-          <h2 className="mt-3 font-display text-lg font-bold">Sua reivindicação está em andamento</h2>
+          <h2 className="mt-3 font-display text-lg font-bold">
+            Sua reivindicação está em andamento
+          </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Status atual: <strong>{STATUS_LABEL[existingClaim.status]}</strong>. Nossa equipe entrará em
-            contato assim que a análise for concluída.
+            Status atual: <strong>{STATUS_LABEL[existingClaim.status]}</strong>. Nossa equipe
+            entrará em contato assim que a análise for concluída.
           </p>
-          <Button className="mt-4" variant="outline" onClick={() => navigate({ to: "/empresa/$id", params: { id } })}>
+          <Button
+            className="mt-4"
+            variant="outline"
+            onClick={() => navigate({ to: "/empresa/$id", params: { id } })}
+          >
             Voltar à empresa
           </Button>
         </GlassCard>
@@ -214,26 +227,60 @@ function ReivindicarPage() {
           <h2 className="font-display text-base font-bold">Seus dados</h2>
           <div className="mt-4 grid gap-3">
             <Field label="Nome completo" required>
-              <Input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} required maxLength={120} />
+              <Input
+                value={form.full_name}
+                onChange={(e) => setForm({ ...form, full_name: e.target.value })}
+                required
+                maxLength={120}
+              />
             </Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="CPF" required>
-                <Input value={form.cpf} onChange={(e) => setForm({ ...form, cpf: e.target.value })} required maxLength={20} placeholder="000.000.000-00" />
+                <Input
+                  value={form.cpf}
+                  onChange={(e) => setForm({ ...form, cpf: e.target.value })}
+                  required
+                  maxLength={20}
+                  placeholder="000.000.000-00"
+                />
               </Field>
               <Field label="Cargo" required>
-                <Input value={form.role_in_company} onChange={(e) => setForm({ ...form, role_in_company: e.target.value })} required maxLength={60} placeholder="Sócio, Gerente…" />
+                <Input
+                  value={form.role_in_company}
+                  onChange={(e) => setForm({ ...form, role_in_company: e.target.value })}
+                  required
+                  maxLength={60}
+                  placeholder="Sócio, Gerente…"
+                />
               </Field>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Telefone" required>
-                <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required inputMode="tel" maxLength={20} />
+                <Input
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  required
+                  inputMode="tel"
+                  maxLength={20}
+                />
               </Field>
               <Field label="WhatsApp">
-                <Input value={form.whatsapp} onChange={(e) => setForm({ ...form, whatsapp: e.target.value })} inputMode="tel" maxLength={20} />
+                <Input
+                  value={form.whatsapp}
+                  onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+                  inputMode="tel"
+                  maxLength={20}
+                />
               </Field>
             </div>
             <Field label="E-mail" required>
-              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required maxLength={255} />
+              <Input
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                required
+                maxLength={255}
+              />
             </Field>
           </div>
         </GlassCard>
@@ -242,7 +289,9 @@ function ReivindicarPage() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h2 className="font-display text-base font-bold">Documentos</h2>
-              <p className="text-xs text-muted-foreground">Envie PDF, JPG ou PNG (até 10 MB cada).</p>
+              <p className="text-xs text-muted-foreground">
+                Envie PDF, JPG ou PNG (até 10 MB cada).
+              </p>
             </div>
             <FileText className="h-5 w-5 text-primary-vibrant" />
           </div>
@@ -259,9 +308,9 @@ function ReivindicarPage() {
         </GlassCard>
 
         <GlassCard className="p-4 text-xs text-muted-foreground">
-          Ao enviar, você declara que as informações são verdadeiras e autoriza o Guia Comendador Soares
-          a verificar o vínculo com a empresa. Falsidade ideológica é crime previsto no Art. 299 do Código
-          Penal.
+          Ao enviar, você declara que as informações são verdadeiras e autoriza o Guia Comendador
+          Soares a verificar o vínculo com a empresa. Falsidade ideológica é crime previsto no Art.
+          299 do Código Penal.
         </GlassCard>
 
         <Button type="submit" className="w-full" disabled={submitting}>
@@ -300,7 +349,15 @@ function Shell({ business, children }: { business: any; children: React.ReactNod
   );
 }
 
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div>
       <Label className="text-xs font-semibold text-muted-foreground">
@@ -327,7 +384,9 @@ function FileRow({
         <div className="min-w-0">
           <p className="text-sm font-semibold text-foreground">{label}</p>
           <p className="truncate text-[11px] text-muted-foreground">
-            {file ? `${file.name} — ${(file.size / 1024).toFixed(0)} KB` : "Nenhum arquivo selecionado"}
+            {file
+              ? `${file.name} — ${(file.size / 1024).toFixed(0)} KB`
+              : "Nenhum arquivo selecionado"}
           </p>
         </div>
         <label

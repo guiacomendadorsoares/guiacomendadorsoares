@@ -6,22 +6,40 @@ export type PlanSlug = "free" | "destaque" | "ouro";
 
 export interface BusinessFeatures {
   description_max?: number;
-  logo: boolean; banner: boolean; gallery: boolean; gallery_max?: number;
-  videos: boolean; social: boolean; website?: boolean;
-  whatsapp: boolean; map?: boolean; directions?: boolean;
-  promotions: boolean; max_promotions?: number;
-  products?: boolean; max_products?: number;
+  logo: boolean;
+  banner: boolean;
+  gallery: boolean;
+  gallery_max?: number;
+  videos: boolean;
+  social: boolean;
+  website?: boolean;
+  whatsapp: boolean;
+  map?: boolean;
+  directions?: boolean;
+  promotions: boolean;
+  max_promotions?: number;
+  products?: boolean;
+  max_products?: number;
   max_jobs_per_month?: number;
   photo_single?: boolean;
   stats: "none" | "basic" | "advanced";
-  featured_home: boolean; featured_category: boolean; verified_badge: boolean;
+  featured_home: boolean;
+  featured_category: boolean;
+  verified_badge: boolean;
   empresa_do_dia?: boolean;
-  rotating_banner?: boolean; priority_search?: boolean; sponsored_posts?: boolean;
+  rotating_banner?: boolean;
+  priority_search?: boolean;
+  sponsored_posts?: boolean;
 }
 export interface PropertyFeatures {
-  max_listings: number; max_photos: number; videos: boolean;
-  featured_home: boolean; featured_search: boolean;
-  stats: "none" | "basic" | "advanced"; whatsapp: boolean; priority_search?: boolean;
+  max_listings: number;
+  max_photos: number;
+  videos: boolean;
+  featured_home: boolean;
+  featured_search: boolean;
+  stats: "none" | "basic" | "advanced";
+  whatsapp: boolean;
+  priority_search?: boolean;
 }
 
 export interface PlanFeatures {
@@ -67,12 +85,15 @@ export function useCurrentPlan() {
         .eq("user_id", user!.id)
         .maybeSingle();
       if (!data) return "free" as PlanSlug;
-      if (data.plan_status === "suspended" || data.plan_status === "canceled") return "free" as PlanSlug;
-      if (data.plan_expires_at && new Date(data.plan_expires_at) < new Date()) return "free" as PlanSlug;
+      if (data.plan_status === "suspended" || data.plan_status === "canceled")
+        return "free" as PlanSlug;
+      if (data.plan_expires_at && new Date(data.plan_expires_at) < new Date())
+        return "free" as PlanSlug;
       return (data.current_plan ?? "free") as PlanSlug;
     },
   });
   const slug: PlanSlug = profile.data ?? "free";
-  const plan = plans.data?.find((p) => p.slug === slug) ?? plans.data?.find((p) => p.slug === "free") ?? null;
+  const plan =
+    plans.data?.find((p) => p.slug === slug) ?? plans.data?.find((p) => p.slug === "free") ?? null;
   return { slug, plan, allPlans: plans.data ?? [], loading: plans.isLoading || profile.isLoading };
 }

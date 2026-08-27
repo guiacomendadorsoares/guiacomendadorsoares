@@ -4,7 +4,11 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const checkoutInput = z.object({
   planSlug: z.enum(["destaque", "ouro"]),
-  cpfCnpj: z.string().min(11).max(20).regex(/^[0-9./-]+$/),
+  cpfCnpj: z
+    .string()
+    .min(11)
+    .max(20)
+    .regex(/^[0-9./-]+$/),
   fullName: z.string().min(2).max(120),
   billingType: z.enum(["PIX", "CREDIT_CARD"]),
 });
@@ -14,10 +18,7 @@ export const createPlanCheckout = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => checkoutInput.parse(data))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
-    const {
-      findOrCreateCustomer,
-      createPayment,
-    } = await import("./asaas.server");
+    const { findOrCreateCustomer, createPayment } = await import("./asaas.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Get plan + profile
@@ -71,7 +72,11 @@ export const createPlanCheckout = createServerFn({ method: "POST" })
     // Persist (admin client — bypass RLS to store cross-table refs safely)
     await supabaseAdmin
       .from("profiles")
-      .update({ asaas_customer_id: customer.id, cpf_cnpj: data.cpfCnpj.replace(/\D/g, ""), full_name: data.fullName })
+      .update({
+        asaas_customer_id: customer.id,
+        cpf_cnpj: data.cpfCnpj.replace(/\D/g, ""),
+        full_name: data.fullName,
+      })
       .eq("user_id", userId);
 
     await supabaseAdmin.from("subscriptions").insert({
@@ -133,7 +138,10 @@ export const cancelAsaasSubscription = createServerFn({ method: "POST" })
       .select("user_id")
       .maybeSingle();
     if (sub?.user_id) {
-      await supabaseAdmin.from("profiles").update({ current_plan: "free" }).eq("user_id", sub.user_id);
+      await supabaseAdmin
+        .from("profiles")
+        .update({ current_plan: "free" })
+        .eq("user_id", sub.user_id);
     }
     return { ok: true };
   });

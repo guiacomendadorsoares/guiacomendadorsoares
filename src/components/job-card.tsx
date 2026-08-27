@@ -7,9 +7,7 @@ export function JobCard({ job }: { job: Job }) {
   return (
     <GlassCard interactive className="overflow-hidden">
       {/* Top accent bar for urgent */}
-      {job.urgent && (
-        <div className="gradient-brand h-1 w-full" />
-      )}
+      {job.urgent && <div className="gradient-brand h-1 w-full" />}
 
       <div className="p-4">
         {/* Header: Logo + Company + Type */}

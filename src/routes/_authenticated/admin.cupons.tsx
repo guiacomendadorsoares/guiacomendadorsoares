@@ -15,8 +15,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2, Plus, Trash2, Copy } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/cupons")({
@@ -94,12 +107,18 @@ function CuponsPage() {
         <CardContent className="grid gap-4 md:grid-cols-5">
           <div className="space-y-1.5">
             <Label>Código</Label>
-            <Input value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} placeholder="TESTE30" />
+            <Input
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="TESTE30"
+            />
           </div>
           <div className="space-y-1.5">
             <Label>Plano</Label>
             <Select value={planSlug} onValueChange={(v) => setPlanSlug(v as any)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="destaque">Destaque</SelectItem>
                 <SelectItem value="ouro">Ouro</SelectItem>
@@ -108,19 +127,38 @@ function CuponsPage() {
           </div>
           <div className="space-y-1.5">
             <Label>Dias</Label>
-            <Input type="number" min={1} max={365} value={days} onChange={(e) => setDays(Number(e.target.value))} />
+            <Input
+              type="number"
+              min={1}
+              max={365}
+              value={days}
+              onChange={(e) => setDays(Number(e.target.value))}
+            />
           </div>
           <div className="space-y-1.5">
             <Label>Usos máx.</Label>
-            <Input type="number" min={1} value={maxUses} onChange={(e) => setMaxUses(Number(e.target.value))} />
+            <Input
+              type="number"
+              min={1}
+              value={maxUses}
+              onChange={(e) => setMaxUses(Number(e.target.value))}
+            />
           </div>
           <div className="space-y-1.5">
             <Label>Expira em (opc.)</Label>
             <Input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
           </div>
           <div className="md:col-span-5">
-            <Button onClick={() => createMut.mutate()} disabled={createMut.isPending || code.length < 3}>
-              {createMut.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} Criar cupom
+            <Button
+              onClick={() => createMut.mutate()}
+              disabled={createMut.isPending || code.length < 3}
+            >
+              {createMut.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}{" "}
+              Criar cupom
             </Button>
           </div>
         </CardContent>
@@ -161,10 +199,16 @@ function CuponsPage() {
                         {c.code} <Copy className="h-3 w-3" />
                       </button>
                     </TableCell>
-                    <TableCell><Badge variant="secondary">{c.plan_slug}</Badge></TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">{c.plan_slug}</Badge>
+                    </TableCell>
                     <TableCell>{c.days}</TableCell>
-                    <TableCell>{c.used_count}/{c.max_uses}</TableCell>
-                    <TableCell className="text-xs">{c.expires_at ? new Date(c.expires_at).toLocaleDateString("pt-BR") : "—"}</TableCell>
+                    <TableCell>
+                      {c.used_count}/{c.max_uses}
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      {c.expires_at ? new Date(c.expires_at).toLocaleDateString("pt-BR") : "—"}
+                    </TableCell>
                     <TableCell>
                       <Switch
                         checked={c.active}
@@ -185,7 +229,11 @@ function CuponsPage() {
                   </TableRow>
                 ))}
                 {coupons.length === 0 && (
-                  <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">Nenhum cupom criado.</TableCell></TableRow>
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center text-muted-foreground">
+                      Nenhum cupom criado.
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>

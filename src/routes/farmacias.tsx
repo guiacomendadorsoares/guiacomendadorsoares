@@ -92,15 +92,11 @@ function PharmaciesPage() {
     if (filter === "open") list = list.filter((p) => isOpenNow(p.business?.hours));
     if (filter === "cheapest")
       list.sort((a, b) => (effPrice(a) ?? Infinity) - (effPrice(b) ?? Infinity));
-    if (filter === "discount")
-      list.sort((a, b) => discountPct(b) - discountPct(a));
+    if (filter === "discount") list.sort((a, b) => discountPct(b) - discountPct(a));
     return list;
   }, [results, filter]);
 
-  const openPharmacies = useMemo(
-    () => pharmacies.filter((p) => isOpenNow(p.hours)),
-    [pharmacies],
-  );
+  const openPharmacies = useMemo(() => pharmacies.filter((p) => isOpenNow(p.hours)), [pharmacies]);
 
   const showSearch = query.trim().length >= 2 || category !== null;
 
@@ -157,7 +153,9 @@ function PharmaciesPage() {
         <section className="mb-8">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-display text-base font-bold">
-              {isFetching ? "Buscando…" : `${filtered.length} resultado${filtered.length === 1 ? "" : "s"}`}
+              {isFetching
+                ? "Buscando…"
+                : `${filtered.length} resultado${filtered.length === 1 ? "" : "s"}`}
             </h2>
           </div>
           <div className="-mx-5 mb-4 overflow-x-auto px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -321,9 +319,7 @@ function PharmacyCard({ b }: { b: PharmacyBusiness }) {
           <p className="line-clamp-1 text-sm font-bold text-foreground">{b.name}</p>
           {b.verified && <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-primary-vibrant" />}
         </div>
-        {b.address && (
-          <p className="line-clamp-1 text-[11px] text-muted-foreground">{b.address}</p>
-        )}
+        {b.address && <p className="line-clamp-1 text-[11px] text-muted-foreground">{b.address}</p>}
       </div>
     </Link>
   );
@@ -337,20 +333,14 @@ function PharmacyRow({ b }: { b: PharmacyBusiness }) {
       className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 shadow-card"
     >
       <div className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl bg-emerald-500/15 text-xl">
-        {b.logo_url ? (
-          <img src={b.logo_url} alt="" className="h-full w-full object-cover" />
-        ) : (
-          "💊"
-        )}
+        {b.logo_url ? <img src={b.logo_url} alt="" className="h-full w-full object-cover" /> : "💊"}
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
           <p className="line-clamp-1 text-sm font-bold text-foreground">{b.name}</p>
           {b.verified && <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-primary-vibrant" />}
         </div>
-        {b.address && (
-          <p className="line-clamp-1 text-xs text-muted-foreground">{b.address}</p>
-        )}
+        {b.address && <p className="line-clamp-1 text-xs text-muted-foreground">{b.address}</p>}
       </div>
       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10.5px] font-bold text-emerald-700">
         <Clock className="h-3 w-3" />
@@ -367,7 +357,12 @@ function ProductGridCard({ p }: { p: PharmacyProduct }) {
     <div className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-card">
       <div className="relative h-24 w-full bg-secondary/40">
         {p.image_url ? (
-          <img src={p.image_url} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
+          <img
+            src={p.image_url}
+            alt={p.name}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
         ) : (
           <div className="grid h-full w-full place-items-center text-3xl opacity-40">💊</div>
         )}
@@ -378,9 +373,7 @@ function ProductGridCard({ p }: { p: PharmacyProduct }) {
         )}
       </div>
       <div className="flex flex-1 flex-col gap-1 p-2.5">
-        <p className="line-clamp-2 text-xs font-semibold leading-tight text-foreground">
-          {p.name}
-        </p>
+        <p className="line-clamp-2 text-xs font-semibold leading-tight text-foreground">{p.name}</p>
         <p className="text-sm font-black text-primary-vibrant">{money(price)}</p>
         {p.business && (
           <p className="line-clamp-1 text-[10.5px] text-muted-foreground">{p.business.name}</p>
@@ -404,15 +397,20 @@ function ProductCard({ p }: { p: PharmacyProduct }) {
     b?.latitude && b?.longitude
       ? `https://www.google.com/maps/dir/?api=1&destination=${b.latitude},${b.longitude}`
       : b?.address
-      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`
-      : null;
+        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`
+        : null;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
       <div className="flex gap-3 p-3">
         <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-secondary/40">
           {p.image_url ? (
-            <img src={p.image_url} alt={p.name} className="h-full w-full object-cover" loading="lazy" />
+            <img
+              src={p.image_url}
+              alt={p.name}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
           ) : (
             <div className="grid h-full w-full place-items-center text-3xl opacity-40">💊</div>
           )}
@@ -448,10 +446,16 @@ function ProductCard({ p }: { p: PharmacyProduct }) {
             </Link>
           )}
           <div className="mt-1 flex flex-wrap gap-1.5 text-[10px] text-muted-foreground">
-            {p.delivery && <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-emerald-700">Entrega</span>}
+            {p.delivery && (
+              <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-emerald-700">
+                Entrega
+              </span>
+            )}
             {p.pickup && <span className="rounded bg-secondary px-1.5 py-0.5">Retirada</span>}
             {b?.hours && isOpenNow(b.hours) && (
-              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-primary-vibrant">Aberta agora</span>
+              <span className="rounded bg-primary/10 px-1.5 py-0.5 text-primary-vibrant">
+                Aberta agora
+              </span>
             )}
             <span className="ml-auto">
               Atualizado {new Date(p.updated_at).toLocaleDateString("pt-BR")}
@@ -461,23 +465,47 @@ function ProductCard({ p }: { p: PharmacyProduct }) {
       </div>
       <div className="grid grid-cols-4 gap-1 border-t border-border p-2">
         {wa ? (
-          <a href={wa} target="_blank" rel="noopener noreferrer" className="btn-mini bg-[#25D366] text-white">
-            <MessageCircle className="h-3.5 w-3.5" />WhatsApp
+          <a
+            href={wa}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-mini bg-[#25D366] text-white"
+          >
+            <MessageCircle className="h-3.5 w-3.5" />
+            WhatsApp
           </a>
-        ) : <span className="btn-mini opacity-40">WhatsApp</span>}
+        ) : (
+          <span className="btn-mini opacity-40">WhatsApp</span>
+        )}
         {tel ? (
           <a href={tel} className="btn-mini bg-secondary text-foreground">
-            <Phone className="h-3.5 w-3.5" />Ligar
+            <Phone className="h-3.5 w-3.5" />
+            Ligar
           </a>
-        ) : <span className="btn-mini opacity-40">Ligar</span>}
+        ) : (
+          <span className="btn-mini opacity-40">Ligar</span>
+        )}
         {map ? (
-          <a href={map} target="_blank" rel="noopener noreferrer" className="btn-mini bg-secondary text-foreground">
-            <Navigation className="h-3.5 w-3.5" />Rota
+          <a
+            href={map}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-mini bg-secondary text-foreground"
+          >
+            <Navigation className="h-3.5 w-3.5" />
+            Rota
           </a>
-        ) : <span className="btn-mini opacity-40">Rota</span>}
+        ) : (
+          <span className="btn-mini opacity-40">Rota</span>
+        )}
         {b && (
-          <Link to="/empresa/$id" params={{ id: b.id }} className="btn-mini bg-primary text-primary-foreground">
-            <ArrowRight className="h-3.5 w-3.5" />Ver
+          <Link
+            to="/empresa/$id"
+            params={{ id: b.id }}
+            className="btn-mini bg-primary text-primary-foreground"
+          >
+            <ArrowRight className="h-3.5 w-3.5" />
+            Ver
           </Link>
         )}
       </div>

@@ -32,13 +32,18 @@ export const Route = createFileRoute("/guia/$categoria")({
         title="Categoria inválida"
         description="A categoria solicitada não existe."
       />
-      <Link to="/guia" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-vibrant">
+      <Link
+        to="/guia"
+        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-vibrant"
+      >
         <ArrowLeft className="h-4 w-4" /> Voltar ao guia
       </Link>
     </AppShell>
   ),
   errorComponent: ({ error }) => (
-    <AppShell title="Erro"><p className="text-sm text-destructive">{error.message}</p></AppShell>
+    <AppShell title="Erro">
+      <p className="text-sm text-destructive">{error.message}</p>
+    </AppShell>
   ),
   component: CategoryPage,
 });
@@ -58,7 +63,8 @@ function CategoryPage() {
     const q = query.trim().toLowerCase();
     return items.filter((b) => {
       const matchSub = sub === "all" || b.subcategory === sub;
-      const matchQ = !q || b.name.toLowerCase().includes(q) || (b.address ?? "").toLowerCase().includes(q);
+      const matchQ =
+        !q || b.name.toLowerCase().includes(q) || (b.address ?? "").toLowerCase().includes(q);
       return matchSub && matchQ;
     });
   }, [items, sub, query]);
@@ -73,7 +79,10 @@ function CategoryPage() {
         className="relative mb-5 overflow-hidden rounded-3xl p-6 text-white shadow-elegant"
         style={{ background: `linear-gradient(135deg, ${cat.from} 0%, ${cat.to} 100%)` }}
       >
-        <Link to="/guia" className="inline-flex items-center gap-1 text-xs font-semibold opacity-90 hover:opacity-100">
+        <Link
+          to="/guia"
+          className="inline-flex items-center gap-1 text-xs font-semibold opacity-90 hover:opacity-100"
+        >
           <ArrowLeft className="h-3.5 w-3.5" /> Guia comercial
         </Link>
         <div className="mt-2 flex items-center gap-3">
@@ -91,7 +100,9 @@ function CategoryPage() {
       {/* Subcategorias */}
       <div className="-mx-5 mb-4 overflow-x-auto px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex gap-2 pb-1">
-          <Pill active={sub === "all"} onClick={() => setSub("all")}>Todos</Pill>
+          <Pill active={sub === "all"} onClick={() => setSub("all")}>
+            Todos
+          </Pill>
           {cat.subcategories.map((s) => (
             <Pill key={s.slug} active={sub === s.slug} onClick={() => setSub(s.slug)}>
               {s.label}
@@ -127,17 +138,23 @@ function CategoryPage() {
                 <Sparkles className="h-3.5 w-3.5 text-gold" /> Em destaque
               </h2>
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                {featured.map((b) => <GuiaBusinessCard key={b.id} b={b} />)}
+                {featured.map((b) => (
+                  <GuiaBusinessCard key={b.id} b={b} />
+                ))}
               </div>
             </section>
           )}
           {others.length > 0 && (
             <section>
               {featured.length > 0 && (
-                <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Todas</h2>
+                <h2 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  Todas
+                </h2>
               )}
               <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-                {others.map((b) => <GuiaBusinessCard key={b.id} b={b} />)}
+                {others.map((b) => (
+                  <GuiaBusinessCard key={b.id} b={b} />
+                ))}
               </div>
             </section>
           )}
@@ -161,23 +178,33 @@ function CategoryPage() {
       <div className="mt-8 text-xs text-muted-foreground">
         <p className="mb-2 font-semibold">Outras categorias</p>
         <div className="flex flex-wrap gap-2">
-          {ACTIVE_CATEGORIES.filter((c) => c.slug !== cat.slug).slice(0, 8).map((c) => (
-            <Link
-              key={c.slug}
-              to="/guia/$categoria"
-              params={{ categoria: c.slug }}
-              className="rounded-full border border-border bg-card px-3 py-1 font-medium text-foreground/80 hover:bg-secondary"
-            >
-              {c.emoji} {c.label}
-            </Link>
-          ))}
+          {ACTIVE_CATEGORIES.filter((c) => c.slug !== cat.slug)
+            .slice(0, 8)
+            .map((c) => (
+              <Link
+                key={c.slug}
+                to="/guia/$categoria"
+                params={{ categoria: c.slug }}
+                className="rounded-full border border-border bg-card px-3 py-1 font-medium text-foreground/80 hover:bg-secondary"
+              >
+                {c.emoji} {c.label}
+              </Link>
+            ))}
         </div>
       </div>
     </AppShell>
   );
 }
 
-function Pill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function Pill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
     <button
       type="button"

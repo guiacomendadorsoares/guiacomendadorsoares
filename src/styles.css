@@ -40,21 +40,21 @@
 
   --shadow-elegant: 0 10px 30px -12px color-mix(in oklab, var(--primary) 35%, transparent);
   --shadow-gold: 0 10px 24px -10px color-mix(in oklab, var(--gold) 45%, transparent);
-  --shadow-card: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px -12px rgba(0,0,0,0.08);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px -12px rgba(0, 0, 0, 0.08);
 }
 
 :root {
   --radius: 0.875rem;
 
   /* Brand */
-  --primary: oklch(0.32 0.07 155);              /* verde escuro premium */
+  --primary: oklch(0.32 0.07 155); /* verde escuro premium */
   --primary-foreground: oklch(0.985 0 0);
-  --primary-vibrant: oklch(0.65 0.18 150);      /* verde vibrante */
-  --gold: oklch(0.78 0.14 85);                  /* amarelo ouro */
+  --primary-vibrant: oklch(0.65 0.18 150); /* verde vibrante */
+  --gold: oklch(0.78 0.14 85); /* amarelo ouro */
   --gold-foreground: oklch(0.18 0.02 150);
 
-  --background: oklch(0.99 0.005 100);          /* branco quente */
-  --foreground: oklch(0.16 0.02 150);           /* preto premium */
+  --background: oklch(0.99 0.005 100); /* branco quente */
+  --foreground: oklch(0.16 0.02 150); /* preto premium */
 
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.16 0.02 150);
@@ -65,7 +65,7 @@
   --secondary-foreground: oklch(0.22 0.04 155);
   --muted: oklch(0.965 0.008 150);
   --muted-foreground: oklch(0.5 0.02 150);
-  --accent: oklch(0.94 0.05 90);                /* leve gold tint */
+  --accent: oklch(0.94 0.05 90); /* leve gold tint */
   --accent-foreground: oklch(0.22 0.04 155);
 
   --destructive: oklch(0.6 0.22 27);
@@ -101,8 +101,13 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html, body { height: 100%; }
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body {
+    height: 100%;
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -110,7 +115,13 @@
     -webkit-font-smoothing: antialiased;
     overscroll-behavior-y: none;
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
 }
 
 @utility safe-bottom {
@@ -120,7 +131,11 @@
   background-image: linear-gradient(135deg, var(--primary) 0%, var(--primary-vibrant) 100%);
 }
 @utility gradient-gold {
-  background-image: linear-gradient(135deg, var(--gold) 0%, color-mix(in oklab, var(--gold) 70%, white) 100%);
+  background-image: linear-gradient(
+    135deg,
+    var(--gold) 0%,
+    color-mix(in oklab, var(--gold) 70%, white) 100%
+  );
 }
 
 /* Hide Lovable badge */

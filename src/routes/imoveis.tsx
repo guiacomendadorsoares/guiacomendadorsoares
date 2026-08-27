@@ -18,9 +18,17 @@ export const Route = createFileRoute("/imoveis")({
   head: () => ({
     meta: [
       { title: "Imóveis em Comendador Soares — Guia CS" },
-      { name: "description", content: "Casas, apartamentos, terrenos e imóveis comerciais para alugar e comprar em Comendador Soares, Nova Iguaçu." },
+      {
+        name: "description",
+        content:
+          "Casas, apartamentos, terrenos e imóveis comerciais para alugar e comprar em Comendador Soares, Nova Iguaçu.",
+      },
       { property: "og:title", content: "Imóveis em Comendador Soares — Guia CS" },
-      { property: "og:description", content: "Casas, apartamentos e comerciais para alugar e comprar no bairro Comendador Soares." },
+      {
+        property: "og:description",
+        content:
+          "Casas, apartamentos e comerciais para alugar e comprar no bairro Comendador Soares.",
+      },
     ],
   }),
   component: ImoveisPage,
@@ -157,7 +165,11 @@ function ImoveisPage() {
         <EmptyState
           icon={<Building2 className="h-5 w-5" />}
           title={properties.length === 0 ? "Nenhum imóvel disponível." : "Nenhum imóvel encontrado"}
-          description={properties.length === 0 ? "Em breve novos imóveis serão publicados pelos corretores parceiros." : "Tente ajustar os filtros ou busque por outro termo."}
+          description={
+            properties.length === 0
+              ? "Em breve novos imóveis serão publicados pelos corretores parceiros."
+              : "Tente ajustar os filtros ou busque por outro termo."
+          }
         />
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

@@ -3,8 +3,17 @@ import type { BusinessFeatures } from "@/lib/plans";
 import { CATEGORY_OPTIONS } from "@/lib/guia-taxonomy";
 
 export type FieldType =
-  | "text" | "textarea" | "select" | "number" | "boolean" | "datetime" | "url"
-  | "image" | "gallery" | "location" | "subcategory";
+  | "text"
+  | "textarea"
+  | "select"
+  | "number"
+  | "boolean"
+  | "datetime"
+  | "url"
+  | "image"
+  | "gallery"
+  | "location"
+  | "subcategory";
 
 export interface FieldDef {
   key: string;
@@ -48,20 +57,74 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
     defaults: { status: "approved" },
     fields: [
       { key: "name", label: "Nome *", type: "text", required: true, max: 120 },
-      { key: "main_category", label: "Categoria *", type: "select", required: true, half: true,
+      {
+        key: "main_category",
+        label: "Categoria *",
+        type: "select",
+        required: true,
+        half: true,
         options: CATEGORY_OPTIONS,
       },
-      { key: "subcategory", label: "Subcategoria *", type: "subcategory", required: true, half: true, dependsOn: "main_category" },
+      {
+        key: "subcategory",
+        label: "Subcategoria *",
+        type: "subcategory",
+        required: true,
+        half: true,
+        dependsOn: "main_category",
+      },
       { key: "address", label: "Endereço *", type: "text", required: true, max: 255, half: true },
       { key: "description", label: "Descrição", type: "textarea", max: 2000 },
       { key: "phone", label: "Telefone", type: "text", max: 40, half: true },
       { key: "email", label: "E-mail", type: "text", max: 255, half: true },
-      { key: "whatsapp", label: "WhatsApp", type: "text", max: 40, half: true, premium: "whatsapp" },
-      { key: "instagram", label: "Instagram", type: "text", max: 120, half: true, premium: "social" },
-      { key: "logo_url", label: "Logo", type: "image", folder: "businesses/logo", aspect: "square", half: true },
-      { key: "banner_url", label: "Banner", type: "image", folder: "businesses/banner", aspect: "wide", half: true, premium: "banner" },
-      { key: "gallery_urls", label: "Galeria de fotos", type: "gallery", folder: "businesses/gallery", limitFrom: "business" },
-      { key: "__location", label: "Localização no mapa", type: "location", addressKey: "address", latKey: "latitude", lngKey: "longitude" },
+      {
+        key: "whatsapp",
+        label: "WhatsApp",
+        type: "text",
+        max: 40,
+        half: true,
+        premium: "whatsapp",
+      },
+      {
+        key: "instagram",
+        label: "Instagram",
+        type: "text",
+        max: 120,
+        half: true,
+        premium: "social",
+      },
+      {
+        key: "logo_url",
+        label: "Logo",
+        type: "image",
+        folder: "businesses/logo",
+        aspect: "square",
+        half: true,
+      },
+      {
+        key: "banner_url",
+        label: "Banner",
+        type: "image",
+        folder: "businesses/banner",
+        aspect: "wide",
+        half: true,
+        premium: "banner",
+      },
+      {
+        key: "gallery_urls",
+        label: "Galeria de fotos",
+        type: "gallery",
+        folder: "businesses/gallery",
+        limitFrom: "business",
+      },
+      {
+        key: "__location",
+        label: "Localização no mapa",
+        type: "location",
+        addressKey: "address",
+        latKey: "latitude",
+        lngKey: "longitude",
+      },
     ],
   },
   jobs: {
@@ -73,9 +136,15 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
       { key: "title", label: "Título *", type: "text", required: true, max: 120 },
       { key: "company", label: "Empresa *", type: "text", required: true, max: 120 },
       {
-        key: "type", label: "Tipo *", type: "select", required: true, options: [
-          { value: "emprego", label: "Emprego" }, { value: "estagio", label: "Estágio" },
-          { value: "jovem-aprendiz", label: "Jovem Aprendiz" }, { value: "freelancer", label: "Freelancer" },
+        key: "type",
+        label: "Tipo *",
+        type: "select",
+        required: true,
+        options: [
+          { value: "emprego", label: "Emprego" },
+          { value: "estagio", label: "Estágio" },
+          { value: "jovem-aprendiz", label: "Jovem Aprendiz" },
+          { value: "freelancer", label: "Freelancer" },
         ],
       },
       { key: "location", label: "Local *", type: "text", required: true, max: 160, half: true },
@@ -91,32 +160,77 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
     label: "Imóvel",
     titleKey: "title",
     subtitleKey: "address",
-    defaults: { listing_type: "venda", kind: "casa", active: true, featured: false, status: "approved" },
+    defaults: {
+      listing_type: "venda",
+      kind: "casa",
+      active: true,
+      featured: false,
+      status: "approved",
+    },
     fields: [
       { key: "title", label: "Título *", type: "text", required: true, max: 160 },
       {
-        key: "listing_type", label: "Modalidade *", type: "select", required: true, half: true, options: [
-          { value: "venda", label: "Venda" }, { value: "aluguel", label: "Aluguel" },
+        key: "listing_type",
+        label: "Modalidade *",
+        type: "select",
+        required: true,
+        half: true,
+        options: [
+          { value: "venda", label: "Venda" },
+          { value: "aluguel", label: "Aluguel" },
         ],
       },
       {
-        key: "kind", label: "Tipo *", type: "select", required: true, half: true, options: [
-          { value: "casa", label: "Casa" }, { value: "apartamento", label: "Apartamento" },
-          { value: "terreno", label: "Terreno" }, { value: "comercial", label: "Comercial" },
+        key: "kind",
+        label: "Tipo *",
+        type: "select",
+        required: true,
+        half: true,
+        options: [
+          { value: "casa", label: "Casa" },
+          { value: "apartamento", label: "Apartamento" },
+          { value: "terreno", label: "Terreno" },
+          { value: "comercial", label: "Comercial" },
         ],
       },
       { key: "price", label: "Preço (R$)", type: "number", half: true },
-      { key: "price_label", label: "Texto do preço", type: "text", max: 60, half: true, placeholder: "Sob consulta" },
+      {
+        key: "price_label",
+        label: "Texto do preço",
+        type: "text",
+        max: 60,
+        half: true,
+        placeholder: "Sob consulta",
+      },
       { key: "bedrooms", label: "Quartos", type: "number", half: true },
       { key: "bathrooms", label: "Banheiros", type: "number", half: true },
       { key: "parking", label: "Vagas", type: "number", half: true },
       { key: "area_m2", label: "Área (m²)", type: "number", half: true },
       { key: "address", label: "Endereço *", type: "text", required: true, max: 255 },
       { key: "description", label: "Descrição", type: "textarea", max: 4000 },
-      { key: "cover_url", label: "Foto principal", type: "image", folder: "properties/cover", aspect: "wide" },
-      { key: "gallery_urls", label: "Galeria de fotos", type: "gallery", folder: "properties/gallery", limitFrom: "properties" },
+      {
+        key: "cover_url",
+        label: "Foto principal",
+        type: "image",
+        folder: "properties/cover",
+        aspect: "wide",
+      },
+      {
+        key: "gallery_urls",
+        label: "Galeria de fotos",
+        type: "gallery",
+        folder: "properties/gallery",
+        limitFrom: "properties",
+      },
       { key: "video_url", label: "URL do vídeo (YouTube)", type: "url", max: 500 },
-      { key: "__location", label: "Localização no mapa", type: "location", addressKey: "address", latKey: "latitude", lngKey: "longitude" },
+      {
+        key: "__location",
+        label: "Localização no mapa",
+        type: "location",
+        addressKey: "address",
+        latKey: "latitude",
+        lngKey: "longitude",
+      },
       { key: "featured", label: "Destaque", type: "boolean" },
     ],
   },
@@ -127,15 +241,28 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
     fields: [
       { key: "title", label: "Título *", type: "text", required: true, max: 200 },
       {
-        key: "category", label: "Categoria *", type: "select", required: true, options: [
-          { value: "bairro", label: "Bairro" }, { value: "seguranca", label: "Segurança" },
-          { value: "transito", label: "Trânsito" }, { value: "obras", label: "Obras" },
-          { value: "saude", label: "Saúde" }, { value: "educacao", label: "Educação" },
+        key: "category",
+        label: "Categoria *",
+        type: "select",
+        required: true,
+        options: [
+          { value: "bairro", label: "Bairro" },
+          { value: "seguranca", label: "Segurança" },
+          { value: "transito", label: "Trânsito" },
+          { value: "obras", label: "Obras" },
+          { value: "saude", label: "Saúde" },
+          { value: "educacao", label: "Educação" },
         ],
       },
       { key: "summary", label: "Resumo", type: "textarea", max: 500 },
       { key: "content", label: "Conteúdo", type: "textarea", max: 20000 },
-      { key: "cover_url", label: "Foto da capa", type: "image", folder: "news/cover", aspect: "wide" },
+      {
+        key: "cover_url",
+        label: "Foto da capa",
+        type: "image",
+        folder: "news/cover",
+        aspect: "wide",
+      },
       { key: "published", label: "Publicado", type: "boolean" },
     ],
   },
@@ -154,8 +281,21 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
       { key: "price", label: "Preço (R$)", type: "number", half: true },
       { key: "is_free", label: "Gratuito", type: "boolean", half: true },
       { key: "url", label: "Link de inscrição", type: "url", max: 500 },
-      { key: "cover_url", label: "Foto da capa", type: "image", folder: "events/cover", aspect: "wide" },
-      { key: "__location", label: "Localização no mapa", type: "location", addressKey: "location", latKey: "latitude", lngKey: "longitude" },
+      {
+        key: "cover_url",
+        label: "Foto da capa",
+        type: "image",
+        folder: "events/cover",
+        aspect: "wide",
+      },
+      {
+        key: "__location",
+        label: "Localização no mapa",
+        type: "location",
+        addressKey: "location",
+        latKey: "latitude",
+        lngKey: "longitude",
+      },
     ],
   },
   curiosities: {
@@ -165,7 +305,13 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
     fields: [
       { key: "title", label: "Título *", type: "text", required: true, max: 200 },
       { key: "body", label: "Conteúdo *", type: "textarea", required: true, max: 8000 },
-      { key: "cover_url", label: "Foto da capa", type: "image", folder: "curiosities/cover", aspect: "wide" },
+      {
+        key: "cover_url",
+        label: "Foto da capa",
+        type: "image",
+        folder: "curiosities/cover",
+        aspect: "wide",
+      },
     ],
   },
 };

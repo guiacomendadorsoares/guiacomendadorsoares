@@ -4,7 +4,15 @@ import type { Business } from "@/lib/businesses";
 import { GlassCard } from "@/components/cards";
 
 function initialsOf(name: string): string {
-  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((s) => s[0]).join("").toUpperCase() || "•";
+  return (
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((s) => s[0])
+      .join("")
+      .toUpperCase() || "•"
+  );
 }
 
 export function GuiaBusinessCard({ b }: { b: Business }) {
@@ -41,7 +49,9 @@ export function GuiaBusinessCard({ b }: { b: Business }) {
               <div className="min-w-0">
                 <h3 className="flex items-center gap-1 truncate font-display text-[15px] font-bold text-foreground">
                   {b.name}
-                  {b.verified && <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-primary-vibrant" />}
+                  {b.verified && (
+                    <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-primary-vibrant" />
+                  )}
                 </h3>
                 <p className="truncate text-[11px] font-medium text-primary-vibrant">
                   {b.categoryLabel || (b.subcategory ?? "")}

@@ -25,7 +25,10 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
 }
 
 /** Upload de mídia (imagem, GIF ou vídeo). Limite 50MB. */
-export async function uploadMedia(file: File, folder: string): Promise<{ url: string; type: "image" | "gif" | "video" }> {
+export async function uploadMedia(
+  file: File,
+  folder: string,
+): Promise<{ url: string; type: "image" | "gif" | "video" }> {
   const { data: u } = await supabase.auth.getUser();
   const uid = u.user?.id;
   if (!uid) throw new Error("Faça login para enviar mídia.");
@@ -45,17 +48,26 @@ export async function uploadMedia(file: File, folder: string): Promise<{ url: st
   });
   if (error) throw error;
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  const type: "image" | "gif" | "video" = isVideo ? "video" : file.type === "image/gif" ? "gif" : "image";
+  const type: "image" | "gif" | "video" = isVideo
+    ? "video"
+    : file.type === "image/gif"
+      ? "gif"
+      : "image";
   return { url: data.publicUrl, type };
 }
 
 export function storagePathFromPublicUrl(url: string): string | null {
   if (!url) return null;
-  if (!/^https?:\/\//i.test(url) && !url.startsWith("data:") && !url.startsWith("blob:")) return url;
+  if (!/^https?:\/\//i.test(url) && !url.startsWith("data:") && !url.startsWith("blob:"))
+    return url;
 
   const publicMarker = `/storage/v1/object/public/${BUCKET}/`;
   const signedMarker = `/storage/v1/object/sign/${BUCKET}/`;
-  const marker = url.includes(publicMarker) ? publicMarker : url.includes(signedMarker) ? signedMarker : null;
+  const marker = url.includes(publicMarker)
+    ? publicMarker
+    : url.includes(signedMarker)
+      ? signedMarker
+      : null;
   if (!marker) return null;
   const i = url.indexOf(marker);
   return decodeURIComponent(url.slice(i + marker.length).split("?")[0]);

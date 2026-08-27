@@ -7,13 +7,37 @@ export type HourEntry =
   | string;
 
 const DAY_ALIASES: Record<string, number> = {
-  dom: 0, domingo: 0, sun: 0, sunday: 0,
-  seg: 1, segunda: 1, mon: 1, monday: 1,
-  ter: 2, terca: 2, "terça": 2, tue: 2, tuesday: 2,
-  qua: 3, quarta: 3, wed: 3, wednesday: 3,
-  qui: 4, quinta: 4, thu: 4, thursday: 4,
-  sex: 5, sexta: 5, fri: 5, friday: 5,
-  sab: 6, "sáb": 6, sabado: 6, "sábado": 6, sat: 6, saturday: 6,
+  dom: 0,
+  domingo: 0,
+  sun: 0,
+  sunday: 0,
+  seg: 1,
+  segunda: 1,
+  mon: 1,
+  monday: 1,
+  ter: 2,
+  terca: 2,
+  terça: 2,
+  tue: 2,
+  tuesday: 2,
+  qua: 3,
+  quarta: 3,
+  wed: 3,
+  wednesday: 3,
+  qui: 4,
+  quinta: 4,
+  thu: 4,
+  thursday: 4,
+  sex: 5,
+  sexta: 5,
+  fri: 5,
+  friday: 5,
+  sab: 6,
+  sáb: 6,
+  sabado: 6,
+  sábado: 6,
+  sat: 6,
+  saturday: 6,
 };
 
 function toDayIndex(v: unknown): number | null {
@@ -46,7 +70,15 @@ function nowInSaoPaulo(): { day: number; minutes: number } {
     hour12: false,
   });
   const parts = Object.fromEntries(fmt.formatToParts(new Date()).map((p) => [p.type, p.value]));
-  const weekdayMap: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  const weekdayMap: Record<string, number> = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+  };
   const day = weekdayMap[parts.weekday as string] ?? new Date().getDay();
   const h = Number(parts.hour) || 0;
   const m = Number(parts.minute) || 0;

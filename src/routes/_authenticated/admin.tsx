@@ -9,7 +9,11 @@ function AdminLayout() {
   const { ready } = useRequireAnyRole(["admin", "editor"]);
   if (!ready) return null;
   return (
-    <DashboardShell role="admin" title="Painel Master" subtitle="Controle total do Guia Comendador Soares">
+    <DashboardShell
+      role="admin"
+      title="Painel Master"
+      subtitle="Controle total do Guia Comendador Soares"
+    >
       <Outlet />
     </DashboardShell>
   );

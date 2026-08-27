@@ -5,13 +5,7 @@ import news3 from "@/assets/news-3.jpg";
 import news4 from "@/assets/news-4.jpg";
 import news5 from "@/assets/news-5.jpg";
 
-export type NewsCategory =
-  | "bairro"
-  | "seguranca"
-  | "transito"
-  | "obras"
-  | "saude"
-  | "educacao";
+export type NewsCategory = "bairro" | "seguranca" | "transito" | "obras" | "saude" | "educacao";
 
 export interface NewsItem {
   id: string;

@@ -3,7 +3,10 @@ import { NEWS_FILTERS, type NewsCategory, type NewsItem } from "@/lib/news";
 import { getDisplayImageUrl } from "@/lib/storage";
 import fallback from "@/assets/news-1.jpg";
 
-const LABELS = Object.fromEntries(NEWS_FILTERS.map((f) => [f.value, f.label])) as Record<string, string>;
+const LABELS = Object.fromEntries(NEWS_FILTERS.map((f) => [f.value, f.label])) as Record<
+  string,
+  string
+>;
 
 export async function fetchNews(): Promise<NewsItem[]> {
   const { data, error } = await supabase

@@ -1,7 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { CheckCircle2, Building2, Briefcase, Home, Newspaper, Calendar, Sparkles, Users, Pill, Crown } from "lucide-react";
+import {
+  CheckCircle2,
+  Building2,
+  Briefcase,
+  Home,
+  Newspaper,
+  Calendar,
+  Sparkles,
+  Users,
+  Pill,
+  Crown,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminHome,
@@ -21,7 +32,11 @@ function useCounts() {
             supabase.from(t).select("*", { count: "exact", head: true }).eq("status", "pending"),
             supabase.from(t).select("*", { count: "exact", head: true }).eq("status", "approved"),
           ]);
-          out[t] = { total: total.count ?? 0, pending: pending.count ?? 0, approved: approved.count ?? 0 };
+          out[t] = {
+            total: total.count ?? 0,
+            pending: pending.count ?? 0,
+            approved: approved.count ?? 0,
+          };
         }),
       );
       const [usersRes, profilesPlans, pharmProducts] = await Promise.all([
@@ -30,7 +45,9 @@ function useCounts() {
         supabase.from("pharmacy_products").select("*", { count: "exact", head: true }),
       ]);
       const plans = { free: 0, destaque: 0, ouro: 0 } as Record<string, number>;
-      (profilesPlans.data ?? []).forEach((p: any) => { plans[p.current_plan ?? "free"] = (plans[p.current_plan ?? "free"] ?? 0) + 1; });
+      (profilesPlans.data ?? []).forEach((p: any) => {
+        plans[p.current_plan ?? "free"] = (plans[p.current_plan ?? "free"] ?? 0) + 1;
+      });
       return {
         byTable: out,
         users: usersRes.count ?? 0,
@@ -41,34 +58,66 @@ function useCounts() {
   });
 }
 
-
 const ICONS = {
-  businesses: Building2, jobs: Briefcase, properties: Home,
-  news: Newspaper, events: Calendar, curiosities: Sparkles,
+  businesses: Building2,
+  jobs: Briefcase,
+  properties: Home,
+  news: Newspaper,
+  events: Calendar,
+  curiosities: Sparkles,
 } as const;
 
 const LABELS = {
-  businesses: "Empresas", jobs: "Vagas", properties: "Imóveis",
-  news: "Notícias", events: "Eventos", curiosities: "Curiosidades",
+  businesses: "Empresas",
+  jobs: "Vagas",
+  properties: "Imóveis",
+  news: "Notícias",
+  events: "Eventos",
+  curiosities: "Curiosidades",
 } as const;
 
 function AdminHome() {
   const { data, isLoading } = useCounts();
-  const totalPending = data ? TABLES.reduce((acc, t) => acc + (data.byTable[t]?.pending ?? 0), 0) : 0;
+  const totalPending = data
+    ? TABLES.reduce((acc, t) => acc + (data.byTable[t]?.pending ?? 0), 0)
+    : 0;
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard label="Aprovações pendentes" value={isLoading ? "…" : totalPending} icon={CheckCircle2} accent="gold" href="/admin/aprovacoes" />
-        <KpiCard label="Usuários" value={isLoading ? "…" : data?.users ?? 0} icon={Users} href="/admin/usuarios" />
-        <KpiCard label="Empresas" value={isLoading ? "…" : data?.byTable.businesses.total ?? 0} icon={Building2} href="/admin/empresas" />
-        <KpiCard label="Imóveis" value={isLoading ? "…" : data?.byTable.properties.total ?? 0} icon={Home} href="/admin/imoveis" />
+        <KpiCard
+          label="Aprovações pendentes"
+          value={isLoading ? "…" : totalPending}
+          icon={CheckCircle2}
+          accent="gold"
+          href="/admin/aprovacoes"
+        />
+        <KpiCard
+          label="Usuários"
+          value={isLoading ? "…" : (data?.users ?? 0)}
+          icon={Users}
+          href="/admin/usuarios"
+        />
+        <KpiCard
+          label="Empresas"
+          value={isLoading ? "…" : (data?.byTable.businesses.total ?? 0)}
+          icon={Building2}
+          href="/admin/empresas"
+        />
+        <KpiCard
+          label="Imóveis"
+          value={isLoading ? "…" : (data?.byTable.properties.total ?? 0)}
+          icon={Home}
+          href="/admin/imoveis"
+        />
       </div>
 
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-display text-lg font-bold">Assinaturas</h2>
-          <Link to="/admin/planos" className="text-xs font-semibold text-primary hover:underline">Configurar planos →</Link>
+          <Link to="/admin/planos" className="text-xs font-semibold text-primary hover:underline">
+            Configurar planos →
+          </Link>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           <PlanKpi label="Free" value={data?.plans.free ?? 0} tone="muted" />
@@ -95,8 +144,6 @@ function AdminHome() {
         </div>
       </section>
 
-
-
       <section>
         <h2 className="mb-3 font-display text-lg font-bold">Cadastro rápido</h2>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -111,7 +158,9 @@ function AdminHome() {
                 <span className="grid h-9 w-9 place-items-center rounded-lg gradient-brand text-primary-foreground">
                   <Icon className="h-4 w-4" />
                 </span>
-                <span className="text-sm font-semibold">Cadastrar {LABELS[t].replace(/s$/, "").toLowerCase()}</span>
+                <span className="text-sm font-semibold">
+                  Cadastrar {LABELS[t].replace(/s$/, "").toLowerCase()}
+                </span>
               </Link>
             );
           })}
@@ -146,24 +195,48 @@ function AdminHome() {
           })}
         </div>
       </section>
-
     </div>
   );
 }
 
-function moduleRoute(t: typeof TABLES[number]) {
-  return ({
-    businesses: "/admin/empresas", jobs: "/admin/vagas", properties: "/admin/imoveis",
-    news: "/admin/noticias", events: "/admin/eventos", curiosities: "/admin/curiosidades",
-  } as const)[t];
+function moduleRoute(t: (typeof TABLES)[number]) {
+  return (
+    {
+      businesses: "/admin/empresas",
+      jobs: "/admin/vagas",
+      properties: "/admin/imoveis",
+      news: "/admin/noticias",
+      events: "/admin/eventos",
+      curiosities: "/admin/curiosidades",
+    } as const
+  )[t];
 }
 
-function KpiCard({ label, value, icon: Icon, accent, href }: { label: string; value: number | string; icon: any; accent?: "gold"; href: string }) {
+function KpiCard({
+  label,
+  value,
+  icon: Icon,
+  accent,
+  href,
+}: {
+  label: string;
+  value: number | string;
+  icon: any;
+  accent?: "gold";
+  href: string;
+}) {
   return (
-    <Link to={href} className="rounded-2xl border border-border bg-card p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-elegant">
+    <Link
+      to={href}
+      className="rounded-2xl border border-border bg-card p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-elegant"
+    >
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
-        <span className={`grid h-9 w-9 place-items-center rounded-xl ${accent === "gold" ? "gradient-gold text-gold-foreground" : "gradient-brand text-primary-foreground"}`}>
+        <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          {label}
+        </p>
+        <span
+          className={`grid h-9 w-9 place-items-center rounded-xl ${accent === "gold" ? "gradient-gold text-gold-foreground" : "gradient-brand text-primary-foreground"}`}
+        >
           <Icon className="h-4 w-4" />
         </span>
       </div>
@@ -172,14 +245,25 @@ function KpiCard({ label, value, icon: Icon, accent, href }: { label: string; va
   );
 }
 
-function PlanKpi({ label, value, tone }: { label: string; value: number; tone: "muted" | "primary" | "gold" }) {
-  const styles = tone === "gold"
-    ? "gradient-brand text-primary-foreground border-transparent"
-    : tone === "primary"
-    ? "bg-primary/10 text-primary border-primary/30"
-    : "bg-card text-muted-foreground border-border";
+function PlanKpi({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number;
+  tone: "muted" | "primary" | "gold";
+}) {
+  const styles =
+    tone === "gold"
+      ? "gradient-brand text-primary-foreground border-transparent"
+      : tone === "primary"
+        ? "bg-primary/10 text-primary border-primary/30"
+        : "bg-card text-muted-foreground border-border";
   return (
-    <div className={`flex items-center justify-between rounded-2xl border p-5 shadow-card ${styles}`}>
+    <div
+      className={`flex items-center justify-between rounded-2xl border p-5 shadow-card ${styles}`}
+    >
       <div className="flex items-center gap-2">
         <Crown className="h-4 w-4" />
         <span className="text-sm font-bold uppercase tracking-wider">{label}</span>
@@ -189,11 +273,14 @@ function PlanKpi({ label, value, tone }: { label: string; value: number; tone: "
   );
 }
 
-
 function Stat({ label, value, tone }: { label: string; value: number; tone?: "gold" | "primary" }) {
   return (
     <div>
-      <p className={`font-display text-xl font-bold ${tone === "gold" ? "text-gold-foreground" : tone === "primary" ? "text-primary" : ""}`}>{value}</p>
+      <p
+        className={`font-display text-xl font-bold ${tone === "gold" ? "text-gold-foreground" : tone === "primary" ? "text-primary" : ""}`}
+      >
+        {value}
+      </p>
       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
     </div>
   );

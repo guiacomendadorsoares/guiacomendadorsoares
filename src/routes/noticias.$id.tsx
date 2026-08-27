@@ -7,7 +7,10 @@ import { getDisplayImageUrl } from "@/lib/storage";
 import { formatNewsDate, getCategoryColor, NEWS_FILTERS, type NewsCategory } from "@/lib/news";
 import fallback from "@/assets/news-1.jpg";
 
-const LABELS = Object.fromEntries(NEWS_FILTERS.map((f) => [f.value, f.label])) as Record<string, string>;
+const LABELS = Object.fromEntries(NEWS_FILTERS.map((f) => [f.value, f.label])) as Record<
+  string,
+  string
+>;
 
 async function fetchNewsById(id: string) {
   const { data, error } = await supabase
@@ -31,7 +34,10 @@ export const Route = createFileRoute("/noticias/$id")({
     const n = loaderData?.news ?? null;
     const rawTitle = n?.title ?? "Notícia";
     const title = `${rawTitle} — Guia Comendador Soares`.slice(0, 60);
-    const desc = (n?.summary ?? "Notícia local do bairro Comendador Soares, em Nova Iguaçu.").slice(0, 155);
+    const desc = (n?.summary ?? "Notícia local do bairro Comendador Soares, em Nova Iguaçu.").slice(
+      0,
+      155,
+    );
     const url = `https://comendadorsoares.com.br/noticias/${params.id}`;
     const image = n?.image;
     const meta: Array<any> = [
@@ -67,10 +73,14 @@ export const Route = createFileRoute("/noticias/$id")({
   },
   component: NoticiaDetalhe,
   errorComponent: ({ error }) => (
-    <AppShell title="Notícia"><p className="text-sm text-destructive">{error.message}</p></AppShell>
+    <AppShell title="Notícia">
+      <p className="text-sm text-destructive">{error.message}</p>
+    </AppShell>
   ),
   notFoundComponent: () => (
-    <AppShell title="Notícia"><p className="text-sm text-muted-foreground">Notícia não encontrada.</p></AppShell>
+    <AppShell title="Notícia">
+      <p className="text-sm text-muted-foreground">Notícia não encontrada.</p>
+    </AppShell>
   ),
 });
 
@@ -107,16 +117,25 @@ function NoticiaDetalhe() {
       </button>
 
       {isLoading ? (
-        <div className="grid place-items-center py-12"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
+        <div className="grid place-items-center py-12">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
       ) : error ? (
         <p className="text-sm text-destructive">Erro ao carregar notícia.</p>
       ) : !data ? (
-        <p className="text-sm text-muted-foreground">Notícia não encontrada. <Link to="/noticias" className="text-primary underline">Voltar</Link></p>
+        <p className="text-sm text-muted-foreground">
+          Notícia não encontrada.{" "}
+          <Link to="/noticias" className="text-primary underline">
+            Voltar
+          </Link>
+        </p>
       ) : (
         <article className="mx-auto flex w-full max-w-3xl flex-col gap-4">
           <div className="relative w-full overflow-hidden rounded-2xl">
             <img src={data.image} alt={data.title} className="h-64 w-full object-cover" />
-            <span className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-lg ${getCategoryColor(data.category as NewsCategory)}`}>
+            <span
+              className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide shadow-lg ${getCategoryColor(data.category as NewsCategory)}`}
+            >
               {LABELS[data.category] ?? data.category}
             </span>
           </div>

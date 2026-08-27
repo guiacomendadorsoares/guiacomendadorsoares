@@ -2,7 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const CONTENT_TABLES = ["businesses", "jobs", "properties", "news", "events", "curiosities"] as const;
+const CONTENT_TABLES = [
+  "businesses",
+  "jobs",
+  "properties",
+  "news",
+  "events",
+  "curiosities",
+] as const;
 const ROLES = ["admin", "editor", "partner", "broker", "influencer", "user"] as const;
 
 async function assertAdminOrEditor(context: { supabase: any; userId: string }, allowEditor = true) {
@@ -158,7 +165,10 @@ const updatePlanSchema = z.object({
 
 async function applyPlanPatch(userId: string, patch: Record<string, any>) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  const { error } = await (supabaseAdmin as any).from("profiles").update(patch).eq("user_id", userId);
+  const { error } = await (supabaseAdmin as any)
+    .from("profiles")
+    .update(patch)
+    .eq("user_id", userId);
   if (error) throw new Error(error.message);
 }
 
@@ -279,5 +289,3 @@ export const renewUserPlan = createServerFn({ method: "POST" })
     });
     return { ok: true };
   });
-
-

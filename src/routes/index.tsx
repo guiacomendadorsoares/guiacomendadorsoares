@@ -10,7 +10,19 @@ import { CategoriesGrid } from "@/components/categories-grid";
 import { SectionHeader } from "@/components/cards";
 import { Reveal } from "@/components/reveal";
 import { getDisplayImageUrl } from "@/lib/storage";
-import { MapPin, Search, Sparkles, ChevronRight, LifeBuoy, Phone, Landmark, Clock, Navigation, Tag, BadgeCheck } from "lucide-react";
+import {
+  MapPin,
+  Search,
+  Sparkles,
+  ChevronRight,
+  LifeBuoy,
+  Phone,
+  Landmark,
+  Clock,
+  Navigation,
+  Tag,
+  BadgeCheck,
+} from "lucide-react";
 import { isOpenNow } from "@/lib/hours";
 import { NotificationsBell } from "@/components/notifications-bell";
 import logoUrl from "@/assets/logo.png";
@@ -45,7 +57,8 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Guia Comendador Soares — Comércio e Vagas em Nova Iguaçu" },
       {
         property: "og:description",
-        content: "O guia oficial do bairro Comendador Soares em Nova Iguaçu: comércio, vagas, imóveis e comunidade.",
+        content:
+          "O guia oficial do bairro Comendador Soares em Nova Iguaçu: comércio, vagas, imóveis e comunidade.",
       },
       { property: "og:url", content: "https://comendadorsoares.com.br/" },
     ],
@@ -72,25 +85,44 @@ function HomePage() {
       <SmartHeader />
       <SearchHero />
       <QuickShortcuts />
-      <Reveal><HeroCarousel /></Reveal>
+      <Reveal>
+        <HeroCarousel />
+      </Reveal>
       <InstallPrompt />
       <HomePopup />
-
 
       <Reveal as="section" className="mb-7">
         <SectionHeader title="Categorias" subtitle="Encontre tudo do bairro" to="/guia" />
         <CategoriesGrid />
       </Reveal>
 
-      <Reveal><PharmaciesHighlight /></Reveal>
-      <Reveal><OpenNowSection /></Reveal>
-      <Reveal><PromotionsPlaceholder /></Reveal>
-      <Reveal><WhereToEat /></Reveal>
-      <Reveal><LatestJobs /></Reveal>
-      <Reveal><RecentProperties /></Reveal>
-      <Reveal><NeighborhoodNews /></Reveal>
-      <Reveal><UpcomingEvents /></Reveal>
-      <Reveal><UtilidadePublicaHighlight /></Reveal>
+      <Reveal>
+        <PharmaciesHighlight />
+      </Reveal>
+      <Reveal>
+        <OpenNowSection />
+      </Reveal>
+      <Reveal>
+        <PromotionsPlaceholder />
+      </Reveal>
+      <Reveal>
+        <WhereToEat />
+      </Reveal>
+      <Reveal>
+        <LatestJobs />
+      </Reveal>
+      <Reveal>
+        <RecentProperties />
+      </Reveal>
+      <Reveal>
+        <NeighborhoodNews />
+      </Reveal>
+      <Reveal>
+        <UpcomingEvents />
+      </Reveal>
+      <Reveal>
+        <UtilidadePublicaHighlight />
+      </Reveal>
     </AppShell>
   );
 }
@@ -130,7 +162,8 @@ function SmartHeader() {
                   {greeting()} <span aria-hidden>👋</span>
                 </p>
                 <p className="flex items-center gap-1 truncate text-[10px] text-muted-foreground">
-                  <MapPin className="h-2.5 w-2.5 shrink-0 text-primary" /> Você está em Comendador Soares
+                  <MapPin className="h-2.5 w-2.5 shrink-0 text-primary" /> Você está em Comendador
+                  Soares
                 </p>
               </>
             ) : (
@@ -176,8 +209,6 @@ function greeting() {
   return "Boa noite";
 }
 
-
-
 function SearchHero() {
   const navigate = useNavigate();
   const [term, setTerm] = useState("");
@@ -205,7 +236,8 @@ function SearchHero() {
         }}
       />
       <h1 className="font-display text-[26px] font-black leading-[1.1] tracking-tight text-foreground sm:text-[30px]">
-        Encontre <span className="text-primary">empresas, profissionais e serviços</span> do bairro em segundos.
+        Encontre <span className="text-primary">empresas, profissionais e serviços</span> do bairro
+        em segundos.
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">
         Empresas, profissionais e serviços do bairro na palma da mão.
@@ -270,7 +302,14 @@ type Shortcut = {
 };
 
 const SHORTCUTS: Shortcut[] = [
-  { label: "Perto de Mim", icon: "📍", to: "/buscar", search: { q: "" }, from: "#1a4d3a", to2: "#34c781" },
+  {
+    label: "Perto de Mim",
+    icon: "📍",
+    to: "/buscar",
+    search: { q: "" },
+    from: "#1a4d3a",
+    to2: "#34c781",
+  },
   { label: "Mais Procurados", icon: "🔥", to: "/guia", from: "#b8842b", to2: "#f0c068" },
   { label: "Farmácias", icon: "💊", to: "/farmacias", from: "#0f3a5c", to2: "#3aa0d6" },
   { label: "Onde Comer", icon: "🍔", to: "/onde-comer", from: "#8a3a1f", to2: "#e08a3a" },
@@ -311,7 +350,6 @@ function QuickShortcuts() {
   );
 }
 
-
 /* ---------- Shared row helpers ---------- */
 
 type ApprovedItem = {
@@ -339,15 +377,16 @@ function useApprovedItems(
     gcTime: 30 * 60_000,
     queryFn: async () => {
       const hasFeatured = table === "businesses" || table === "properties";
-      const cols = table === "businesses"
-        ? "id,name,address,logo_url,banner_url,featured"
-        : table === "jobs"
-        ? "id,title,company,urgent"
-        : table === "news"
-        ? "id,title,summary,cover_url"
-        : hasFeatured
-        ? "id,title,cover_url,featured"
-        : "id,title,cover_url";
+      const cols =
+        table === "businesses"
+          ? "id,name,address,logo_url,banner_url,featured"
+          : table === "jobs"
+            ? "id,title,company,urgent"
+            : table === "news"
+              ? "id,title,summary,cover_url"
+              : hasFeatured
+                ? "id,title,cover_url,featured"
+                : "id,title,cover_url";
       let q = supabase.from(table).select(cols).eq("status", "approved");
       if (table === "businesses" && mainCategory) q = (q as any).eq("main_category", mainCategory);
       if (hasFeatured) q = q.order("featured", { ascending: false });
@@ -361,7 +400,9 @@ function useApprovedItems(
         ((data ?? []) as unknown as ApprovedItem[]).map(async (item) => ({
           ...item,
           subtitle: item.company ?? item.summary ?? item.address ?? null,
-          cover_url: await getDisplayImageUrl(item.cover_url ?? item.banner_url ?? item.logo_url ?? null),
+          cover_url: await getDisplayImageUrl(
+            item.cover_url ?? item.banner_url ?? item.logo_url ?? null,
+          ),
           banner_url: await getDisplayImageUrl(item.banner_url ?? null),
           logo_url: await getDisplayImageUrl(item.logo_url ?? null),
         })),
@@ -374,8 +415,20 @@ type PHCard = { title: string; subtitle: string; image: string };
 
 function PlaceholderRow({ cards, compact = false }: { cards: PHCard[]; compact?: boolean }) {
   const size = compact
-    ? { card: "min-w-[150px] max-w-[150px]", img: "h-20", pad: "p-2", title: "text-[12.5px]", sub: "text-[11px]" }
-    : { card: "min-w-[230px] max-w-[230px]", img: "h-32", pad: "p-3", title: "text-sm", sub: "text-xs" };
+    ? {
+        card: "min-w-[150px] max-w-[150px]",
+        img: "h-20",
+        pad: "p-2",
+        title: "text-[12.5px]",
+        sub: "text-[11px]",
+      }
+    : {
+        card: "min-w-[230px] max-w-[230px]",
+        img: "h-32",
+        pad: "p-3",
+        title: "text-sm",
+        sub: "text-xs",
+      };
   return (
     <div className="-mx-1 flex gap-2.5 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {cards.map((c, i) => (
@@ -384,14 +437,23 @@ function PlaceholderRow({ cards, compact = false }: { cards: PHCard[]; compact?:
           className={`relative overflow-hidden rounded-2xl border border-border bg-card shadow-card ${size.card}`}
         >
           <div className={`relative w-full overflow-hidden ${size.img}`}>
-            <img src={c.image} alt={c.title} loading="lazy" className="h-full w-full object-cover" />
+            <img
+              src={c.image}
+              alt={c.title}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
             <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-background/85 px-1.5 py-0.5 text-[9px] font-semibold text-muted-foreground backdrop-blur">
               <Sparkles className="h-2.5 w-2.5" /> Em breve
             </span>
           </div>
           <div className={size.pad}>
             <p className={`font-semibold leading-tight line-clamp-1 ${size.title}`}>{c.title}</p>
-            {!compact && <p className={`mt-0.5 line-clamp-2 text-muted-foreground ${size.sub}`}>{c.subtitle}</p>}
+            {!compact && (
+              <p className={`mt-0.5 line-clamp-2 text-muted-foreground ${size.sub}`}>
+                {c.subtitle}
+              </p>
+            )}
           </div>
         </article>
       ))}
@@ -419,8 +481,20 @@ function RealRow({
   compact?: boolean;
 }) {
   const size = compact
-    ? { card: "min-w-[150px] max-w-[150px]", img: "h-20", pad: "p-2", title: "text-[12.5px]", sub: "text-[11px]" }
-    : { card: "min-w-[230px] max-w-[230px]", img: "h-32", pad: "p-3", title: "text-sm", sub: "text-xs" };
+    ? {
+        card: "min-w-[150px] max-w-[150px]",
+        img: "h-20",
+        pad: "p-2",
+        title: "text-[12.5px]",
+        sub: "text-[11px]",
+      }
+    : {
+        card: "min-w-[230px] max-w-[230px]",
+        img: "h-32",
+        pad: "p-3",
+        title: "text-sm",
+        sub: "text-xs",
+      };
   return (
     <div className="-mx-1 flex gap-2.5 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((it) => {
@@ -435,7 +509,12 @@ function RealRow({
             className={`group relative overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-all duration-200 ease-out hover:-translate-y-1 hover:border-primary/30 hover:shadow-elegant active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:transform-none ${size.card}`}
           >
             <div className={`relative w-full overflow-hidden ${size.img}`}>
-              <img src={cover} alt={title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06] motion-reduce:transform-none" />
+              <img
+                src={cover}
+                alt={title}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06] motion-reduce:transform-none"
+              />
               <span className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               {it.featured ? (
                 <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-gold px-1.5 py-0.5 text-[9px] font-semibold text-gold-foreground shadow-card">
@@ -446,7 +525,9 @@ function RealRow({
             <div className={size.pad}>
               <p className={`font-semibold leading-tight line-clamp-2 ${size.title}`}>{title}</p>
               {!compact && it.subtitle ? (
-                <p className={`mt-1 line-clamp-2 text-muted-foreground ${size.sub}`}>{it.subtitle}</p>
+                <p className={`mt-1 line-clamp-2 text-muted-foreground ${size.sub}`}>
+                  {it.subtitle}
+                </p>
               ) : null}
             </div>
           </Link>
@@ -463,7 +544,10 @@ function SkeletonRow({ compact = false, count = 3 }: { compact?: boolean; count?
   return (
     <div className="-mx-1 flex gap-2.5 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className={`overflow-hidden rounded-2xl border border-border bg-card shadow-card ${size.card}`}>
+        <div
+          key={i}
+          className={`overflow-hidden rounded-2xl border border-border bg-card shadow-card ${size.card}`}
+        >
           <div className={`w-full animate-pulse bg-muted ${size.img}`} />
           <div className={`${size.pad} space-y-2`}>
             <div className="h-3 w-4/5 animate-pulse rounded bg-muted" />
@@ -475,20 +559,45 @@ function SkeletonRow({ compact = false, count = 3 }: { compact?: boolean; count?
   );
 }
 
-
 /* ---------- Sections ---------- */
 
 function FeaturedCompanies() {
   const { data: items = [], isLoading } = useApprovedItems("businesses");
   const placeholders: PHCard[] = [
-    { title: "Sua empresa aqui", subtitle: "Anuncie seu negócio e apareça em destaque.", image: phEmpresa.url },
-    { title: "Comércio local", subtitle: "Conecte-se com clientes da sua vizinhança.", image: phEmpresa2.url },
-    { title: "Plano Ouro", subtitle: "Tenha prioridade no guia com o premium.", image: phEmpresa3.url },
+    {
+      title: "Sua empresa aqui",
+      subtitle: "Anuncie seu negócio e apareça em destaque.",
+      image: phEmpresa.url,
+    },
+    {
+      title: "Comércio local",
+      subtitle: "Conecte-se com clientes da sua vizinhança.",
+      image: phEmpresa2.url,
+    },
+    {
+      title: "Plano Ouro",
+      subtitle: "Tenha prioridade no guia com o premium.",
+      image: phEmpresa3.url,
+    },
   ];
   return (
     <section className="mb-7">
-      <SectionHeader title="Empresas em destaque" subtitle="Selecionadas com plano Ouro" to="/guia" />
-      {isLoading ? <SkeletonRow /> : items.length === 0 ? <PlaceholderRow cards={placeholders} /> : <RealRow items={items} to={(id) => ({ to: "/empresa/$id", params: { id } })} fallbackImage={phEmpresa.url} />}
+      <SectionHeader
+        title="Empresas em destaque"
+        subtitle="Selecionadas com plano Ouro"
+        to="/guia"
+      />
+      {isLoading ? (
+        <SkeletonRow />
+      ) : items.length === 0 ? (
+        <PlaceholderRow cards={placeholders} />
+      ) : (
+        <RealRow
+          items={items}
+          to={(id) => ({ to: "/empresa/$id", params: { id } })}
+          fallbackImage={phEmpresa.url}
+        />
+      )}
     </section>
   );
 }
@@ -496,14 +605,37 @@ function FeaturedCompanies() {
 function LatestJobs() {
   const { data: items = [], isLoading } = useApprovedItems("jobs");
   const placeholders: PHCard[] = [
-    { title: "Vagas no bairro", subtitle: "Empresas locais publicarão oportunidades aqui.", image: phVaga.url },
-    { title: "Trabalhe perto de casa", subtitle: "Menos deslocamento, mais qualidade de vida.", image: phVaga2.url },
-    { title: "Cadastre sua vaga", subtitle: "Encontre talentos da vizinhança.", image: phVaga3.url },
+    {
+      title: "Vagas no bairro",
+      subtitle: "Empresas locais publicarão oportunidades aqui.",
+      image: phVaga.url,
+    },
+    {
+      title: "Trabalhe perto de casa",
+      subtitle: "Menos deslocamento, mais qualidade de vida.",
+      image: phVaga2.url,
+    },
+    {
+      title: "Cadastre sua vaga",
+      subtitle: "Encontre talentos da vizinhança.",
+      image: phVaga3.url,
+    },
   ];
   return (
     <section className="mb-7">
       <SectionHeader title="Últimas vagas" subtitle="Trabalhe perto de casa" to="/vagas" />
-      {isLoading ? <SkeletonRow compact /> : items.length === 0 ? <PlaceholderRow compact cards={placeholders} /> : <RealRow compact items={items} to={(id) => ({ to: "/vagas/$id", params: { id } })} fallbackImage={phVaga.url} />}
+      {isLoading ? (
+        <SkeletonRow compact />
+      ) : items.length === 0 ? (
+        <PlaceholderRow compact cards={placeholders} />
+      ) : (
+        <RealRow
+          compact
+          items={items}
+          to={(id) => ({ to: "/vagas/$id", params: { id } })}
+          fallbackImage={phVaga.url}
+        />
+      )}
     </section>
   );
 }
@@ -511,14 +643,33 @@ function LatestJobs() {
 function RecentProperties() {
   const { data: items = [], isLoading } = useApprovedItems("properties");
   const placeholders: PHCard[] = [
-    { title: "Casas para alugar", subtitle: "Confira opções por aqui em breve.", image: phImovel.url },
-    { title: "Imóveis à venda", subtitle: "Corretores parceiros publicam aqui.", image: phImovel2.url },
+    {
+      title: "Casas para alugar",
+      subtitle: "Confira opções por aqui em breve.",
+      image: phImovel.url,
+    },
+    {
+      title: "Imóveis à venda",
+      subtitle: "Corretores parceiros publicam aqui.",
+      image: phImovel2.url,
+    },
     { title: "Terrenos", subtitle: "Oportunidades para investir no bairro.", image: phImovel3.url },
   ];
   return (
     <section className="mb-7">
       <SectionHeader title="Imóveis em destaque" subtitle="Alugar e comprar" to="/imoveis" />
-      {isLoading ? <SkeletonRow compact /> : items.length === 0 ? <PlaceholderRow compact cards={placeholders} /> : <RealRow compact items={items} to={(id) => ({ to: "/imoveis/$id", params: { id } })} fallbackImage={phImovel.url} />}
+      {isLoading ? (
+        <SkeletonRow compact />
+      ) : items.length === 0 ? (
+        <PlaceholderRow compact cards={placeholders} />
+      ) : (
+        <RealRow
+          compact
+          items={items}
+          to={(id) => ({ to: "/imoveis/$id", params: { id } })}
+          fallbackImage={phImovel.url}
+        />
+      )}
     </section>
   );
 }
@@ -526,14 +677,37 @@ function RecentProperties() {
 function UpcomingEvents() {
   const { data: items = [], isLoading } = useApprovedItems("events");
   const placeholders: PHCard[] = [
-    { title: "Festas do bairro", subtitle: "Eventos da comunidade aparecerão aqui.", image: phEvento.url },
-    { title: "Shows e feiras", subtitle: "Fique por dentro da agenda local.", image: phEvento2.url },
-    { title: "Encontros culturais", subtitle: "Cultura e lazer pertinho de você.", image: phEvento3.url },
+    {
+      title: "Festas do bairro",
+      subtitle: "Eventos da comunidade aparecerão aqui.",
+      image: phEvento.url,
+    },
+    {
+      title: "Shows e feiras",
+      subtitle: "Fique por dentro da agenda local.",
+      image: phEvento2.url,
+    },
+    {
+      title: "Encontros culturais",
+      subtitle: "Cultura e lazer pertinho de você.",
+      image: phEvento3.url,
+    },
   ];
   return (
     <section className="mb-7">
       <SectionHeader title="Próximos eventos" subtitle="Acontece pertinho de você" />
-      {isLoading ? <SkeletonRow compact /> : items.length === 0 ? <PlaceholderRow compact cards={placeholders} /> : <RealRow compact items={items} to={(id) => ({ to: "/eventos/$id", params: { id } })} fallbackImage={phEvento.url} />}
+      {isLoading ? (
+        <SkeletonRow compact />
+      ) : items.length === 0 ? (
+        <PlaceholderRow compact cards={placeholders} />
+      ) : (
+        <RealRow
+          compact
+          items={items}
+          to={(id) => ({ to: "/eventos/$id", params: { id } })}
+          fallbackImage={phEvento.url}
+        />
+      )}
     </section>
   );
 }
@@ -541,29 +715,69 @@ function UpcomingEvents() {
 function NeighborhoodNews() {
   const { data: items = [], isLoading } = useApprovedItems("news", { limit: 5 });
   const placeholders: PHCard[] = [
-    { title: "Notícias do bairro", subtitle: "A redação está preparando os conteúdos.", image: phNoticia.url },
+    {
+      title: "Notícias do bairro",
+      subtitle: "A redação está preparando os conteúdos.",
+      image: phNoticia.url,
+    },
     { title: "Comunidade", subtitle: "Histórias dos moradores.", image: phNoticia2.url },
     { title: "Acontece em CS", subtitle: "Acompanhe o que rola por aqui.", image: phNoticia3.url },
   ];
   return (
     <section className="mb-7">
       <SectionHeader title="Notícias do bairro" subtitle="As 5 mais recentes" to="/noticias" />
-      {isLoading ? <SkeletonRow compact /> : items.length === 0 ? <PlaceholderRow compact cards={placeholders} /> : <RealRow compact items={items} to={(id) => ({ to: "/noticias/$id", params: { id } })} fallbackImage={phNoticia.url} />}
+      {isLoading ? (
+        <SkeletonRow compact />
+      ) : items.length === 0 ? (
+        <PlaceholderRow compact cards={placeholders} />
+      ) : (
+        <RealRow
+          compact
+          items={items}
+          to={(id) => ({ to: "/noticias/$id", params: { id } })}
+          fallbackImage={phNoticia.url}
+        />
+      )}
     </section>
   );
 }
 
 function WhereToEat() {
-  const { data: items = [], isLoading } = useApprovedItems("businesses", { mainCategory: "alimentacao" });
+  const { data: items = [], isLoading } = useApprovedItems("businesses", {
+    mainCategory: "alimentacao",
+  });
   const placeholders: PHCard[] = [
-    { title: "Restaurantes locais", subtitle: "Os favoritos da vizinhança em breve.", image: phComer.url },
+    {
+      title: "Restaurantes locais",
+      subtitle: "Os favoritos da vizinhança em breve.",
+      image: phComer.url,
+    },
     { title: "Lanchonetes", subtitle: "Sabores do bairro pertinho de você.", image: phComer2.url },
-    { title: "Cafés e padarias", subtitle: "Comece bem o dia no comércio local.", image: phComer3.url },
+    {
+      title: "Cafés e padarias",
+      subtitle: "Comece bem o dia no comércio local.",
+      image: phComer3.url,
+    },
   ];
   return (
     <section className="mb-7">
-      <SectionHeader title="Onde comer" subtitle="Restaurantes, pizzarias, açaí e mais" to="/onde-comer" />
-      {isLoading ? <SkeletonRow compact /> : items.length === 0 ? <PlaceholderRow compact cards={placeholders} /> : <RealRow compact items={items} to={(id) => ({ to: "/empresa/$id", params: { id } })} fallbackImage={phComer.url} />}
+      <SectionHeader
+        title="Onde comer"
+        subtitle="Restaurantes, pizzarias, açaí e mais"
+        to="/onde-comer"
+      />
+      {isLoading ? (
+        <SkeletonRow compact />
+      ) : items.length === 0 ? (
+        <PlaceholderRow compact cards={placeholders} />
+      ) : (
+        <RealRow
+          compact
+          items={items}
+          to={(id) => ({ to: "/empresa/$id", params: { id } })}
+          fallbackImage={phComer.url}
+        />
+      )}
     </section>
   );
 }
@@ -616,7 +830,9 @@ function OpenNowSection() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("businesses")
-        .select("id,name,address,logo_url,banner_url,hours,verified,whatsapp,latitude,longitude,category_label,subcategory")
+        .select(
+          "id,name,address,logo_url,banner_url,hours,verified,whatsapp,latitude,longitude,category_label,subcategory",
+        )
         .eq("status", "approved")
         .limit(60);
       if (error) return [];
@@ -645,7 +861,12 @@ function OpenNowSection() {
           >
             <div className="relative h-28 w-full overflow-hidden">
               {b.cover_url ? (
-                <img src={b.cover_url} alt={b.name} loading="lazy" className="h-full w-full object-cover" />
+                <img
+                  src={b.cover_url}
+                  alt={b.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 <div className="h-full w-full bg-gradient-to-br from-primary/25 to-gold/20" />
               )}
@@ -705,7 +926,9 @@ function PharmaciesHighlight() {
         to="/farmacias"
         className="group relative block overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-emerald-500/15 via-primary/10 to-teal-400/15 p-5 shadow-elegant transition-all hover:-translate-y-0.5"
       >
-        <div className="absolute -right-6 -top-6 text-8xl opacity-20 transition-transform group-hover:scale-110">💊</div>
+        <div className="absolute -right-6 -top-6 text-8xl opacity-20 transition-transform group-hover:scale-110">
+          💊
+        </div>
         <div className="relative">
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wider text-emerald-700">
             Novidade
@@ -725,5 +948,3 @@ function PharmaciesHighlight() {
     </section>
   );
 }
-
-

@@ -10,9 +10,16 @@ export const Route = createFileRoute("/vagas")({
   head: () => ({
     meta: [
       { title: "Vagas de Emprego em Comendador Soares — Guia CS" },
-      { name: "description", content: "Encontre vagas de emprego, estágios, jovem aprendiz e freelances no bairro Comendador Soares e região de Nova Iguaçu." },
+      {
+        name: "description",
+        content:
+          "Encontre vagas de emprego, estágios, jovem aprendiz e freelances no bairro Comendador Soares e região de Nova Iguaçu.",
+      },
       { property: "og:title", content: "Vagas de Emprego em Comendador Soares — Guia CS" },
-      { property: "og:description", content: "Empregos, estágios e oportunidades perto de casa no bairro Comendador Soares." },
+      {
+        property: "og:description",
+        content: "Empregos, estágios e oportunidades perto de casa no bairro Comendador Soares.",
+      },
     ],
   }),
   component: VagasPage,
@@ -95,7 +102,11 @@ function VagasPage() {
         <EmptyState
           icon={<Briefcase className="h-5 w-5" />}
           title={sampleJobs.length === 0 ? "Nenhuma vaga publicada." : "Nenhuma vaga encontrada"}
-          description={sampleJobs.length === 0 ? "As empresas parceiras ainda não publicaram oportunidades. Volte em breve." : "Tente ajustar os filtros ou a busca para encontrar oportunidades."}
+          description={
+            sampleJobs.length === 0
+              ? "As empresas parceiras ainda não publicaram oportunidades. Volte em breve."
+              : "Tente ajustar os filtros ou a busca para encontrar oportunidades."
+          }
         />
       ) : (
         <div className="grid gap-3 pb-2 md:grid-cols-2 lg:grid-cols-3">

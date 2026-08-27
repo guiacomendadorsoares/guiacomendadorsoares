@@ -18,8 +18,6 @@ import { fetchBusinessById } from "@/services/businesses.service";
 import { useOwnerPlan, can } from "@/lib/plan-limits";
 import { businessHasOwner } from "@/lib/business-claims";
 
-
-
 export const Route = createFileRoute("/empresa/$id")({
   loader: async ({ params }) => {
     const b = await fetchBusinessById(params.id);
@@ -113,37 +111,50 @@ function EmpresaPage() {
     );
   }
 
-
   const showWhatsapp = can(ownerPlan, "business", "whatsapp");
   const showSocial = can(ownerPlan, "business", "social");
   const showGallery = can(ownerPlan, "business", "gallery");
   const showBanner = can(ownerPlan, "business", "banner");
   const showVerified = can(ownerPlan, "business", "verified_badge");
-  const cover = showBanner ? (b.cover_url || b.banner_url || b.logo_url || null) : (b.logo_url || null);
+  const cover = showBanner ? b.cover_url || b.banner_url || b.logo_url || null : b.logo_url || null;
   const description = (b.description || "").slice(0, ownerPlan?.slug === "free" ? 500 : 4000);
-  const instagram = showSocial ? (b.instagram || "") : "";
+  const instagram = showSocial ? b.instagram || "" : "";
   const phone = b.phone || "";
-  const whatsapp = showWhatsapp ? (b.whatsapp || b.phone || "") : "";
+  const whatsapp = showWhatsapp ? b.whatsapp || b.phone || "" : "";
   const waUrl = whatsapp ? `https://wa.me/${whatsapp.replace(/\D/g, "")}` : "#";
   const telUrl = phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : "#";
-  const initials = b.name.split(/\s+/).filter(Boolean).slice(0, 2).map((s: string) => s[0]).join("").toUpperCase();
+  const initials = b.name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((s: string) => s[0])
+    .join("")
+    .toUpperCase();
   const from = b.from || "#1f3a2e";
   const to = b.to || "#4a8a6b";
   const hours: Array<{ day: string; hours: string }> = Array.isArray(b.hours) ? b.hours : [];
-  const rawGallery: string[] = Array.isArray(b.gallery_urls) && b.gallery_urls.length
-    ? b.gallery_urls
-    : Array.isArray(b.gallery) ? (b.gallery as string[]) : [];
+  const rawGallery: string[] =
+    Array.isArray(b.gallery_urls) && b.gallery_urls.length
+      ? b.gallery_urls
+      : Array.isArray(b.gallery)
+        ? (b.gallery as string[])
+        : [];
   const gallery = showGallery ? rawGallery : [];
-
-
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
       <div className="relative h-56 w-full overflow-hidden">
         {cover ? (
-          <img src={cover} alt={`Fachada de ${b.name} em Comendador Soares`} className="h-full w-full object-cover" />
+          <img
+            src={cover}
+            alt={`Fachada de ${b.name} em Comendador Soares`}
+            className="h-full w-full object-cover"
+          />
         ) : (
-          <div className="h-full w-full" style={{ backgroundImage: `linear-gradient(135deg, ${from}, ${to})` }} />
+          <div
+            className="h-full w-full"
+            style={{ backgroundImage: `linear-gradient(135deg, ${from}, ${to})` }}
+          />
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
 
@@ -164,7 +175,11 @@ function EmpresaPage() {
               style={{ backgroundImage: `linear-gradient(135deg, ${from}, ${to})` }}
             >
               {b.logo_url ? (
-                <img src={b.logo_url} alt={`Logotipo de ${b.name} em Comendador Soares`} className="h-full w-full object-cover" />
+                <img
+                  src={b.logo_url}
+                  alt={`Logotipo de ${b.name} em Comendador Soares`}
+                  className="h-full w-full object-cover"
+                />
               ) : (
                 initials
               )}
@@ -177,13 +192,10 @@ function EmpresaPage() {
                 {b.verified && showVerified && (
                   <BadgeCheck className="h-4 w-4 shrink-0 text-primary-vibrant" />
                 )}
-
               </div>
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 {b.categoryLabel || b.category_label || b.subcategory || b.main_category}
               </p>
-
-
             </div>
           </div>
 
@@ -216,7 +228,9 @@ function EmpresaPage() {
                 <ShieldCheck className="h-5 w-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="font-display text-sm font-bold text-foreground">Administrada pelo proprietário</p>
+                <p className="font-display text-sm font-bold text-foreground">
+                  Administrada pelo proprietário
+                </p>
                 <p className="text-[11.5px] leading-snug text-muted-foreground">
                   As informações desta empresa são mantidas por quem a representa oficialmente.
                 </p>
@@ -245,7 +259,7 @@ function EmpresaPage() {
           </section>
         )}
 
-        {(b.latitude != null && b.longitude != null) && (
+        {b.latitude != null && b.longitude != null && (
           <section className="mt-6">
             <SectionTitle>Localização</SectionTitle>
             <LocationMap lat={b.latitude} lng={b.longitude} label={b.name} height={260} />
@@ -289,7 +303,6 @@ function EmpresaPage() {
             </div>
           </section>
         )}
-
       </main>
 
       {whatsapp && (

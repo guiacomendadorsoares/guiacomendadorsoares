@@ -8,22 +8,53 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-  DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Crown, MoreHorizontal, History, ArrowUp, ArrowDown, Pause, Play, Gift, RefreshCw } from "lucide-react";
 import {
-  updateUserPlan, promoteUserPlan, demoteUserPlan, suspendUserPlan,
-  reactivateUserPlan, grantTrial, renewUserPlan,
+  Crown,
+  MoreHorizontal,
+  History,
+  ArrowUp,
+  ArrowDown,
+  Pause,
+  Play,
+  Gift,
+  RefreshCw,
+} from "lucide-react";
+import {
+  updateUserPlan,
+  promoteUserPlan,
+  demoteUserPlan,
+  suspendUserPlan,
+  reactivateUserPlan,
+  grantTrial,
+  renewUserPlan,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/gerenciar-planos")({
@@ -51,11 +82,17 @@ type PartnerRow = {
 
 const PLAN_LABELS: Record<PlanSlug, string> = { free: "Free", destaque: "Destaque", ouro: "Ouro" };
 const STATUS_LABELS: Record<PlanStatus, string> = {
-  active: "Ativo", suspended: "Suspenso", canceled: "Cancelado", trial: "Em teste",
+  active: "Ativo",
+  suspended: "Suspenso",
+  canceled: "Cancelado",
+  trial: "Em teste",
 };
 const SOURCE_LABELS: Record<PlanSource, string> = {
-  manual_admin: "Manual Admin", asaas: "Asaas", promotion: "Promoção",
-  courtesy: "Cortesia", migration: "Migração",
+  manual_admin: "Manual Admin",
+  asaas: "Asaas",
+  promotion: "Promoção",
+  courtesy: "Cortesia",
+  migration: "Migração",
 };
 
 function planBadgeVariant(plan: PlanSlug) {
@@ -88,14 +125,19 @@ function GerenciarPlanosPage() {
     queryFn: async (): Promise<PartnerRow[]> => {
       const { data: profs } = await (supabase as any)
         .from("profiles")
-        .select("id,user_id,email,full_name,avatar_url,current_plan,plan_status,plan_source,plan_started_at,plan_expires_at,plan_notes")
+        .select(
+          "id,user_id,email,full_name,avatar_url,current_plan,plan_status,plan_source,plan_started_at,plan_expires_at,plan_notes",
+        )
         .order("created_at", { ascending: false })
         .limit(500);
       const rows = (profs ?? []) as any[];
       const ids = rows.map((r) => r.user_id).filter(Boolean);
       let rolesMap = new Map<string, string[]>();
       if (ids.length) {
-        const { data: roles } = await supabase.from("user_roles").select("user_id, role").in("user_id", ids);
+        const { data: roles } = await supabase
+          .from("user_roles")
+          .select("user_id, role")
+          .in("user_id", ids);
         for (const r of (roles ?? []) as any[]) {
           const arr = rolesMap.get(r.user_id) ?? [];
           arr.push(r.role);
@@ -109,7 +151,8 @@ function GerenciarPlanosPage() {
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return data.filter((r) => {
-      if (needle && !`${r.full_name ?? ""} ${r.email ?? ""}`.toLowerCase().includes(needle)) return false;
+      if (needle && !`${r.full_name ?? ""} ${r.email ?? ""}`.toLowerCase().includes(needle))
+        return false;
       if (roleFilter !== "all" && !r.roles.includes(roleFilter)) return false;
       if (planFilter !== "all" && r.current_plan !== planFilter) return false;
       if (statusFilter !== "all" && r.plan_status !== statusFilter) return false;
@@ -132,9 +175,15 @@ function GerenciarPlanosPage() {
       </header>
 
       <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-card md:grid-cols-[1fr_auto_auto_auto]">
-        <Input placeholder="Buscar por nome ou email…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <Input
+          placeholder="Buscar por nome ou email…"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+        />
         <Select value={roleFilter} onValueChange={setRoleFilter}>
-          <SelectTrigger className="w-[160px]"><SelectValue placeholder="Perfil" /></SelectTrigger>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Perfil" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos perfis</SelectItem>
             <SelectItem value="partner">Parceiros</SelectItem>
@@ -146,7 +195,9 @@ function GerenciarPlanosPage() {
           </SelectContent>
         </Select>
         <Select value={planFilter} onValueChange={setPlanFilter}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Plano" /></SelectTrigger>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Plano" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos planos</SelectItem>
             <SelectItem value="free">Free</SelectItem>
@@ -155,7 +206,9 @@ function GerenciarPlanosPage() {
           </SelectContent>
         </Select>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos status</SelectItem>
             <SelectItem value="active">Ativo</SelectItem>
@@ -193,8 +246,14 @@ function GerenciarPlanosPage() {
 }
 
 function PartnerRowCard({
-  row, onEdit, onHistory,
-}: { row: PartnerRow; onEdit: () => void; onHistory: () => void }) {
+  row,
+  onEdit,
+  onHistory,
+}: {
+  row: PartnerRow;
+  onEdit: () => void;
+  onHistory: () => void;
+}) {
   const qc = useQueryClient();
   const promote = useServerFn(promoteUserPlan);
   const demote = useServerFn(demoteUserPlan);
@@ -210,7 +269,11 @@ function PartnerRowCard({
   };
 
   const run = (fn: () => Promise<any>, msg: string) =>
-    fn().then(() => { toast.success(msg); invalidate(); })
+    fn()
+      .then(() => {
+        toast.success(msg);
+        invalidate();
+      })
       .catch((e: Error) => toast.error(e.message));
 
   const expired = row.plan_expires_at && new Date(row.plan_expires_at) < new Date();
@@ -228,7 +291,11 @@ function PartnerRowCard({
           <p className="truncate text-xs text-muted-foreground">{row.email}</p>
           {row.roles.length > 0 && (
             <div className="mt-1 flex flex-wrap gap-1">
-              {row.roles.map((r) => <Badge key={r} variant="outline" className="text-[10px]">{r}</Badge>)}
+              {row.roles.map((r) => (
+                <Badge key={r} variant="outline" className="text-[10px]">
+                  {r}
+                </Badge>
+              ))}
             </div>
           )}
         </div>
@@ -244,51 +311,166 @@ function PartnerRowCard({
           Venc: {fmtDate(row.plan_expires_at)}
         </span>
 
-        <Button size="sm" variant="outline" onClick={onEdit}>Editar plano</Button>
+        <Button size="sm" variant="outline" onClick={onEdit}>
+          Editar plano
+        </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost"><MoreHorizontal className="h-4 w-4" /></Button>
+            <Button size="icon" variant="ghost">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>Ações rápidas</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => run(() => promote({ data: { userId: row.user_id, plan: "destaque" } }), "Promovido para Destaque")}>
+            <DropdownMenuItem
+              onClick={() =>
+                run(
+                  () => promote({ data: { userId: row.user_id, plan: "destaque" } }),
+                  "Promovido para Destaque",
+                )
+              }
+            >
               <ArrowUp className="mr-2 h-4 w-4" /> Promover para Destaque
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => run(() => promote({ data: { userId: row.user_id, plan: "ouro" } }), "Promovido para Ouro")}>
+            <DropdownMenuItem
+              onClick={() =>
+                run(
+                  () => promote({ data: { userId: row.user_id, plan: "ouro" } }),
+                  "Promovido para Ouro",
+                )
+              }
+            >
               <ArrowUp className="mr-2 h-4 w-4" /> Promover para Ouro
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => run(() => demote({ data: { userId: row.user_id } }), "Rebaixado para Free")}>
+            <DropdownMenuItem
+              onClick={() =>
+                run(() => demote({ data: { userId: row.user_id } }), "Rebaixado para Free")
+              }
+            >
               <ArrowDown className="mr-2 h-4 w-4" /> Rebaixar para Free
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {row.plan_status === "suspended" ? (
-              <DropdownMenuItem onClick={() => run(() => reactivate({ data: { userId: row.user_id } }), "Plano reativado")}>
+              <DropdownMenuItem
+                onClick={() =>
+                  run(() => reactivate({ data: { userId: row.user_id } }), "Plano reativado")
+                }
+              >
                 <Play className="mr-2 h-4 w-4" /> Reativar plano
               </DropdownMenuItem>
             ) : (
-              <DropdownMenuItem onClick={() => run(() => suspend({ data: { userId: row.user_id } }), "Plano suspenso")}>
+              <DropdownMenuItem
+                onClick={() =>
+                  run(() => suspend({ data: { userId: row.user_id } }), "Plano suspenso")
+                }
+              >
                 <Pause className="mr-2 h-4 w-4" /> Suspender plano
               </DropdownMenuItem>
             )}
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger><Gift className="mr-2 h-4 w-4" /> Conceder teste gratuito</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>
+                <Gift className="mr-2 h-4 w-4" /> Conceder teste gratuito
+              </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={() => run(() => trial({ data: { userId: row.user_id, plan: "destaque", days: 7 } }), "Teste de 7 dias concedido")}>Destaque — 7 dias</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => run(() => trial({ data: { userId: row.user_id, plan: "destaque", days: 15 } }), "Teste de 15 dias concedido")}>Destaque — 15 dias</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => run(() => trial({ data: { userId: row.user_id, plan: "destaque", days: 30 } }), "Teste de 30 dias concedido")}>Destaque — 30 dias</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => trial({ data: { userId: row.user_id, plan: "destaque", days: 7 } }),
+                      "Teste de 7 dias concedido",
+                    )
+                  }
+                >
+                  Destaque — 7 dias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => trial({ data: { userId: row.user_id, plan: "destaque", days: 15 } }),
+                      "Teste de 15 dias concedido",
+                    )
+                  }
+                >
+                  Destaque — 15 dias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => trial({ data: { userId: row.user_id, plan: "destaque", days: 30 } }),
+                      "Teste de 30 dias concedido",
+                    )
+                  }
+                >
+                  Destaque — 30 dias
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => run(() => trial({ data: { userId: row.user_id, plan: "ouro", days: 7 } }), "Teste de 7 dias concedido")}>Ouro — 7 dias</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => run(() => trial({ data: { userId: row.user_id, plan: "ouro", days: 15 } }), "Teste de 15 dias concedido")}>Ouro — 15 dias</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => run(() => trial({ data: { userId: row.user_id, plan: "ouro", days: 30 } }), "Teste de 30 dias concedido")}>Ouro — 30 dias</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => trial({ data: { userId: row.user_id, plan: "ouro", days: 7 } }),
+                      "Teste de 7 dias concedido",
+                    )
+                  }
+                >
+                  Ouro — 7 dias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => trial({ data: { userId: row.user_id, plan: "ouro", days: 15 } }),
+                      "Teste de 15 dias concedido",
+                    )
+                  }
+                >
+                  Ouro — 15 dias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => trial({ data: { userId: row.user_id, plan: "ouro", days: 30 } }),
+                      "Teste de 30 dias concedido",
+                    )
+                  }
+                >
+                  Ouro — 30 dias
+                </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger><RefreshCw className="mr-2 h-4 w-4" /> Renovar plano</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>
+                <RefreshCw className="mr-2 h-4 w-4" /> Renovar plano
+              </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                <DropdownMenuItem onClick={() => run(() => renew({ data: { userId: row.user_id, days: 30 } }), "Renovado por 30 dias")}>+ 30 dias</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => run(() => renew({ data: { userId: row.user_id, days: 90 } }), "Renovado por 90 dias")}>+ 90 dias</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => run(() => renew({ data: { userId: row.user_id, days: 365 } }), "Renovado por 1 ano")}>+ 365 dias</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => renew({ data: { userId: row.user_id, days: 30 } }),
+                      "Renovado por 30 dias",
+                    )
+                  }
+                >
+                  + 30 dias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => renew({ data: { userId: row.user_id, days: 90 } }),
+                      "Renovado por 90 dias",
+                    )
+                  }
+                >
+                  + 90 dias
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    run(
+                      () => renew({ data: { userId: row.user_id, days: 365 } }),
+                      "Renovado por 1 ano",
+                    )
+                  }
+                >
+                  + 365 dias
+                </DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuSeparator />
@@ -303,16 +485,26 @@ function PartnerRowCard({
 }
 
 function EditPlanDialog({
-  row, open, onOpenChange,
-}: { row: PartnerRow; open: boolean; onOpenChange: (v: boolean) => void }) {
+  row,
+  open,
+  onOpenChange,
+}: {
+  row: PartnerRow;
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
   const qc = useQueryClient();
   const update = useServerFn(updateUserPlan);
   const [plan, setPlan] = useState<PlanSlug>(row.current_plan);
   const [status, setStatus] = useState<PlanStatus>(row.plan_status);
   const [source, setSource] = useState<PlanSource>(row.plan_source);
-  const [startedAt, setStartedAt] = useState(row.plan_started_at ? row.plan_started_at.slice(0, 10) : "");
+  const [startedAt, setStartedAt] = useState(
+    row.plan_started_at ? row.plan_started_at.slice(0, 10) : "",
+  );
   const [noExpiry, setNoExpiry] = useState(!row.plan_expires_at);
-  const [expiresAt, setExpiresAt] = useState(row.plan_expires_at ? row.plan_expires_at.slice(0, 10) : "");
+  const [expiresAt, setExpiresAt] = useState(
+    row.plan_expires_at ? row.plan_expires_at.slice(0, 10) : "",
+  );
   const [reason, setReason] = useState("");
 
   const save = useMutation({
@@ -320,9 +512,11 @@ function EditPlanDialog({
       update({
         data: {
           userId: row.user_id,
-          plan, status, source,
+          plan,
+          status,
+          source,
           startedAt: startedAt ? new Date(startedAt).toISOString() : null,
-          expiresAt: noExpiry ? null : (expiresAt ? new Date(expiresAt).toISOString() : null),
+          expiresAt: noExpiry ? null : expiresAt ? new Date(expiresAt).toISOString() : null,
           reason: reason || undefined,
         },
       }),
@@ -347,7 +541,9 @@ function EditPlanDialog({
             <div>
               <Label className="text-xs">Plano</Label>
               <Select value={plan} onValueChange={(v) => setPlan(v as PlanSlug)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="free">Free</SelectItem>
                   <SelectItem value="destaque">Destaque</SelectItem>
@@ -358,7 +554,9 @@ function EditPlanDialog({
             <div>
               <Label className="text-xs">Status</Label>
               <Select value={status} onValueChange={(v) => setStatus(v as PlanStatus)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="active">Ativo</SelectItem>
                   <SelectItem value="trial">Em teste</SelectItem>
@@ -370,7 +568,9 @@ function EditPlanDialog({
             <div>
               <Label className="text-xs">Origem</Label>
               <Select value={source} onValueChange={(v) => setSource(v as PlanSource)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="manual_admin">Manual Admin</SelectItem>
                   <SelectItem value="asaas">Asaas</SelectItem>
@@ -389,7 +589,12 @@ function EditPlanDialog({
             </div>
             <div>
               <Label className="text-xs">Data de vencimento</Label>
-              <Input type="date" value={expiresAt} disabled={noExpiry} onChange={(e) => setExpiresAt(e.target.value)} />
+              <Input
+                type="date"
+                value={expiresAt}
+                disabled={noExpiry}
+                onChange={(e) => setExpiresAt(e.target.value)}
+              />
               <label className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                 <Switch checked={noExpiry} onCheckedChange={setNoExpiry} />
                 Sem vencimento
@@ -399,12 +604,21 @@ function EditPlanDialog({
 
           <div>
             <Label className="text-xs">Motivo / observação</Label>
-            <Textarea rows={2} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Opcional — fica no histórico" />
+            <Textarea
+              rows={2}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Opcional — fica no histórico"
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={() => save.mutate()} disabled={save.isPending}>Salvar</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={() => save.mutate()} disabled={save.isPending}>
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -412,8 +626,14 @@ function EditPlanDialog({
 }
 
 function HistoryDialog({
-  row, open, onOpenChange,
-}: { row: PartnerRow; open: boolean; onOpenChange: (v: boolean) => void }) {
+  row,
+  open,
+  onOpenChange,
+}: {
+  row: PartnerRow;
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
   const { data = [], isLoading } = useQuery({
     queryKey: ["plan-audit-log", row.user_id],
     enabled: open,
@@ -449,15 +669,18 @@ function HistoryDialog({
                 </span>
               </div>
               <div className="mt-1 text-xs text-muted-foreground">
-                Status: {r.previous_status ?? "—"} → {r.new_status ?? "—"} · Origem: {r.previous_source ?? "—"} → {r.new_source ?? "—"} ·
-                Venc: {fmtDate(r.previous_expires_at)} → {fmtDate(r.new_expires_at)}
+                Status: {r.previous_status ?? "—"} → {r.new_status ?? "—"} · Origem:{" "}
+                {r.previous_source ?? "—"} → {r.new_source ?? "—"} · Venc:{" "}
+                {fmtDate(r.previous_expires_at)} → {fmtDate(r.new_expires_at)}
               </div>
               {r.reason && <p className="mt-1 text-xs">Motivo: {r.reason}</p>}
             </div>
           ))}
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Fechar</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            Fechar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

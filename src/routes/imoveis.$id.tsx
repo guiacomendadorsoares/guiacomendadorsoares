@@ -18,9 +18,13 @@ export const Route = createFileRoute("/imoveis/$id")({
     const name = p?.title ?? "Imóvel";
     const title = `${name} — Comendador Soares, Nova Iguaçu`.slice(0, 60);
     const rawDesc = (p?.description ?? p?.address ?? "").trim();
-    const desc = (rawDesc || `Detalhes de ${name} em Comendador Soares, Nova Iguaçu.`).slice(0, 155);
+    const desc = (rawDesc || `Detalhes de ${name} em Comendador Soares, Nova Iguaçu.`).slice(
+      0,
+      155,
+    );
     const url = `https://comendadorsoares.com.br/imoveis/${params.id}`;
-    const image = p?.cover_url || (Array.isArray(p?.gallery_urls) && p.gallery_urls[0]) || undefined;
+    const image =
+      p?.cover_url || (Array.isArray(p?.gallery_urls) && p.gallery_urls[0]) || undefined;
     const meta: Array<any> = [
       { title },
       { name: "description", content: desc },
@@ -76,7 +80,11 @@ function ImovelPage() {
   const { data: p, isLoading } = useQuery({
     queryKey: ["property", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("properties").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase
+        .from("properties")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -104,7 +112,8 @@ function ImovelPage() {
   const listing = (p.listing_type ?? "venda") as string;
   const listingLabel = listing === "aluguel" ? "Aluguel" : "Venda";
   const price = p.price_label ?? formatPrice(p.price as any, listing);
-  const cover = p.cover_url || (Array.isArray(p.gallery_urls) && p.gallery_urls[0]) || "/placeholder.svg";
+  const cover =
+    p.cover_url || (Array.isArray(p.gallery_urls) && p.gallery_urls[0]) || "/placeholder.svg";
   const gallery: string[] = Array.isArray(p.gallery_urls) ? p.gallery_urls : [];
 
   return (
@@ -129,47 +138,75 @@ function ImovelPage() {
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {p.kind ?? "Imóvel"}
           </p>
-          <h1 className="mt-1 font-display text-xl font-bold leading-tight text-foreground">{p.title}</h1>
+          <h1 className="mt-1 font-display text-xl font-bold leading-tight text-foreground">
+            {p.title}
+          </h1>
           {p.address && (
             <p className="mt-2 flex items-start gap-1.5 text-sm text-muted-foreground">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-vibrant" />
               <span>{p.address}</span>
             </p>
           )}
-          <p className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground">{price}</p>
+          <p className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground">
+            {price}
+          </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
             {typeof p.bedrooms === "number" && (
-              <span className="flex items-center gap-1"><BedDouble className="h-4 w-4" />{p.bedrooms} {p.bedrooms === 1 ? "quarto" : "quartos"}</span>
+              <span className="flex items-center gap-1">
+                <BedDouble className="h-4 w-4" />
+                {p.bedrooms} {p.bedrooms === 1 ? "quarto" : "quartos"}
+              </span>
             )}
             {typeof p.bathrooms === "number" && (
-              <span className="flex items-center gap-1"><Bath className="h-4 w-4" />{p.bathrooms} {p.bathrooms === 1 ? "banheiro" : "banheiros"}</span>
+              <span className="flex items-center gap-1">
+                <Bath className="h-4 w-4" />
+                {p.bathrooms} {p.bathrooms === 1 ? "banheiro" : "banheiros"}
+              </span>
             )}
             {typeof p.parking === "number" && (
-              <span className="flex items-center gap-1"><Car className="h-4 w-4" />{p.parking} {p.parking === 1 ? "vaga" : "vagas"}</span>
+              <span className="flex items-center gap-1">
+                <Car className="h-4 w-4" />
+                {p.parking} {p.parking === 1 ? "vaga" : "vagas"}
+              </span>
             )}
             {typeof p.area_m2 === "number" && (
-              <span className="flex items-center gap-1"><Maximize className="h-4 w-4" />{p.area_m2} m²</span>
+              <span className="flex items-center gap-1">
+                <Maximize className="h-4 w-4" />
+                {p.area_m2} m²
+              </span>
             )}
           </div>
         </GlassCard>
 
         {p.description && (
           <section className="mt-6">
-            <h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wider text-muted-foreground">Descrição</h2>
+            <h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wider text-muted-foreground">
+              Descrição
+            </h2>
             <GlassCard className="p-4">
-              <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{p.description}</p>
+              <p className="whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
+                {p.description}
+              </p>
             </GlassCard>
           </section>
         )}
 
         {gallery.length > 0 && (
           <section className="mt-6">
-            <h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wider text-muted-foreground">Galeria</h2>
+            <h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wider text-muted-foreground">
+              Galeria
+            </h2>
             <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <div className="flex gap-3 pb-1">
                 {gallery.map((src, i) => (
-                  <img key={i} src={src} alt={`Foto ${i + 1}`} loading="lazy" className="h-40 w-40 shrink-0 rounded-2xl object-cover shadow-card" />
+                  <img
+                    key={i}
+                    src={src}
+                    alt={`Foto ${i + 1}`}
+                    loading="lazy"
+                    className="h-40 w-40 shrink-0 rounded-2xl object-cover shadow-card"
+                  />
                 ))}
               </div>
             </div>

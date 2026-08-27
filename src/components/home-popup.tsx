@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
 type Popup = {
@@ -19,13 +26,19 @@ function wasSeen(p: Popup) {
   if (p.frequency === "always") return false;
   const key = p.frequency === "once" ? `popup-seen-${p.id}` : `popup-seen-session-${p.id}`;
   const store = p.frequency === "once" ? localStorage : sessionStorage;
-  try { return store.getItem(key) === "1"; } catch { return false; }
+  try {
+    return store.getItem(key) === "1";
+  } catch {
+    return false;
+  }
 }
 function markSeen(p: Popup) {
   if (p.frequency === "always") return;
   const key = p.frequency === "once" ? `popup-seen-${p.id}` : `popup-seen-session-${p.id}`;
   const store = p.frequency === "once" ? localStorage : sessionStorage;
-  try { store.setItem(key, "1"); } catch {}
+  try {
+    store.setItem(key, "1");
+  } catch {}
 }
 
 export function HomePopup() {
@@ -71,14 +84,22 @@ export function HomePopup() {
           <DialogHeader>
             <DialogTitle className="font-display text-xl">{current.title}</DialogTitle>
             {current.content && (
-              <DialogDescription className="whitespace-pre-line">{current.content}</DialogDescription>
+              <DialogDescription className="whitespace-pre-line">
+                {current.content}
+              </DialogDescription>
             )}
           </DialogHeader>
           <DialogFooter className="mt-5 gap-2 sm:gap-2">
-            <Button variant="ghost" onClick={close}>Fechar</Button>
+            <Button variant="ghost" onClick={close}>
+              Fechar
+            </Button>
             {current.link_url && (
               <Button asChild variant="premium" onClick={close}>
-                <a href={current.link_url} target={current.link_url.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                <a
+                  href={current.link_url}
+                  target={current.link_url.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer"
+                >
                   {current.link_label || "Saiba mais"}
                 </a>
               </Button>

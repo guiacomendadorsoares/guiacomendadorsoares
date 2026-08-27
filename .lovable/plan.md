@@ -25,10 +25,12 @@ Dado o tamanho, proponho entregar em **5 fases sequenciais**, cada uma testável
 **Storage:** novo bucket privado `business-claims` com RLS (dono da claim + admin).
 
 **RLS chave:**
+
 - Empresa é "reivindicável" quando não tem `business_members` com `is_primary_owner=true`.
 - Solicitante vê apenas as próprias claims. Admin vê tudo (via `has_role('admin')`).
 
 **Interface Fase 1:**
+
 - Botão **"Sou o proprietário desta empresa"** em `src/routes/empresa.$id.tsx` (só aparece se empresa não tem dono).
 - Página de solicitação `/empresa/$id/reivindicar` com formulário + upload multi-arquivo (validação de tipo/tamanho: PDF/JPG/PNG até 10MB).
 - Se não logado → redireciona para `/auth` guardando o destino.

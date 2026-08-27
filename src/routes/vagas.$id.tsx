@@ -1,13 +1,24 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Banknote, Briefcase, Clock, Flame, Loader2, MapPin, MessageCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Banknote,
+  Briefcase,
+  Clock,
+  Flame,
+  Loader2,
+  MapPin,
+  MessageCircle,
+} from "lucide-react";
 import { AppShell } from "@/components/app-shell";
 import { supabase } from "@/integrations/supabase/client";
 
 async function fetchJobById(id: string) {
   const { data, error } = await supabase
     .from("jobs")
-    .select("id,title,company,type,salary,location,description,apply_url,whatsapp,urgent,posted_at,expires_at,active,status")
+    .select(
+      "id,title,company,type,salary,location,description,apply_url,whatsapp,urgent,posted_at,expires_at,active,status",
+    )
     .eq("id", id)
     .eq("status", "approved")
     .eq("active", true)
@@ -22,10 +33,14 @@ export const Route = createFileRoute("/vagas/$id")({
     const j: any = loaderData?.job ?? null;
     const jobTitle = j?.title ?? "Vaga de emprego";
     const company = j?.company ?? "";
-    const title = (company ? `${jobTitle} — ${company}` : `${jobTitle} — Comendador Soares`).slice(0, 60);
-    const desc = (j
-      ? `${jobTitle}${company ? " na " + company : ""} em Comendador Soares, Nova Iguaçu.${j.salary ? " Salário: " + j.salary + "." : ""}`
-      : "Confira detalhes desta vaga em Comendador Soares e candidate-se."
+    const title = (company ? `${jobTitle} — ${company}` : `${jobTitle} — Comendador Soares`).slice(
+      0,
+      60,
+    );
+    const desc = (
+      j
+        ? `${jobTitle}${company ? " na " + company : ""} em Comendador Soares, Nova Iguaçu.${j.salary ? " Salário: " + j.salary + "." : ""}`
+        : "Confira detalhes desta vaga em Comendador Soares e candidate-se."
     ).slice(0, 155);
     const url = `https://comendadorsoares.com.br/vagas/${params.id}`;
     const meta: Array<any> = [
@@ -49,9 +64,7 @@ export const Route = createFileRoute("/vagas/$id")({
           datePosted: j.posted_at || undefined,
           validThrough: j.expires_at || undefined,
           employmentType: j.type || undefined,
-          hiringOrganization: j.company
-            ? { "@type": "Organization", name: j.company }
-            : undefined,
+          hiringOrganization: j.company ? { "@type": "Organization", name: j.company } : undefined,
           jobLocation: {
             "@type": "Place",
             address: {
@@ -62,7 +75,13 @@ export const Route = createFileRoute("/vagas/$id")({
               addressCountry: "BR",
             },
           },
-          baseSalary: j.salary ? { "@type": "MonetaryAmount", currency: "BRL", value: { "@type": "QuantitativeValue", value: j.salary, unitText: "MONTH" } } : undefined,
+          baseSalary: j.salary
+            ? {
+                "@type": "MonetaryAmount",
+                currency: "BRL",
+                value: { "@type": "QuantitativeValue", value: j.salary, unitText: "MONTH" },
+              }
+            : undefined,
         }),
       });
     }
@@ -90,7 +109,11 @@ const TYPE_LABELS: Record<string, string> = {
 
 function formatDate(iso?: string | null) {
   if (!iso) return "Publicado recentemente";
-  return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 function VagaDetalhe() {
@@ -102,7 +125,9 @@ function VagaDetalhe() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("jobs")
-        .select("id,title,company,type,salary,location,description,apply_url,whatsapp,urgent,posted_at,expires_at,active,status")
+        .select(
+          "id,title,company,type,salary,location,description,apply_url,whatsapp,urgent,posted_at,expires_at,active,status",
+        )
         .eq("id", id)
         .eq("status", "approved")
         .eq("active", true)
@@ -132,7 +157,10 @@ function VagaDetalhe() {
         <p className="text-sm text-destructive">Erro ao carregar vaga.</p>
       ) : !data ? (
         <p className="text-sm text-muted-foreground">
-          Vaga não encontrada. <Link to="/vagas" className="text-primary underline">Voltar</Link>
+          Vaga não encontrada.{" "}
+          <Link to="/vagas" className="text-primary underline">
+            Voltar
+          </Link>
         </p>
       ) : (
         <article className="mx-auto flex w-full max-w-3xl flex-col gap-4">
@@ -161,8 +189,16 @@ function VagaDetalhe() {
           <div className="grid gap-2 text-sm text-muted-foreground">
             {data.salary && <Info icon={<Banknote className="h-4 w-4" />} text={data.salary} />}
             {data.location && <Info icon={<MapPin className="h-4 w-4" />} text={data.location} />}
-            <Info icon={<Clock className="h-4 w-4" />} text={`Publicado em ${formatDate(data.posted_at)}`} />
-            {data.expires_at && <Info icon={<Clock className="h-4 w-4" />} text={`Encerra em ${formatDate(data.expires_at)}`} />}
+            <Info
+              icon={<Clock className="h-4 w-4" />}
+              text={`Publicado em ${formatDate(data.posted_at)}`}
+            />
+            {data.expires_at && (
+              <Info
+                icon={<Clock className="h-4 w-4" />}
+                text={`Encerra em ${formatDate(data.expires_at)}`}
+              />
+            )}
           </div>
 
           {data.description && (
@@ -173,12 +209,22 @@ function VagaDetalhe() {
 
           <div className="flex flex-col gap-2 sm:flex-row">
             {data.apply_url && (
-              <a href={data.apply_url} target="_blank" rel="noopener noreferrer" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-card">
+              <a
+                href={data.apply_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-card"
+              >
                 Candidatar-se
               </a>
             )}
             {whatsappUrl && (
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-card">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-card"
+              >
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </a>
             )}

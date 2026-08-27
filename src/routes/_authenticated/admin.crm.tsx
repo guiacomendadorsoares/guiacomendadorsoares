@@ -3,16 +3,41 @@ import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
-  DndContext, DragOverlay, PointerSensor, useSensor, useSensors,
-  useDraggable, useDroppable,
-  type DragEndEvent, type DragStartEvent,
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDraggable,
+  useDroppable,
+  type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import { toast } from "sonner";
 import {
-  Search, Plus, Phone, MessageCircle, Mail, Building2, Calendar,
-  Clock, MoreHorizontal, Trash2, Edit3, History as HistoryIcon,
-  Pause, Play, Gift, ArrowUp, ArrowDown, RefreshCw, DollarSign,
-  BarChart3, ListChecks, LayoutGrid, TrendingUp,
+  Search,
+  Plus,
+  Phone,
+  MessageCircle,
+  Mail,
+  Building2,
+  Calendar,
+  Clock,
+  MoreHorizontal,
+  Trash2,
+  Edit3,
+  History as HistoryIcon,
+  Pause,
+  Play,
+  Gift,
+  ArrowUp,
+  ArrowDown,
+  RefreshCw,
+  DollarSign,
+  BarChart3,
+  ListChecks,
+  LayoutGrid,
+  TrendingUp,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,24 +47,53 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
-  DropdownMenuSeparator, DropdownMenuLabel, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuSubContent,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import { useHasRole } from "@/hooks/use-auth";
 import {
-  listCrmLeads, upsertCrmLead, deleteCrmLead, moveCrmLeadStage,
-  addCrmActivity, listCrmActivities, addCrmReminder, toggleCrmReminder,
-  listCrmReminders, listCrmAudit,
+  listCrmLeads,
+  upsertCrmLead,
+  deleteCrmLead,
+  moveCrmLeadStage,
+  addCrmActivity,
+  listCrmActivities,
+  addCrmReminder,
+  toggleCrmReminder,
+  listCrmReminders,
+  listCrmAudit,
 } from "@/lib/crm.functions";
 import {
-  promoteUserPlan, demoteUserPlan, suspendUserPlan, reactivateUserPlan,
-  grantTrial, renewUserPlan, updateUserPlan,
+  promoteUserPlan,
+  demoteUserPlan,
+  suspendUserPlan,
+  reactivateUserPlan,
+  grantTrial,
+  renewUserPlan,
+  updateUserPlan,
 } from "@/lib/admin.functions";
 
 export const Route = createFileRoute("/_authenticated/admin/crm")({
@@ -47,8 +101,15 @@ export const Route = createFileRoute("/_authenticated/admin/crm")({
 });
 
 type Stage =
-  | "lead" | "contato" | "visita" | "proposta" | "negociacao"
-  | "teste" | "ativo" | "renovacao" | "cancelado";
+  | "lead"
+  | "contato"
+  | "visita"
+  | "proposta"
+  | "negociacao"
+  | "teste"
+  | "ativo"
+  | "renovacao"
+  | "cancelado";
 
 type PartnerType = "empresa" | "farmacia" | "corretor" | "imobiliaria" | "lead";
 type PlanSlug = "free" | "destaque" | "ouro";
@@ -80,12 +141,26 @@ type Lead = {
 };
 
 const STAGE_ORDER: Stage[] = [
-  "lead","contato","visita","proposta","negociacao","teste","ativo","renovacao","cancelado",
+  "lead",
+  "contato",
+  "visita",
+  "proposta",
+  "negociacao",
+  "teste",
+  "ativo",
+  "renovacao",
+  "cancelado",
 ];
 const STAGE_LABELS: Record<Stage, string> = {
-  lead: "🟡 Lead", contato: "🔵 Primeiro Contato", visita: "🟠 Visita Agendada",
-  proposta: "🟣 Proposta Enviada", negociacao: "🟢 Negociação", teste: "🟢 Teste Gratuito",
-  ativo: "⭐ Cliente Ativo", renovacao: "🟡 Renovação", cancelado: "🔴 Cancelado",
+  lead: "🟡 Lead",
+  contato: "🔵 Primeiro Contato",
+  visita: "🟠 Visita Agendada",
+  proposta: "🟣 Proposta Enviada",
+  negociacao: "🟢 Negociação",
+  teste: "🟢 Teste Gratuito",
+  ativo: "⭐ Cliente Ativo",
+  renovacao: "🟡 Renovação",
+  cancelado: "🔴 Cancelado",
 };
 const STAGE_COLOR: Record<Stage, string> = {
   lead: "bg-muted text-muted-foreground border-muted-foreground/20",
@@ -101,11 +176,16 @@ const STAGE_COLOR: Record<Stage, string> = {
 
 const PLAN_LABEL: Record<PlanSlug, string> = { free: "Free", destaque: "Destaque", ouro: "Ouro" };
 const PLAN_VARIANT: Record<PlanSlug, "default" | "secondary" | "outline"> = {
-  ouro: "default", destaque: "secondary", free: "outline",
+  ouro: "default",
+  destaque: "secondary",
+  free: "outline",
 };
 const PARTNER_LABEL: Record<PartnerType, string> = {
-  empresa: "Empresa", farmacia: "Farmácia", corretor: "Corretor",
-  imobiliaria: "Imobiliária", lead: "Lead",
+  empresa: "Empresa",
+  farmacia: "Farmácia",
+  corretor: "Corretor",
+  imobiliaria: "Imobiliária",
+  lead: "Lead",
 };
 
 function fmtDate(iso: string | null | undefined) {
@@ -136,7 +216,8 @@ function CrmPage() {
 
   const list = useServerFn(listCrmLeads);
   const { data: leads = [], isLoading } = useQuery({
-    queryKey: ["crm-leads"], queryFn: () => list(),
+    queryKey: ["crm-leads"],
+    queryFn: () => list(),
   });
 
   const [openLead, setOpenLead] = useState<Lead | null>(null);
@@ -156,15 +237,25 @@ function CrmPage() {
             </p>
           </div>
         </div>
-        <Button onClick={() => setNewOpen(true)}><Plus className="mr-2 h-4 w-4" /> Novo Lead</Button>
+        <Button onClick={() => setNewOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" /> Novo Lead
+        </Button>
       </header>
 
       <Tabs defaultValue="dashboard">
         <TabsList>
-          <TabsTrigger value="dashboard"><BarChart3 className="mr-2 h-4 w-4" /> Dashboard</TabsTrigger>
-          <TabsTrigger value="funil"><LayoutGrid className="mr-2 h-4 w-4" /> Funil</TabsTrigger>
-          <TabsTrigger value="renovacoes"><RefreshCw className="mr-2 h-4 w-4" /> Renovações</TabsTrigger>
-          <TabsTrigger value="relatorios"><ListChecks className="mr-2 h-4 w-4" /> Relatórios</TabsTrigger>
+          <TabsTrigger value="dashboard">
+            <BarChart3 className="mr-2 h-4 w-4" /> Dashboard
+          </TabsTrigger>
+          <TabsTrigger value="funil">
+            <LayoutGrid className="mr-2 h-4 w-4" /> Funil
+          </TabsTrigger>
+          <TabsTrigger value="renovacoes">
+            <RefreshCw className="mr-2 h-4 w-4" /> Renovações
+          </TabsTrigger>
+          <TabsTrigger value="relatorios">
+            <ListChecks className="mr-2 h-4 w-4" /> Relatórios
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="mt-4">
@@ -181,19 +272,23 @@ function CrmPage() {
         </TabsContent>
       </Tabs>
 
-      {openLead && (
-        <LeadSheet lead={openLead} onClose={() => setOpenLead(null)} />
-      )}
-      {newOpen && (
-        <LeadFormDialog open onOpenChange={setNewOpen} lead={null} />
-      )}
+      {openLead && <LeadSheet lead={openLead} onClose={() => setOpenLead(null)} />}
+      {newOpen && <LeadFormDialog open onOpenChange={setNewOpen} lead={null} />}
     </div>
   );
 }
 
 /* -------------------- Dashboard -------------------- */
 
-function StatCard({ label, value, tone }: { label: string; value: number | string; tone?: string }) {
+function StatCard({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number | string;
+  tone?: string;
+}) {
   return (
     <div className={`rounded-xl border border-border bg-card p-4 shadow-card ${tone ?? ""}`}>
       <p className="text-xs text-muted-foreground">{label}</p>
@@ -207,9 +302,14 @@ function DashboardTab({ leads, loading }: { leads: Lead[]; loading: boolean }) {
     const total = leads.length;
     const byPlan = { free: 0, destaque: 0, ouro: 0 };
     const byType = { empresa: 0, farmacia: 0, corretor: 0, imobiliaria: 0, lead: 0 };
-    let trial = 0, ativo = 0, suspenso = 0, cancelado = 0, renovProx = 0;
+    let trial = 0,
+      ativo = 0,
+      suspenso = 0,
+      cancelado = 0,
+      renovProx = 0;
     for (const l of leads) {
-      byPlan[l.plan_slug]++; byType[l.partner_type]++;
+      byPlan[l.plan_slug]++;
+      byType[l.partner_type]++;
       if (l.stage === "teste") trial++;
       if (l.stage === "ativo") ativo++;
       if (l.stage === "cancelado") cancelado++;
@@ -242,8 +342,14 @@ function DashboardTab({ leads, loading }: { leads: Lead[]; loading: boolean }) {
 /* -------------------- Funnel (Kanban) -------------------- */
 
 function FunnelTab({
-  leads, loading, onOpen,
-}: { leads: Lead[]; loading: boolean; onOpen: (l: Lead) => void }) {
+  leads,
+  loading,
+  onOpen,
+}: {
+  leads: Lead[];
+  loading: boolean;
+  onOpen: (l: Lead) => void;
+}) {
   const qc = useQueryClient();
   const move = useServerFn(moveCrmLeadStage);
   const [q, setQ] = useState("");
@@ -254,7 +360,13 @@ function FunnelTab({
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     return leads.filter((l) => {
-      if (needle && !`${l.company_name} ${l.contact_name ?? ""} ${l.phone ?? ""} ${l.email ?? ""} ${l.category ?? ""}`.toLowerCase().includes(needle)) return false;
+      if (
+        needle &&
+        !`${l.company_name} ${l.contact_name ?? ""} ${l.phone ?? ""} ${l.email ?? ""} ${l.category ?? ""}`
+          .toLowerCase()
+          .includes(needle)
+      )
+        return false;
       if (planF !== "all" && l.plan_slug !== planF) return false;
       if (typeF !== "all" && l.partner_type !== typeF) return false;
       return true;
@@ -300,11 +412,17 @@ function FunnelTab({
       <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-card md:grid-cols-[1fr_auto_auto]">
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input className="pl-9" placeholder="Buscar por nome, telefone, email, categoria…"
-            value={q} onChange={(e) => setQ(e.target.value)} />
+          <Input
+            className="pl-9"
+            placeholder="Buscar por nome, telefone, email, categoria…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
         </div>
         <Select value={planF} onValueChange={setPlanF}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Plano" /></SelectTrigger>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Plano" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos planos</SelectItem>
             <SelectItem value="free">Free</SelectItem>
@@ -313,7 +431,9 @@ function FunnelTab({
           </SelectContent>
         </Select>
         <Select value={typeF} onValueChange={setTypeF}>
-          <SelectTrigger className="w-[160px]"><SelectValue placeholder="Tipo" /></SelectTrigger>
+          <SelectTrigger className="w-[160px]">
+            <SelectValue placeholder="Tipo" />
+          </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos tipos</SelectItem>
             <SelectItem value="lead">Lead</SelectItem>
@@ -332,7 +452,11 @@ function FunnelTab({
           ))}
         </div>
         <DragOverlay>
-          {dragging && <div className="rotate-2 opacity-90"><LeadCard lead={dragging} onOpen={() => {}} compact /></div>}
+          {dragging && (
+            <div className="rotate-2 opacity-90">
+              <LeadCard lead={dragging} onOpen={() => {}} compact />
+            </div>
+          )}
         </DragOverlay>
       </DndContext>
     </div>
@@ -340,12 +464,20 @@ function FunnelTab({
 }
 
 function KanbanColumn({
-  stage, leads, onOpen,
-}: { stage: Stage; leads: Lead[]; onOpen: (l: Lead) => void }) {
+  stage,
+  leads,
+  onOpen,
+}: {
+  stage: Stage;
+  leads: Lead[];
+  onOpen: (l: Lead) => void;
+}) {
   const { setNodeRef, isOver } = useDroppable({ id: stage });
   return (
     <div className="flex w-[280px] shrink-0 flex-col gap-2">
-      <div className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm font-medium ${STAGE_COLOR[stage]}`}>
+      <div
+        className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm font-medium ${STAGE_COLOR[stage]}`}
+      >
         <span>{STAGE_LABELS[stage]}</span>
         <span className="rounded-full bg-background/60 px-2 text-xs">{leads.length}</span>
       </div>
@@ -364,9 +496,17 @@ function KanbanColumn({
 }
 
 function LeadCard({
-  lead, onOpen, compact,
-}: { lead: Lead; onOpen: (l: Lead) => void; compact?: boolean }) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({ id: lead.id });
+  lead,
+  onOpen,
+  compact,
+}: {
+  lead: Lead;
+  onOpen: (l: Lead) => void;
+  compact?: boolean;
+}) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: lead.id,
+  });
   const style = transform
     ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` }
     : undefined;
@@ -381,14 +521,17 @@ function LeadCard({
     >
       <div className="flex items-start gap-2">
         <button
-          {...listeners} {...attributes}
+          {...listeners}
+          {...attributes}
           className="mt-0.5 h-8 w-8 shrink-0 cursor-grab overflow-hidden rounded-lg bg-muted"
           aria-label="Arrastar"
         >
           {lead.logo_url ? (
             <img src={lead.logo_url} alt="" className="h-full w-full object-cover" />
           ) : (
-            <div className="grid h-full w-full place-items-center"><Building2 className="h-4 w-4 text-muted-foreground" /></div>
+            <div className="grid h-full w-full place-items-center">
+              <Building2 className="h-4 w-4 text-muted-foreground" />
+            </div>
           )}
         </button>
         <button className="min-w-0 flex-1 text-left" onClick={() => onOpen(lead)}>
@@ -397,15 +540,15 @@ function LeadCard({
             {lead.category ?? PARTNER_LABEL[lead.partner_type]}
           </p>
         </button>
-        <Badge variant={PLAN_VARIANT[lead.plan_slug]} className="shrink-0">{PLAN_LABEL[lead.plan_slug]}</Badge>
+        <Badge variant={PLAN_VARIANT[lead.plan_slug]} className="shrink-0">
+          {PLAN_LABEL[lead.plan_slug]}
+        </Badge>
       </div>
       {!compact && (
         <div className="mt-2 space-y-1 text-xs text-muted-foreground">
           {lead.contact_name && <p className="truncate">👤 {lead.contact_name}</p>}
           {lead.phone && <p className="truncate">📞 {lead.phone}</p>}
-          {lead.next_action && (
-            <p className="truncate text-foreground">→ {lead.next_action}</p>
-          )}
+          {lead.next_action && <p className="truncate text-foreground">→ {lead.next_action}</p>}
           {lead.renewal_at && (
             <p className={dLeft != null && dLeft < 0 ? "text-destructive" : ""}>
               🔁 Renov: {fmtDate(lead.renewal_at)} {dLeft != null && `(${dLeft}d)`}
@@ -446,12 +589,19 @@ function RenewalsTab({ leads, onOpen }: { leads: Lead[]; onOpen: (l: Lead) => vo
     <div className="grid gap-3 lg:grid-cols-2">
       {sections.map(([label, tone, items]) => (
         <div key={label} className={`rounded-xl border border-border p-3 ${tone}`}>
-          <p className="mb-2 text-sm font-semibold">{label} · <span className="text-muted-foreground">{items.length}</span></p>
+          <p className="mb-2 text-sm font-semibold">
+            {label} · <span className="text-muted-foreground">{items.length}</span>
+          </p>
           <div className="grid gap-2">
-            {items.length === 0 && <p className="text-xs text-muted-foreground">Nenhum registro.</p>}
+            {items.length === 0 && (
+              <p className="text-xs text-muted-foreground">Nenhum registro.</p>
+            )}
             {items.map((l) => (
-              <button key={l.id} onClick={() => onOpen(l)}
-                className="flex items-center justify-between rounded-lg border border-border bg-card p-2 text-left text-sm hover:border-primary/40">
+              <button
+                key={l.id}
+                onClick={() => onOpen(l)}
+                className="flex items-center justify-between rounded-lg border border-border bg-card p-2 text-left text-sm hover:border-primary/40"
+              >
                 <span className="truncate font-medium">{l.company_name}</span>
                 <span className="text-xs text-muted-foreground">{fmtDate(l.renewal_at)}</span>
               </button>
@@ -470,7 +620,9 @@ function ReportsTab({ leads }: { leads: Lead[] }) {
     const byPlan = new Map<string, number>();
     const byCat = new Map<string, number>();
     const byBairro = new Map<string, number>();
-    let novos30 = 0, renov30 = 0, cancel30 = 0;
+    let novos30 = 0,
+      renov30 = 0,
+      cancel30 = 0;
     const now = Date.now();
     for (const l of leads) {
       byPlan.set(l.plan_slug, (byPlan.get(l.plan_slug) ?? 0) + 1);
@@ -517,7 +669,10 @@ function ReportCard({ title, data }: { title: string; data: Map<string, number> 
               <span className="text-muted-foreground">{v}</span>
             </div>
             <div className="h-1.5 rounded bg-muted">
-              <div className="h-full rounded gradient-brand" style={{ width: `${(v / max) * 100}%` }} />
+              <div
+                className="h-full rounded gradient-brand"
+                style={{ width: `${(v / max) * 100}%` }}
+              />
             </div>
           </div>
         ))}
@@ -537,13 +692,16 @@ function LeadSheet({ lead, onClose }: { lead: Lead; onClose: () => void }) {
   const listAudit = useServerFn(listCrmAudit);
 
   const { data: activities = [] } = useQuery({
-    queryKey: ["crm-activities", lead.id], queryFn: () => listActs({ data: { leadId: lead.id } }),
+    queryKey: ["crm-activities", lead.id],
+    queryFn: () => listActs({ data: { leadId: lead.id } }),
   });
   const { data: reminders = [] } = useQuery({
-    queryKey: ["crm-reminders", lead.id], queryFn: () => listRem({ data: { leadId: lead.id } }),
+    queryKey: ["crm-reminders", lead.id],
+    queryFn: () => listRem({ data: { leadId: lead.id } }),
   });
   const { data: audit = [] } = useQuery({
-    queryKey: ["crm-audit", lead.id], queryFn: () => listAudit({ data: { leadId: lead.id } }),
+    queryKey: ["crm-audit", lead.id],
+    queryFn: () => listAudit({ data: { leadId: lead.id } }),
   });
 
   const invalidate = () => {
@@ -557,7 +715,11 @@ function LeadSheet({ lead, onClose }: { lead: Lead; onClose: () => void }) {
         <SheetHeader>
           <SheetTitle className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-lg bg-muted">
-              {lead.logo_url ? <img src={lead.logo_url} alt="" className="h-full w-full object-cover" /> : <Building2 className="h-5 w-5 text-muted-foreground" />}
+              {lead.logo_url ? (
+                <img src={lead.logo_url} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <Building2 className="h-5 w-5 text-muted-foreground" />
+              )}
             </span>
             <span className="truncate">{lead.company_name}</span>
           </SheetTitle>
@@ -568,27 +730,41 @@ function LeadSheet({ lead, onClose }: { lead: Lead; onClose: () => void }) {
           <Badge variant={PLAN_VARIANT[lead.plan_slug]}>{PLAN_LABEL[lead.plan_slug]}</Badge>
           <Badge variant="outline">{PARTNER_LABEL[lead.partner_type]}</Badge>
           {lead.renewal_at && (
-            <Badge variant="outline"><Calendar className="mr-1 h-3 w-3" /> {fmtDate(lead.renewal_at)}</Badge>
+            <Badge variant="outline">
+              <Calendar className="mr-1 h-3 w-3" /> {fmtDate(lead.renewal_at)}
+            </Badge>
           )}
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
           {lead.whatsapp && (
-            <a href={`https://wa.me/${lead.whatsapp.replace(/\D/g, "")}`} target="_blank" rel="noreferrer">
-              <Button size="sm" variant="outline"><MessageCircle className="mr-2 h-4 w-4" /> WhatsApp</Button>
+            <a
+              href={`https://wa.me/${lead.whatsapp.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button size="sm" variant="outline">
+                <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp
+              </Button>
             </a>
           )}
           {lead.phone && (
             <a href={`tel:${lead.phone}`}>
-              <Button size="sm" variant="outline"><Phone className="mr-2 h-4 w-4" /> Ligar</Button>
+              <Button size="sm" variant="outline">
+                <Phone className="mr-2 h-4 w-4" /> Ligar
+              </Button>
             </a>
           )}
           {lead.email && (
             <a href={`mailto:${lead.email}`}>
-              <Button size="sm" variant="outline"><Mail className="mr-2 h-4 w-4" /> Email</Button>
+              <Button size="sm" variant="outline">
+                <Mail className="mr-2 h-4 w-4" /> Email
+              </Button>
             </a>
           )}
-          <Button size="sm" variant="outline" onClick={() => setEditing(true)}><Edit3 className="mr-2 h-4 w-4" /> Editar</Button>
+          <Button size="sm" variant="outline" onClick={() => setEditing(true)}>
+            <Edit3 className="mr-2 h-4 w-4" /> Editar
+          </Button>
           <LeadActionsMenu lead={lead} onDone={invalidate} onClose={onClose} />
         </div>
 
@@ -633,7 +809,9 @@ function LeadSheet({ lead, onClose }: { lead: Lead; onClose: () => void }) {
           </TabsContent>
 
           <TabsContent value="financeiro" className="mt-3 space-y-2 text-sm">
-            <p className="text-xs text-muted-foreground">Estrutura preparada para integração com Asaas.</p>
+            <p className="text-xs text-muted-foreground">
+              Estrutura preparada para integração com Asaas.
+            </p>
             <Field label="Plano" value={PLAN_LABEL[lead.plan_slug]} />
             <Field label="Valor" value={fmtMoney(lead.monthly_value)} />
             <Field label="Situação" value={lead.stage} />
@@ -643,17 +821,22 @@ function LeadSheet({ lead, onClose }: { lead: Lead; onClose: () => void }) {
           </TabsContent>
 
           <TabsContent value="auditoria" className="mt-3 space-y-2">
-            {(audit as any[]).length === 0 && <p className="text-xs text-muted-foreground">Sem alterações.</p>}
+            {(audit as any[]).length === 0 && (
+              <p className="text-xs text-muted-foreground">Sem alterações.</p>
+            )}
             {(audit as any[]).map((a) => (
               <div key={a.id} className="rounded-lg border border-border p-3 text-xs">
                 <div className="flex justify-between">
                   <span className="font-medium">
                     {a.previous_stage ?? "—"} → {a.new_stage ?? "—"}
                   </span>
-                  <span className="text-muted-foreground">{new Date(a.created_at).toLocaleString("pt-BR")}</span>
+                  <span className="text-muted-foreground">
+                    {new Date(a.created_at).toLocaleString("pt-BR")}
+                  </span>
                 </div>
                 <p className="text-muted-foreground">
-                  Plano: {a.previous_plan ?? "—"} → {a.new_plan ?? "—"} · Origem: {a.previous_source ?? "—"} → {a.new_source ?? "—"}
+                  Plano: {a.previous_plan ?? "—"} → {a.new_plan ?? "—"} · Origem:{" "}
+                  {a.previous_source ?? "—"} → {a.new_source ?? "—"}
                 </p>
                 {a.reason && <p className="mt-1">Motivo: {a.reason}</p>}
               </div>
@@ -681,8 +864,14 @@ function Field({ label, value }: { label: string; value: any }) {
 /* -------------------- Lead actions menu -------------------- */
 
 function LeadActionsMenu({
-  lead, onDone, onClose,
-}: { lead: Lead; onDone: () => void; onClose: () => void }) {
+  lead,
+  onDone,
+  onClose,
+}: {
+  lead: Lead;
+  onDone: () => void;
+  onClose: () => void;
+}) {
   const qc = useQueryClient();
   const del = useServerFn(deleteCrmLead);
   const promote = useServerFn(promoteUserPlan);
@@ -695,22 +884,33 @@ function LeadActionsMenu({
   const upsert = useServerFn(upsertCrmLead);
 
   const setPlanLocal = async (plan: PlanSlug) => {
-    await upsert({ data: { id: lead.id, company_name: lead.company_name, plan_slug: plan } as any });
+    await upsert({
+      data: { id: lead.id, company_name: lead.company_name, plan_slug: plan } as any,
+    });
     if (lead.user_id) await update({ data: { userId: lead.user_id, plan } });
   };
 
   const run = (fn: () => Promise<any>, msg: string) =>
-    fn().then(() => { toast.success(msg); onDone(); qc.invalidateQueries(); })
+    fn()
+      .then(() => {
+        toast.success(msg);
+        onDone();
+        qc.invalidateQueries();
+      })
       .catch((e: Error) => toast.error(e.message));
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="outline"><MoreHorizontal className="h-4 w-4" /></Button>
+        <Button size="sm" variant="outline">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <DropdownMenuLabel>Alterar plano</DropdownMenuLabel>
-        <DropdownMenuItem onClick={() => run(() => setPlanLocal("destaque"), "Plano Destaque aplicado")}>
+        <DropdownMenuItem
+          onClick={() => run(() => setPlanLocal("destaque"), "Plano Destaque aplicado")}
+        >
           <ArrowUp className="mr-2 h-4 w-4" /> Promover para Destaque
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => run(() => setPlanLocal("ouro"), "Plano Ouro aplicado")}>
@@ -723,29 +923,55 @@ function LeadActionsMenu({
         {lead.user_id && (
           <>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger><Gift className="mr-2 h-4 w-4" /> Conceder teste</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>
+                <Gift className="mr-2 h-4 w-4" /> Conceder teste
+              </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {[7, 15, 30, 60, 90].map((d) => (
-                  <DropdownMenuItem key={d} onClick={() => run(() => trial({ data: { userId: lead.user_id!, plan: "destaque", days: d } }), `Teste de ${d} dias concedido`)}>
+                  <DropdownMenuItem
+                    key={d}
+                    onClick={() =>
+                      run(
+                        () => trial({ data: { userId: lead.user_id!, plan: "destaque", days: d } }),
+                        `Teste de ${d} dias concedido`,
+                      )
+                    }
+                  >
                     {d} dias
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>
             </DropdownMenuSub>
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger><RefreshCw className="mr-2 h-4 w-4" /> Renovar</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger>
+                <RefreshCw className="mr-2 h-4 w-4" /> Renovar
+              </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 {[30, 90, 365].map((d) => (
-                  <DropdownMenuItem key={d} onClick={() => run(() => renew({ data: { userId: lead.user_id!, days: d } }), `Renovado por ${d} dias`)}>
+                  <DropdownMenuItem
+                    key={d}
+                    onClick={() =>
+                      run(
+                        () => renew({ data: { userId: lead.user_id!, days: d } }),
+                        `Renovado por ${d} dias`,
+                      )
+                    }
+                  >
                     + {d} dias
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuSubContent>
             </DropdownMenuSub>
-            <DropdownMenuItem onClick={() => run(() => suspend({ data: { userId: lead.user_id! } }), "Suspenso")}>
+            <DropdownMenuItem
+              onClick={() => run(() => suspend({ data: { userId: lead.user_id! } }), "Suspenso")}
+            >
               <Pause className="mr-2 h-4 w-4" /> Suspender
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => run(() => reactivate({ data: { userId: lead.user_id! } }), "Reativado")}>
+            <DropdownMenuItem
+              onClick={() =>
+                run(() => reactivate({ data: { userId: lead.user_id! } }), "Reativado")
+              }
+            >
               <Play className="mr-2 h-4 w-4" /> Reativar
             </DropdownMenuItem>
           </>
@@ -755,9 +981,13 @@ function LeadActionsMenu({
           className="text-destructive"
           onClick={() => {
             if (!confirm("Excluir este lead?")) return;
-            del({ data: { id: lead.id } }).then(() => {
-              toast.success("Excluído"); onDone(); onClose();
-            }).catch((e: Error) => toast.error(e.message));
+            del({ data: { id: lead.id } })
+              .then(() => {
+                toast.success("Excluído");
+                onDone();
+                onClose();
+              })
+              .catch((e: Error) => toast.error(e.message));
           }}
         >
           <Trash2 className="mr-2 h-4 w-4" /> Excluir
@@ -777,7 +1007,8 @@ function TimelineTab({ leadId, activities }: { leadId: string; activities: any[]
   const save = useMutation({
     mutationFn: () => add({ data: { leadId, type: type as any, content } }),
     onSuccess: () => {
-      setContent(""); toast.success("Registrado");
+      setContent("");
+      toast.success("Registrado");
       qc.invalidateQueries({ queryKey: ["crm-activities", leadId] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -787,7 +1018,9 @@ function TimelineTab({ leadId, activities }: { leadId: string; activities: any[]
       <div className="rounded-lg border border-border p-2">
         <div className="flex gap-2">
           <Select value={type} onValueChange={setType}>
-            <SelectTrigger className="w-[140px]"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="ligacao">Ligação</SelectItem>
               <SelectItem value="visita">Visita</SelectItem>
@@ -798,18 +1031,27 @@ function TimelineTab({ leadId, activities }: { leadId: string; activities: any[]
               <SelectItem value="observacao">Observação</SelectItem>
             </SelectContent>
           </Select>
-          <Input placeholder="Descrição…" value={content} onChange={(e) => setContent(e.target.value)} />
-          <Button onClick={() => save.mutate()} disabled={save.isPending}>Registrar</Button>
+          <Input
+            placeholder="Descrição…"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <Button onClick={() => save.mutate()} disabled={save.isPending}>
+            Registrar
+          </Button>
         </div>
       </div>
       <div className="space-y-2">
-        {activities.length === 0 && <p className="text-xs text-muted-foreground">Sem atividades.</p>}
+        {activities.length === 0 && (
+          <p className="text-xs text-muted-foreground">Sem atividades.</p>
+        )}
         {activities.map((a) => (
           <div key={a.id} className="rounded-lg border border-border p-3 text-sm">
             <div className="flex items-center justify-between">
               <span className="font-medium capitalize">{a.type}</span>
               <span className="text-xs text-muted-foreground">
-                <Clock className="mr-1 inline h-3 w-3" />{new Date(a.created_at).toLocaleString("pt-BR")}
+                <Clock className="mr-1 inline h-3 w-3" />
+                {new Date(a.created_at).toLocaleString("pt-BR")}
               </span>
             </div>
             {a.content && <p className="mt-1 text-muted-foreground">{a.content}</p>}
@@ -829,7 +1071,9 @@ function RemindersTab({ leadId, reminders }: { leadId: string; reminders: any[] 
   const save = useMutation({
     mutationFn: () => add({ data: { leadId, title, dueAt: new Date(dueAt).toISOString() } }),
     onSuccess: () => {
-      setTitle(""); setDueAt(""); toast.success("Lembrete criado");
+      setTitle("");
+      setDueAt("");
+      toast.success("Lembrete criado");
       qc.invalidateQueries({ queryKey: ["crm-reminders", leadId] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -837,24 +1081,38 @@ function RemindersTab({ leadId, reminders }: { leadId: string; reminders: any[] 
   return (
     <div className="space-y-3">
       <div className="grid gap-2 rounded-lg border border-border p-2 md:grid-cols-[1fr_auto_auto]">
-        <Input placeholder="Ex: Ligar amanhã, enviar proposta…" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <Input
+          placeholder="Ex: Ligar amanhã, enviar proposta…"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <Input type="datetime-local" value={dueAt} onChange={(e) => setDueAt(e.target.value)} />
-        <Button onClick={() => save.mutate()} disabled={save.isPending || !title || !dueAt}>Criar</Button>
+        <Button onClick={() => save.mutate()} disabled={save.isPending || !title || !dueAt}>
+          Criar
+        </Button>
       </div>
       <div className="space-y-2">
         {reminders.length === 0 && <p className="text-xs text-muted-foreground">Sem lembretes.</p>}
         {reminders.map((r) => (
-          <label key={r.id} className="flex items-center gap-2 rounded-lg border border-border p-2 text-sm">
+          <label
+            key={r.id}
+            className="flex items-center gap-2 rounded-lg border border-border p-2 text-sm"
+          >
             <input
-              type="checkbox" checked={r.done}
+              type="checkbox"
+              checked={r.done}
               onChange={(e) => {
                 toggle({ data: { id: r.id, done: e.target.checked } })
                   .then(() => qc.invalidateQueries({ queryKey: ["crm-reminders", leadId] }))
                   .catch((err: Error) => toast.error(err.message));
               }}
             />
-            <span className={`flex-1 ${r.done ? "line-through text-muted-foreground" : ""}`}>{r.title}</span>
-            <span className="text-xs text-muted-foreground">{new Date(r.due_at).toLocaleString("pt-BR")}</span>
+            <span className={`flex-1 ${r.done ? "line-through text-muted-foreground" : ""}`}>
+              {r.title}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {new Date(r.due_at).toLocaleString("pt-BR")}
+            </span>
           </label>
         ))}
       </div>
@@ -865,8 +1123,14 @@ function RemindersTab({ leadId, reminders }: { leadId: string; reminders: any[] 
 /* -------------------- New/Edit Lead Dialog -------------------- */
 
 function LeadFormDialog({
-  open, onOpenChange, lead,
-}: { open: boolean; onOpenChange: (v: boolean) => void; lead: Lead | null }) {
+  open,
+  onOpenChange,
+  lead,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  lead: Lead | null;
+}) {
   const qc = useQueryClient();
   const upsert = useServerFn(upsertCrmLead);
   const [f, setF] = useState({
@@ -910,7 +1174,11 @@ function LeadFormDialog({
           monthly_value: Number(f.monthly_value) || null,
           next_action: f.next_action || null,
           next_action_at: f.next_action_at ? new Date(f.next_action_at).toISOString() : null,
-          renewal_at: f.noRenewal ? null : (f.renewal_at ? new Date(f.renewal_at).toISOString() : null),
+          renewal_at: f.noRenewal
+            ? null
+            : f.renewal_at
+              ? new Date(f.renewal_at).toISOString()
+              : null,
           notes: f.notes || null,
         } as any,
       }),
@@ -938,7 +1206,9 @@ function LeadFormDialog({
           <div>
             <Label>Tipo</Label>
             <Select value={f.partner_type} onValueChange={(v) => set("partner_type", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="lead">Lead</SelectItem>
                 <SelectItem value="empresa">Empresa</SelectItem>
@@ -979,10 +1249,14 @@ function LeadFormDialog({
           <div>
             <Label>Estágio</Label>
             <Select value={f.stage} onValueChange={(v) => set("stage", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 {STAGE_ORDER.map((s) => (
-                  <SelectItem key={s} value={s}>{STAGE_LABELS[s]}</SelectItem>
+                  <SelectItem key={s} value={s}>
+                    {STAGE_LABELS[s]}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -990,7 +1264,9 @@ function LeadFormDialog({
           <div>
             <Label>Plano</Label>
             <Select value={f.plan_slug} onValueChange={(v) => set("plan_slug", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="free">Free</SelectItem>
                 <SelectItem value="destaque">Destaque</SelectItem>
@@ -1001,7 +1277,9 @@ function LeadFormDialog({
           <div>
             <Label>Origem do plano</Label>
             <Select value={f.plan_source} onValueChange={(v) => set("plan_source", v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="manual_admin">Manual Admin</SelectItem>
                 <SelectItem value="asaas">Asaas</SelectItem>
@@ -1013,7 +1291,11 @@ function LeadFormDialog({
           </div>
           <div>
             <Label>Valor mensal (R$)</Label>
-            <Input type="number" value={f.monthly_value} onChange={(e) => set("monthly_value", e.target.value)} />
+            <Input
+              type="number"
+              value={f.monthly_value}
+              onChange={(e) => set("monthly_value", e.target.value)}
+            />
           </div>
           <div>
             <Label>Próxima ação</Label>
@@ -1021,11 +1303,20 @@ function LeadFormDialog({
           </div>
           <div>
             <Label>Data da ação</Label>
-            <Input type="date" value={f.next_action_at} onChange={(e) => set("next_action_at", e.target.value)} />
+            <Input
+              type="date"
+              value={f.next_action_at}
+              onChange={(e) => set("next_action_at", e.target.value)}
+            />
           </div>
           <div>
             <Label>Renovação</Label>
-            <Input type="date" value={f.renewal_at} disabled={f.noRenewal} onChange={(e) => set("renewal_at", e.target.value)} />
+            <Input
+              type="date"
+              value={f.renewal_at}
+              disabled={f.noRenewal}
+              onChange={(e) => set("renewal_at", e.target.value)}
+            />
             <label className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
               <Switch checked={f.noRenewal} onCheckedChange={(v) => set("noRenewal", v)} />
               Sem vencimento
@@ -1037,7 +1328,9 @@ function LeadFormDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
           <Button onClick={() => save.mutate()} disabled={save.isPending || !f.company_name}>
             Salvar
           </Button>

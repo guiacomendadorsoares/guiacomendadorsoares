@@ -1,7 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Phone, Copy, Share2, Navigation, Mail, Globe, MapPin, AlertTriangle, Search } from "lucide-react";
+import {
+  Phone,
+  Copy,
+  Share2,
+  Navigation,
+  Mail,
+  Globe,
+  MapPin,
+  AlertTriangle,
+  Search,
+} from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
@@ -40,10 +50,10 @@ import imgAgricultura from "@/assets/services/agricultura.jpg";
 import imgPrevidencia from "@/assets/services/previdencia.jpg";
 
 const CATEGORY_IMAGES: Record<string, string> = {
-  "Prefeitura": imgPrefeitura,
-  "Ouvidoria": imgOuvidoria,
+  Prefeitura: imgPrefeitura,
+  Ouvidoria: imgOuvidoria,
   "Defesa Civil": imgDefesa,
-  "Emergência": imgEmergencia,
+  Emergência: imgEmergencia,
   "Secretarias Municipais": imgSecretarias,
   "Órgãos Municipais": imgOrgaos,
 };
@@ -77,7 +87,12 @@ const KEYWORD_IMAGES: Array<[RegExp, string]> = [
   [/planejamento|governo|procuradoria|codeni|fenig/i, imgAdministracao],
 ];
 
-function pickImage(s: { name: string; category: string; is_emergency: boolean; image_url: string | null }): string {
+function pickImage(s: {
+  name: string;
+  category: string;
+  is_emergency: boolean;
+  image_url: string | null;
+}): string {
   if (s.image_url) return s.image_url;
   for (const [rx, img] of KEYWORD_IMAGES) {
     if (rx.test(s.name) || rx.test(s.category)) return img;
@@ -167,87 +182,104 @@ function ServiceCard({ s }: { s: PublicService }) {
         </div>
       )}
       <div className="p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{s.category}</p>
-          <h3 className="font-display text-lg font-bold leading-tight">{s.name}</h3>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              {s.category}
+            </p>
+            <h3 className="font-display text-lg font-bold leading-tight">{s.name}</h3>
+          </div>
         </div>
-      </div>
 
-      {s.description && <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>}
+        {s.description && <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>}
 
-      <div className="mt-3 space-y-1.5 text-sm">
-        {phones.map((p) => (
-          <div key={p} className="flex items-center gap-2 text-foreground">
-            <Phone className="h-4 w-4 text-primary" />
-            <a href={`tel:${p.replace(/\D/g, "")}`} className="font-semibold hover:underline">
-              {p}
-            </a>
-          </div>
-        ))}
-        {s.email && (
-          <div className="flex items-center gap-2 text-foreground">
-            <Mail className="h-4 w-4 text-primary" />
-            <a href={`mailto:${s.email}`} className="hover:underline">
-              {s.email}
-            </a>
-          </div>
-        )}
-        {s.website && (
-          <div className="flex items-center gap-2 text-foreground">
-            <Globe className="h-4 w-4 text-primary" />
-            <a href={s.website} target="_blank" rel="noreferrer" className="truncate hover:underline">
-              {s.website.replace(/^https?:\/\//, "")}
-            </a>
-          </div>
-        )}
-        {s.address && (
-          <div className="flex items-start gap-2 text-foreground">
-            <MapPin className="mt-0.5 h-4 w-4 text-primary" />
-            <span>{s.address}</span>
-          </div>
-        )}
-        {s.hours && <p className="text-xs text-muted-foreground">{s.hours}</p>}
-      </div>
+        <div className="mt-3 space-y-1.5 text-sm">
+          {phones.map((p) => (
+            <div key={p} className="flex items-center gap-2 text-foreground">
+              <Phone className="h-4 w-4 text-primary" />
+              <a href={`tel:${p.replace(/\D/g, "")}`} className="font-semibold hover:underline">
+                {p}
+              </a>
+            </div>
+          ))}
+          {s.email && (
+            <div className="flex items-center gap-2 text-foreground">
+              <Mail className="h-4 w-4 text-primary" />
+              <a href={`mailto:${s.email}`} className="hover:underline">
+                {s.email}
+              </a>
+            </div>
+          )}
+          {s.website && (
+            <div className="flex items-center gap-2 text-foreground">
+              <Globe className="h-4 w-4 text-primary" />
+              <a
+                href={s.website}
+                target="_blank"
+                rel="noreferrer"
+                className="truncate hover:underline"
+              >
+                {s.website.replace(/^https?:\/\//, "")}
+              </a>
+            </div>
+          )}
+          {s.address && (
+            <div className="flex items-start gap-2 text-foreground">
+              <MapPin className="mt-0.5 h-4 w-4 text-primary" />
+              <span>{s.address}</span>
+            </div>
+          )}
+          {s.hours && <p className="text-xs text-muted-foreground">{s.hours}</p>}
+        </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {primary && (
-          <Button asChild size="sm" className="rounded-full">
-            <a href={`tel:${primary.replace(/\D/g, "")}`}>
-              <Phone className="h-4 w-4" /> Ligar
-            </a>
-          </Button>
-        )}
-        {primary && (
-          <Button size="sm" variant="outline" className="rounded-full" onClick={() => copyText(primary)}>
-            <Copy className="h-4 w-4" /> Copiar
-          </Button>
-        )}
-        <Button size="sm" variant="outline" className="rounded-full" onClick={() => shareService(s)}>
-          <Share2 className="h-4 w-4" /> Compartilhar
-        </Button>
-        {(s.address || (s.latitude && s.longitude)) && (
-          <Button asChild size="sm" variant="outline" className="rounded-full">
-            <a
-              href={
-                s.latitude && s.longitude
-                  ? directionsUrl(s.latitude, s.longitude, s.name)
-                  : `https://www.openstreetmap.org/search?query=${encodeURIComponent(s.address ?? "")}`
-              }
-              target="_blank"
-              rel="noreferrer"
+        <div className="mt-4 flex flex-wrap gap-2">
+          {primary && (
+            <Button asChild size="sm" className="rounded-full">
+              <a href={`tel:${primary.replace(/\D/g, "")}`}>
+                <Phone className="h-4 w-4" /> Ligar
+              </a>
+            </Button>
+          )}
+          {primary && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="rounded-full"
+              onClick={() => copyText(primary)}
             >
-              <Navigation className="h-4 w-4" /> Como chegar
-            </a>
+              <Copy className="h-4 w-4" /> Copiar
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            className="rounded-full"
+            onClick={() => shareService(s)}
+          >
+            <Share2 className="h-4 w-4" /> Compartilhar
           </Button>
-        )}
-      </div>
+          {(s.address || (s.latitude && s.longitude)) && (
+            <Button asChild size="sm" variant="outline" className="rounded-full">
+              <a
+                href={
+                  s.latitude && s.longitude
+                    ? directionsUrl(s.latitude, s.longitude, s.name)
+                    : `https://www.openstreetmap.org/search?query=${encodeURIComponent(s.address ?? "")}`
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Navigation className="h-4 w-4" /> Como chegar
+              </a>
+            </Button>
+          )}
+        </div>
 
-      {s.source && (
-        <p className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground">
-          Fonte oficial: Prefeitura de Nova Iguaçu
-        </p>
-      )}
+        {s.source && (
+          <p className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground">
+            Fonte oficial: Prefeitura de Nova Iguaçu
+          </p>
+        )}
       </div>
     </article>
   );
@@ -288,10 +320,7 @@ function UtilidadePublicaPage() {
   }, [data, filter, search]);
 
   return (
-    <AppShell
-      title="Utilidade Pública"
-      subtitle="Contatos oficiais de Nova Iguaçu"
-    >
+    <AppShell title="Utilidade Pública" subtitle="Contatos oficiais de Nova Iguaçu">
       <div className="space-y-4">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -322,7 +351,10 @@ function UtilidadePublicaPage() {
         {isLoading ? (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-44 animate-pulse rounded-2xl border border-border bg-card" />
+              <div
+                key={i}
+                className="h-44 animate-pulse rounded-2xl border border-border bg-card"
+              />
             ))}
           </div>
         ) : filtered.length === 0 ? (

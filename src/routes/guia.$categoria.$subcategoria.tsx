@@ -32,13 +32,18 @@ export const Route = createFileRoute("/guia/$categoria/$subcategoria")({
         title="Subcategoria inválida"
         description="A subcategoria solicitada não existe."
       />
-      <Link to="/guia" className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-vibrant">
+      <Link
+        to="/guia"
+        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary-vibrant"
+      >
         <ArrowLeft className="h-4 w-4" /> Voltar ao guia
       </Link>
     </AppShell>
   ),
   errorComponent: ({ error }) => (
-    <AppShell title="Erro"><p className="text-sm text-destructive">{error.message}</p></AppShell>
+    <AppShell title="Erro">
+      <p className="text-sm text-destructive">{error.message}</p>
+    </AppShell>
   ),
   component: SubPage,
 });
@@ -84,7 +89,9 @@ function SubPage() {
         />
       ) : (
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((b) => <GuiaBusinessCard key={b.id} b={b} />)}
+          {items.map((b) => (
+            <GuiaBusinessCard key={b.id} b={b} />
+          ))}
         </div>
       )}
     </AppShell>

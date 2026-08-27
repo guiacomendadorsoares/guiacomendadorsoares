@@ -11,10 +11,7 @@ function baseUrl() {
   return SANDBOX_URL;
 }
 
-async function asaasFetch<T = any>(
-  path: string,
-  init: RequestInit = {},
-): Promise<T> {
+async function asaasFetch<T = any>(path: string, init: RequestInit = {}): Promise<T> {
   const key = process.env.ASAAS_API_KEY;
   if (!key) throw new Error("ASAAS_API_KEY ausente");
   const res = await fetch(`${baseUrl()}${path}`, {

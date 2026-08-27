@@ -8,7 +8,6 @@ import { SingleImageUploader } from "@/components/image-uploader";
 import { fetchPharmacyCategories } from "@/services/pharmacies.service";
 import { useLimits, formatLimit } from "@/lib/plan-limits";
 
-
 type Product = {
   id: string;
   business_id: string;
@@ -49,7 +48,6 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
   const maxProducts: number = limits.pharmacy.max_products ?? 0;
   const allowPromotion: boolean = !!limits.pharmacy.promotions;
 
-
   const { data: pharmacies = [] } = useQuery({
     queryKey: ["my-pharmacies", userId],
     queryFn: async () => {
@@ -89,10 +87,14 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
       if (!p.name?.trim()) throw new Error("Nome obrigatório");
       if (!p.business_id) throw new Error("Selecione uma farmácia");
       if (!p.id && maxProducts !== -1 && products.length >= maxProducts) {
-        throw new Error(`Você atingiu o limite do seu plano (${maxProducts} produtos). Faça upgrade para cadastrar mais.`);
+        throw new Error(
+          `Você atingiu o limite do seu plano (${maxProducts} produtos). Faça upgrade para cadastrar mais.`,
+        );
       }
       if (p.promo_price != null && !allowPromotion) {
-        throw new Error("Promoções estão disponíveis a partir do plano Destaque. Faça upgrade para ativar.");
+        throw new Error(
+          "Promoções estão disponíveis a partir do plano Destaque. Faça upgrade para ativar.",
+        );
       }
 
       const payload = {
@@ -123,7 +125,7 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
       setEditing(null);
       qc.invalidateQueries({ queryKey: ["my-pharm-products", activeBiz] });
     },
-    onError: (e: any) => toast.error(e.message ?? "Erro ao salvar"),
+    onError: (e: Error) => toast.error(e.message ?? "Erro ao salvar"),
   });
 
   const del = useMutation({
@@ -135,7 +137,7 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
       toast.success("Produto excluído");
       qc.invalidateQueries({ queryKey: ["my-pharm-products", activeBiz] });
     },
-    onError: (e: any) => toast.error(e.message ?? "Erro"),
+    onError: (e: Error) => toast.error(e.message ?? "Erro"),
   });
 
   const stats = useMemo(() => {
@@ -158,7 +160,7 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
     <div className="space-y-4">
       {pharmacies.length > 1 && (
         <div className="flex flex-wrap gap-2">
-          {pharmacies.map((b: any) => (
+          {pharmacies.map((b) => (
             <button
               key={b.id}
               onClick={() => setSelectedBiz(b.id)}
@@ -175,15 +177,26 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
       )}
 
       <div className="grid grid-cols-3 gap-2 text-center">
-        <StatBox label={`Produtos ${products.length}/${formatLimit(maxProducts)}`} value={stats.total} />
+        <StatBox
+          label={`Produtos ${products.length}/${formatLimit(maxProducts)}`}
+          value={stats.total}
+        />
         <StatBox label="Em promoção" value={stats.promo} />
         <StatBox label="Indisponíveis" value={stats.unavailable} />
       </div>
 
       {maxProducts !== -1 && products.length >= maxProducts && (
         <div className="flex items-center justify-between gap-3 rounded-xl border border-destructive/40 bg-destructive/5 p-3 text-sm">
-          <span className="flex items-center gap-2"><Lock className="h-4 w-4 text-destructive" /> Você atingiu o limite do seu plano ({maxProducts} produtos).</span>
-          <Link to="/planos" className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">Fazer upgrade</Link>
+          <span className="flex items-center gap-2">
+            <Lock className="h-4 w-4 text-destructive" /> Você atingiu o limite do seu plano (
+            {maxProducts} produtos).
+          </span>
+          <Link
+            to="/planos"
+            className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground"
+          >
+            Fazer upgrade
+          </Link>
         </div>
       )}
 
@@ -205,7 +218,6 @@ export function PharmacyProductsManager({ userId }: { userId: string }) {
           <Plus className="h-3.5 w-3.5" /> Novo produto
         </button>
       </div>
-
 
       {editing && (
         <ProductForm
@@ -329,7 +341,11 @@ function ProductForm({
           </select>
         </Field>
         <Field label="Marca">
-          <input className="input" value={value.brand ?? ""} onChange={(e) => upd({ brand: e.target.value })} />
+          <input
+            className="input"
+            value={value.brand ?? ""}
+            onChange={(e) => upd({ brand: e.target.value })}
+          />
         </Field>
       </div>
 
@@ -355,7 +371,6 @@ function ProductForm({
           onChange={(url: string | null) => upd({ image_url: url ?? "" })}
           folder="pharmacy-products"
         />
-
       </Field>
 
       <div className="grid grid-cols-2 gap-2">
@@ -382,13 +397,24 @@ function ProductForm({
       </div>
 
       <div className="flex flex-wrap gap-3 text-xs">
-        <Toggle label="Disponível" v={value.available ?? true} onChange={(v) => upd({ available: v })} />
-        <Toggle label="Entrega" v={value.delivery ?? false} onChange={(v) => upd({ delivery: v })} />
+        <Toggle
+          label="Disponível"
+          v={value.available ?? true}
+          onChange={(v) => upd({ available: v })}
+        />
+        <Toggle
+          label="Entrega"
+          v={value.delivery ?? false}
+          onChange={(v) => upd({ delivery: v })}
+        />
         <Toggle label="Retirada" v={value.pickup ?? true} onChange={(v) => upd({ pickup: v })} />
       </div>
 
       <div className="flex justify-end gap-2 pt-1">
-        <button onClick={onCancel} className="rounded-full border border-border px-4 py-1.5 text-xs font-bold">
+        <button
+          onClick={onCancel}
+          className="rounded-full border border-border px-4 py-1.5 text-xs font-bold"
+        >
           Cancelar
         </button>
         <button
@@ -416,10 +442,23 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function Toggle({ label, v, onChange }: { label: string; v: boolean; onChange: (v: boolean) => void }) {
+function Toggle({
+  label,
+  v,
+  onChange,
+}: {
+  label: string;
+  v: boolean;
+  onChange: (v: boolean) => void;
+}) {
   return (
     <label className="inline-flex cursor-pointer items-center gap-2">
-      <input type="checkbox" checked={v} onChange={(e) => onChange(e.target.checked)} className="h-4 w-4" />
+      <input
+        type="checkbox"
+        checked={v}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-4 w-4"
+      />
       <span className="font-semibold">{label}</span>
     </label>
   );

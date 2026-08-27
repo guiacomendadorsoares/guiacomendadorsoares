@@ -109,7 +109,10 @@ function CuriosidadeDetalhe() {
         <p className="text-sm text-destructive">Erro ao carregar curiosidade.</p>
       ) : !data ? (
         <p className="text-sm text-muted-foreground">
-          Curiosidade não encontrada. <Link to="/" className="text-primary underline">Voltar</Link>
+          Curiosidade não encontrada.{" "}
+          <Link to="/" className="text-primary underline">
+            Voltar
+          </Link>
         </p>
       ) : (
         <article className="mx-auto flex w-full max-w-3xl flex-col gap-4">

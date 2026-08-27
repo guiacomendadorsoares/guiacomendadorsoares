@@ -26,11 +26,15 @@ function AdminPlanosPage() {
         </span>
         <div>
           <h1 className="font-display text-xl font-bold">Planos de assinatura</h1>
-          <p className="text-sm text-muted-foreground">Edite nome, descrição, preço e disponibilidade.</p>
+          <p className="text-sm text-muted-foreground">
+            Edite nome, descrição, preço e disponibilidade.
+          </p>
         </div>
       </header>
       <div className="grid gap-3">
-        {plans.map((p) => <PlanRow key={p.id} plan={p} />)}
+        {plans.map((p) => (
+          <PlanRow key={p.id} plan={p} />
+        ))}
       </div>
     </div>
   );
@@ -39,16 +43,28 @@ function AdminPlanosPage() {
 function PlanRow({ plan }: { plan: Plan }) {
   const qc = useQueryClient();
   const [form, setForm] = useState({
-    name: plan.name, description: plan.description ?? "", price: plan.price, active: plan.active,
+    name: plan.name,
+    description: plan.description ?? "",
+    price: plan.price,
+    active: plan.active,
   });
   const save = useMutation({
     mutationFn: async () => {
-      const { error } = await (supabase as any).from("subscription_plans").update({
-        name: form.name, description: form.description, price: form.price, active: form.active,
-      }).eq("id", plan.id);
+      const { error } = await (supabase as any)
+        .from("subscription_plans")
+        .update({
+          name: form.name,
+          description: form.description,
+          price: form.price,
+          active: form.active,
+        })
+        .eq("id", plan.id);
       if (error) throw error;
     },
-    onSuccess: () => { toast.success("Plano atualizado"); qc.invalidateQueries({ queryKey: ["plans"] }); },
+    onSuccess: () => {
+      toast.success("Plano atualizado");
+      qc.invalidateQueries({ queryKey: ["plans"] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -61,19 +77,32 @@ function PlanRow({ plan }: { plan: Plan }) {
         </div>
         <div>
           <Label className="text-xs">Descrição</Label>
-          <Textarea rows={1} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          <Textarea
+            rows={1}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
         </div>
         <div>
           <Label className="text-xs">Preço (R$)</Label>
-          <Input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
+          <Input
+            type="number"
+            step="0.01"
+            value={form.price}
+            onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
+          />
         </div>
         <div className="flex items-center gap-2">
           <Switch checked={form.active} onCheckedChange={(v) => setForm({ ...form, active: v })} />
           <span className="text-xs">{form.active ? "Ativo" : "Inativo"}</span>
         </div>
-        <Button size="sm" onClick={() => save.mutate()} disabled={save.isPending}>Salvar</Button>
+        <Button size="sm" onClick={() => save.mutate()} disabled={save.isPending}>
+          Salvar
+        </Button>
       </div>
-      <p className="mt-2 text-[11px] text-muted-foreground">Slug: <code>{plan.slug}</code></p>
+      <p className="mt-2 text-[11px] text-muted-foreground">
+        Slug: <code>{plan.slug}</code>
+      </p>
     </div>
   );
 }

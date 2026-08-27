@@ -31,11 +31,41 @@ const schema = z.object({
 
 type Profile = "user" | "partner" | "broker" | "influencer";
 
-const PROFILES: { id: Profile; label: string; desc: string; icon: typeof User; redirect: string }[] = [
-  { id: "user", label: "Visitante", desc: "Favoritar, avaliar e acompanhar o Guia", icon: User, redirect: "/minha-conta" },
-  { id: "partner", label: "Empresa", desc: "Cadastrar negócio, vagas e promoções", icon: Building2, redirect: "/painel-empresa" },
-  { id: "broker", label: "Corretor", desc: "Anunciar e gerenciar imóveis", icon: Home, redirect: "/painel-imoveis" },
-  { id: "influencer", label: "Imprensa", desc: "Publicar notícias, eventos e curiosidades", icon: Megaphone, redirect: "/portal-imprensa" },
+const PROFILES: {
+  id: Profile;
+  label: string;
+  desc: string;
+  icon: typeof User;
+  redirect: string;
+}[] = [
+  {
+    id: "user",
+    label: "Visitante",
+    desc: "Favoritar, avaliar e acompanhar o Guia",
+    icon: User,
+    redirect: "/minha-conta",
+  },
+  {
+    id: "partner",
+    label: "Empresa",
+    desc: "Cadastrar negócio, vagas e promoções",
+    icon: Building2,
+    redirect: "/painel-empresa",
+  },
+  {
+    id: "broker",
+    label: "Corretor",
+    desc: "Anunciar e gerenciar imóveis",
+    icon: Home,
+    redirect: "/painel-imoveis",
+  },
+  {
+    id: "influencer",
+    label: "Imprensa",
+    desc: "Publicar notícias, eventos e curiosidades",
+    icon: Megaphone,
+    redirect: "/portal-imprensa",
+  },
 ];
 
 async function redirectForUser(userId: string, fallback: string): Promise<string> {
@@ -88,7 +118,11 @@ function AuthPage() {
         });
         if (error) throw error;
         if (signUp.session && profile !== "user") {
-          try { await requestSelfRole({ data: { role: profile } }); } catch { /* ignore */ }
+          try {
+            await requestSelfRole({ data: { role: profile } });
+          } catch {
+            /* ignore */
+          }
         }
         toast.success("Conta criada! Verifique seu e-mail para confirmar.");
         if (signUp.session) {
@@ -164,7 +198,10 @@ function AuthPage() {
   return (
     <div className="min-h-dvh grid place-items-center bg-gradient-to-br from-background via-background to-secondary px-4 py-10">
       <div className="w-full max-w-2xl rounded-3xl border border-border bg-card p-7 shadow-elegant">
-        <Link to="/" className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+        <Link
+          to="/"
+          className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+        >
           ← Guia CS
         </Link>
         <h1 className="mt-4 font-display text-2xl font-bold text-foreground">
@@ -190,10 +227,12 @@ function AuthPage() {
                     : "border-border bg-background hover:border-primary/40",
                 )}
               >
-                <span className={cn(
-                  "grid h-10 w-10 place-items-center rounded-xl",
-                  active ? "bg-primary text-primary-foreground" : "bg-secondary text-primary",
-                )}>
+                <span
+                  className={cn(
+                    "grid h-10 w-10 place-items-center rounded-xl",
+                    active ? "bg-primary text-primary-foreground" : "bg-secondary text-primary",
+                  )}
+                >
                   <Icon className="h-5 w-5" />
                 </span>
                 <span className="text-xs font-semibold text-foreground">{p.label}</span>
@@ -223,12 +262,24 @@ function AuthPage() {
           {mode === "signup" && (
             <div className="space-y-1.5">
               <Label htmlFor="name">Nome completo</Label>
-              <Input id="name" value={fullName} onChange={(e) => setFullName(e.target.value)} maxLength={120} />
+              <Input
+                id="name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                maxLength={120}
+              />
             </div>
           )}
           <div className="space-y-1.5">
             <Label htmlFor="email">E-mail</Label>
-            <Input id="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="password">Senha</Label>
@@ -243,7 +294,13 @@ function AuthPage() {
             />
           </div>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "signin" ? `Entrar como ${selected.label}` : `Criar conta como ${selected.label}`}
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : mode === "signin" ? (
+              `Entrar como ${selected.label}`
+            ) : (
+              `Criar conta como ${selected.label}`
+            )}
           </Button>
         </form>
 

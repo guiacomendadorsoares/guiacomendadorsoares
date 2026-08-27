@@ -5,9 +5,23 @@ import { listAsaasFinancials, cancelAsaasSubscription } from "@/lib/asaas.functi
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, RefreshCw, CheckCircle2, Clock, AlertTriangle, CalendarClock } from "lucide-react";
+import {
+  Loader2,
+  RefreshCw,
+  CheckCircle2,
+  Clock,
+  AlertTriangle,
+  CalendarClock,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/admin/financeiro")({
@@ -71,7 +85,8 @@ function FinanceiroPage() {
         <div>
           <h1 className="font-display text-2xl font-bold">Financeiro</h1>
           <p className="text-sm text-muted-foreground">
-            Integração Asaas {data?.sandbox ? <Badge variant="secondary">Sandbox</Badge> : <Badge>Produção</Badge>}
+            Integração Asaas{" "}
+            {data?.sandbox ? <Badge variant="secondary">Sandbox</Badge> : <Badge>Produção</Badge>}
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
@@ -87,17 +102,43 @@ function FinanceiroPage() {
 
       {error && (
         <Card className="border-destructive/40">
-          <CardContent className="p-4 text-sm text-destructive">Erro: {(error as Error).message}</CardContent>
+          <CardContent className="p-4 text-sm text-destructive">
+            Erro: {(error as Error).message}
+          </CardContent>
         </Card>
       )}
 
       {data && (
         <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <SummaryCard icon={CheckCircle2} label="Pagas" value={brl(totalPaid)} count={paid.length} tone="success" />
-            <SummaryCard icon={Clock} label="Pendentes" value={brl(totalPending)} count={pending.length} tone="warning" />
-            <SummaryCard icon={CalendarClock} label="A vencer (7d)" value={`${dueSoon.length} cobranças`} count={dueSoon.length} tone="info" />
-            <SummaryCard icon={AlertTriangle} label="Vencidas" value={brl(totalOverdue)} count={overdue.length} tone="danger" />
+            <SummaryCard
+              icon={CheckCircle2}
+              label="Pagas"
+              value={brl(totalPaid)}
+              count={paid.length}
+              tone="success"
+            />
+            <SummaryCard
+              icon={Clock}
+              label="Pendentes"
+              value={brl(totalPending)}
+              count={pending.length}
+              tone="warning"
+            />
+            <SummaryCard
+              icon={CalendarClock}
+              label="A vencer (7d)"
+              value={`${dueSoon.length} cobranças`}
+              count={dueSoon.length}
+              tone="info"
+            />
+            <SummaryCard
+              icon={AlertTriangle}
+              label="Vencidas"
+              value={brl(totalOverdue)}
+              count={overdue.length}
+              tone="danger"
+            />
           </div>
 
           <Tabs defaultValue="paid">
@@ -106,16 +147,39 @@ function FinanceiroPage() {
               <TabsTrigger value="pending">Geradas não pagas ({pending.length})</TabsTrigger>
               <TabsTrigger value="due">A vencer ({dueSoon.length})</TabsTrigger>
               <TabsTrigger value="overdue">Vencidas ({overdue.length})</TabsTrigger>
-              <TabsTrigger value="subsEnd">Assinaturas a expirar ({subsEndingSoon.length})</TabsTrigger>
+              <TabsTrigger value="subsEnd">
+                Assinaturas a expirar ({subsEndingSoon.length})
+              </TabsTrigger>
               <TabsTrigger value="subs">Todas assinaturas ({subs.length})</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="paid"><PaymentsTable rows={paid} /></TabsContent>
-            <TabsContent value="pending"><PaymentsTable rows={pending} /></TabsContent>
-            <TabsContent value="due"><PaymentsTable rows={dueSoon} showDaysLeft /></TabsContent>
-            <TabsContent value="overdue"><PaymentsTable rows={overdue} /></TabsContent>
-            <TabsContent value="subsEnd"><SubsTable rows={subsEndingSoon} showDaysLeft onCancel={(id) => cancelMut.mutate(id)} cancelPending={cancelMut.isPending} /></TabsContent>
-            <TabsContent value="subs"><SubsTable rows={subs} onCancel={(id) => cancelMut.mutate(id)} cancelPending={cancelMut.isPending} /></TabsContent>
+            <TabsContent value="paid">
+              <PaymentsTable rows={paid} />
+            </TabsContent>
+            <TabsContent value="pending">
+              <PaymentsTable rows={pending} />
+            </TabsContent>
+            <TabsContent value="due">
+              <PaymentsTable rows={dueSoon} showDaysLeft />
+            </TabsContent>
+            <TabsContent value="overdue">
+              <PaymentsTable rows={overdue} />
+            </TabsContent>
+            <TabsContent value="subsEnd">
+              <SubsTable
+                rows={subsEndingSoon}
+                showDaysLeft
+                onCancel={(id) => cancelMut.mutate(id)}
+                cancelPending={cancelMut.isPending}
+              />
+            </TabsContent>
+            <TabsContent value="subs">
+              <SubsTable
+                rows={subs}
+                onCancel={(id) => cancelMut.mutate(id)}
+                cancelPending={cancelMut.isPending}
+              />
+            </TabsContent>
           </Tabs>
         </>
       )}
@@ -124,8 +188,18 @@ function FinanceiroPage() {
 }
 
 function SummaryCard({
-  icon: Icon, label, value, count, tone,
-}: { icon: any; label: string; value: string; count: number; tone: "success" | "warning" | "info" | "danger" }) {
+  icon: Icon,
+  label,
+  value,
+  count,
+  tone,
+}: {
+  icon: any;
+  label: string;
+  value: string;
+  count: number;
+  tone: "success" | "warning" | "info" | "danger";
+}) {
   const toneCls = {
     success: "text-emerald-600 bg-emerald-500/10",
     warning: "text-amber-600 bg-amber-500/10",
@@ -174,16 +248,34 @@ function PaymentsTable({ rows, showDaysLeft = false }: { rows: any[]; showDaysLe
                 <TableCell>{brl(p.value)}</TableCell>
                 <TableCell>{p.dueDate}</TableCell>
                 {showDaysLeft && <TableCell>{daysUntil(p.dueDate)}d</TableCell>}
-                <TableCell><Badge variant="secondary">{p.status}</Badge></TableCell>
+                <TableCell>
+                  <Badge variant="secondary">{p.status}</Badge>
+                </TableCell>
                 <TableCell>
                   {p.invoiceUrl ? (
-                    <a href={p.invoiceUrl} target="_blank" rel="noreferrer" className="text-primary underline">abrir</a>
-                  ) : "—"}
+                    <a
+                      href={p.invoiceUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-primary underline"
+                    >
+                      abrir
+                    </a>
+                  ) : (
+                    "—"
+                  )}
                 </TableCell>
               </TableRow>
             ))}
             {rows.length === 0 && (
-              <TableRow><TableCell colSpan={showDaysLeft ? 8 : 7} className="text-center text-muted-foreground">Nada por aqui.</TableCell></TableRow>
+              <TableRow>
+                <TableCell
+                  colSpan={showDaysLeft ? 8 : 7}
+                  className="text-center text-muted-foreground"
+                >
+                  Nada por aqui.
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
@@ -193,8 +285,16 @@ function PaymentsTable({ rows, showDaysLeft = false }: { rows: any[]; showDaysLe
 }
 
 function SubsTable({
-  rows, showDaysLeft = false, onCancel, cancelPending,
-}: { rows: any[]; showDaysLeft?: boolean; onCancel: (id: string) => void; cancelPending: boolean }) {
+  rows,
+  showDaysLeft = false,
+  onCancel,
+  cancelPending,
+}: {
+  rows: any[];
+  showDaysLeft?: boolean;
+  onCancel: (id: string) => void;
+  cancelPending: boolean;
+}) {
   return (
     <Card>
       <CardContent className="overflow-x-auto p-0">
@@ -221,8 +321,12 @@ function SubsTable({
                   <TableCell>{brl(s.value)}</TableCell>
                   <TableCell>{s.cycle}</TableCell>
                   <TableCell>{s.nextDueDate}</TableCell>
-                  {showDaysLeft && <TableCell>{s.nextDueDate ? `${daysUntil(s.nextDueDate)}d` : "—"}</TableCell>}
-                  <TableCell><Badge variant="secondary">{s.status}</Badge></TableCell>
+                  {showDaysLeft && (
+                    <TableCell>{s.nextDueDate ? `${daysUntil(s.nextDueDate)}d` : "—"}</TableCell>
+                  )}
+                  <TableCell>
+                    <Badge variant="secondary">{s.status}</Badge>
+                  </TableCell>
                   <TableCell className="text-right">
                     <Button
                       variant="ghost"
@@ -239,7 +343,14 @@ function SubsTable({
               );
             })}
             {rows.length === 0 && (
-              <TableRow><TableCell colSpan={showDaysLeft ? 8 : 7} className="text-center text-muted-foreground">Nenhuma assinatura.</TableCell></TableRow>
+              <TableRow>
+                <TableCell
+                  colSpan={showDaysLeft ? 8 : 7}
+                  className="text-center text-muted-foreground"
+                >
+                  Nenhuma assinatura.
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

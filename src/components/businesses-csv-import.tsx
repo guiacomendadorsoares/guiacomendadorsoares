@@ -1,7 +1,14 @@
 import { useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Upload, Download, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,8 +23,13 @@ function detectDelimiter(text: string): string {
     ";": (firstLine.match(/;/g) || []).length,
     "\t": (firstLine.match(/\t/g) || []).length,
   };
-  let best = ","; let max = -1;
-  for (const [d, n] of Object.entries(counts)) if (n > max) { best = d; max = n; }
+  let best = ",";
+  let max = -1;
+  for (const [d, n] of Object.entries(counts))
+    if (n > max) {
+      best = d;
+      max = n;
+    }
   return best;
 }
 
@@ -32,38 +44,60 @@ function parseCsv(text: string, delimiter?: string): string[][] {
     const c = src[i];
     if (inQuotes) {
       if (c === '"') {
-        if (src[i + 1] === '"') { field += '"'; i++; }
-        else inQuotes = false;
+        if (src[i + 1] === '"') {
+          field += '"';
+          i++;
+        } else inQuotes = false;
       } else field += c;
     } else {
       if (c === '"') inQuotes = true;
-      else if (c === delim) { cur.push(field); field = ""; }
-      else if (c === "\n" || c === "\r") {
+      else if (c === delim) {
+        cur.push(field);
+        field = "";
+      } else if (c === "\n" || c === "\r") {
         if (c === "\r" && src[i + 1] === "\n") i++;
-        cur.push(field); rows.push(cur); cur = []; field = "";
+        cur.push(field);
+        rows.push(cur);
+        cur = [];
+        field = "";
       } else field += c;
     }
   }
-  if (field.length > 0 || cur.length > 0) { cur.push(field); rows.push(cur); }
+  if (field.length > 0 || cur.length > 0) {
+    cur.push(field);
+    rows.push(cur);
+  }
   return rows.filter((r) => r.some((v) => v.trim() !== ""));
 }
 
 const HEADER_KEYS = ["name", "category", "address", "phone"] as const;
-type Key = typeof HEADER_KEYS[number];
+type Key = (typeof HEADER_KEYS)[number];
 
 const HEADER_ALIASES: Record<string, Key> = {
-  nome: "name", name: "name",
-  categoria: "category", category: "category",
-  endereco: "address", "endereço": "address", address: "address",
-  telefone: "phone", phone: "phone", tel: "phone",
+  nome: "name",
+  name: "name",
+  categoria: "category",
+  category: "category",
+  endereco: "address",
+  endereço: "address",
+  address: "address",
+  telefone: "phone",
+  phone: "phone",
+  tel: "phone",
 };
 
 function norm(s: string) {
-  return s.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return s
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 function slugifyCategoryInput(s: string) {
-  return norm(s).replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  return norm(s)
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 }
 
 const CATEGORY_ALIASES: Record<string, string> = {
@@ -175,15 +209,17 @@ function resolveCategory(input: string): { slug: string; label: string } | null 
   const slug = slugifyCategoryInput(input);
   if (!q) return null;
   const aliasSlug = CATEGORY_ALIASES[q] ?? CATEGORY_ALIASES[slug];
-  const c = CATEGORIES.find((cat) =>
-    norm(cat.slug) === q ||
-    slugifyCategoryInput(cat.label) === slug ||
-    cat.slug === aliasSlug ||
-    cat.subcategories.some((sub) => slugifyCategoryInput(sub.label) === slug || norm(sub.label) === q)
+  const c = CATEGORIES.find(
+    (cat) =>
+      norm(cat.slug) === q ||
+      slugifyCategoryInput(cat.label) === slug ||
+      cat.slug === aliasSlug ||
+      cat.subcategories.some(
+        (sub) => slugifyCategoryInput(sub.label) === slug || norm(sub.label) === q,
+      ),
   );
   return c ? { slug: c.slug, label: c.label } : null;
 }
-
 
 type ParsedRow = {
   index: number;
@@ -213,7 +249,9 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
     const blob = new Blob([TEMPLATE_CSV], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "modelo-empresas.csv"; a.click();
+    a.href = url;
+    a.download = "modelo-empresas.csv";
+    a.click();
     URL.revokeObjectURL(url);
   }
 
@@ -236,12 +274,17 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
     setProgress(null);
     const text = await readFileSmart(file);
     const table = parseCsv(text);
-    if (table.length < 2) { toast.error("Planilha vazia ou sem linhas."); return; }
+    if (table.length < 2) {
+      toast.error("Planilha vazia ou sem linhas.");
+      return;
+    }
     const header = table[0].map((h) => HEADER_ALIASES[norm(h)] ?? (norm(h) as Key));
-    const missing = ["name", "category", "address", "phone"].filter((k) => !header.includes(k as Key));
+    const missing = ["name", "category", "address", "phone"].filter(
+      (k) => !header.includes(k as Key),
+    );
     if (missing.length) {
       toast.error(
-        `Colunas obrigatórias faltando: ${missing.join(", ")}. Cabeçalhos detectados: ${table[0].join(" | ")}`
+        `Colunas obrigatórias faltando: ${missing.join(", ")}. Cabeçalhos detectados: ${table[0].join(" | ")}`,
       );
       return;
     }
@@ -265,17 +308,30 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
     const parsed: ParsedRow[] = [];
     for (let i = 1; i < table.length; i++) {
       const rec: Record<string, string> = {};
-      header.forEach((k, j) => { rec[k] = (table[i][j] ?? "").trim(); });
+      header.forEach((k, j) => {
+        rec[k] = (table[i][j] ?? "").trim();
+      });
       const row: ParsedRow = { index: i, raw: rec, status: "invalid" };
 
-      const cat = resolveCategory(rec.category ?? "") ?? (rec.category?.trim()
-        ? { slug: slugifyCategoryInput(rec.category), label: rec.category.trim() }
-        : { slug: "sem-categoria", label: "Sem categoria" });
+      const cat =
+        resolveCategory(rec.category ?? "") ??
+        (rec.category?.trim()
+          ? { slug: slugifyCategoryInput(rec.category), label: rec.category.trim() }
+          : { slug: "sem-categoria", label: "Sem categoria" });
 
       const nameKey = norm(rec.name);
       const nameAddrKey = `${nameKey}|${norm(rec.address)}`;
-      if (!nameKey) { row.error = "Nome vazio"; parsed.push(row); continue; }
-      if (dupSet.has(nameKey) || dupSet.has(nameAddrKey)) { row.status = "duplicate"; row.error = "Já existe (pulado)"; parsed.push(row); continue; }
+      if (!nameKey) {
+        row.error = "Nome vazio";
+        parsed.push(row);
+        continue;
+      }
+      if (dupSet.has(nameKey) || dupSet.has(nameAddrKey)) {
+        row.status = "duplicate";
+        row.error = "Já existe (pulado)";
+        parsed.push(row);
+        continue;
+      }
       dupSet.add(nameKey);
       dupSet.add(nameAddrKey);
 
@@ -296,18 +352,26 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
   }
 
   async function runImport() {
-    if (!okCount) { toast.error("Nenhuma linha válida para importar."); return; }
+    if (!okCount) {
+      toast.error("Nenhuma linha válida para importar.");
+      return;
+    }
     setImporting(true);
     const { data: u } = await supabase.auth.getUser();
     const submittedBy = u.user?.id ?? null;
-    let ok = 0, err = 0;
-    const toInsert = rows.filter((r) => r.status === "ok" && r.values).map((r) => ({ ...r.values!, submitted_by: submittedBy }));
+    let ok = 0,
+      err = 0;
+    const toInsert = rows
+      .filter((r) => r.status === "ok" && r.values)
+      .map((r) => ({ ...r.values!, submitted_by: submittedBy }));
     // Insert in chunks of 50
     for (let i = 0; i < toInsert.length; i += 50) {
       const chunk = toInsert.slice(i, i + 50);
       const { error, data } = await (supabase.from("businesses") as any).insert(chunk).select("id");
-      if (error) { err += chunk.length; console.error(error); }
-      else ok += (data?.length ?? chunk.length);
+      if (error) {
+        err += chunk.length;
+        console.error(error);
+      } else ok += data?.length ?? chunk.length;
     }
     setImporting(false);
     setProgress({ ok, skip: dupCount, err: err + errCount });
@@ -323,13 +387,23 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
         <Upload className="mr-1 h-4 w-4" /> Importar planilha
       </Button>
 
-      <Dialog open={open} onOpenChange={(o) => { if (!o) { setOpen(false); setRows([]); setProgress(null); } }}>
+      <Dialog
+        open={open}
+        onOpenChange={(o) => {
+          if (!o) {
+            setOpen(false);
+            setRows([]);
+            setProgress(null);
+          }
+        }}
+      >
         <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Importar empresas via CSV</DialogTitle>
             <DialogDescription>
-              Cada linha vira uma empresa no <strong>plano Free</strong>, já <strong>aprovada</strong> e vinculada à categoria informada.
-              Duplicatas (mesmo nome + categoria) são puladas automaticamente.
+              Cada linha vira uma empresa no <strong>plano Free</strong>, já{" "}
+              <strong>aprovada</strong> e vinculada à categoria informada. Duplicatas (mesmo nome +
+              categoria) são puladas automaticamente.
             </DialogDescription>
           </DialogHeader>
 
@@ -355,9 +429,16 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
             </div>
 
             <div className="rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
-              <p className="font-semibold text-foreground">Colunas da planilha (todas obrigatórias exceto telefone):</p>
-              <p className="mt-1"><code>name, category, address, phone</code></p>
-              <p className="mt-2"><strong>category</strong> pode ser o slug (<code>alimentacao</code>) ou o nome (<code>Alimentação</code>).</p>
+              <p className="font-semibold text-foreground">
+                Colunas da planilha (todas obrigatórias exceto telefone):
+              </p>
+              <p className="mt-1">
+                <code>name, category, address, phone</code>
+              </p>
+              <p className="mt-2">
+                <strong>category</strong> pode ser o slug (<code>alimentacao</code>) ou o nome (
+                <code>Alimentação</code>).
+              </p>
             </div>
 
             {rows.length > 0 && (
@@ -392,12 +473,21 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
                       {rows.map((r) => (
                         <tr key={r.index} className="border-t border-border">
                           <td className="p-2 text-muted-foreground">{r.index}</td>
-                          <td className="p-2">{r.raw.name || <span className="text-muted-foreground">—</span>}</td>
-                          <td className="p-2">{r.raw.category}{r.raw.subcategory ? ` / ${r.raw.subcategory}` : ""}</td>
+                          <td className="p-2">
+                            {r.raw.name || <span className="text-muted-foreground">—</span>}
+                          </td>
+                          <td className="p-2">
+                            {r.raw.category}
+                            {r.raw.subcategory ? ` / ${r.raw.subcategory}` : ""}
+                          </td>
                           <td className="p-2">
                             {r.status === "ok" && <span className="text-emerald-600">OK</span>}
-                            {r.status === "duplicate" && <span className="text-amber-600">Duplicada</span>}
-                            {r.status === "invalid" && <span className="text-destructive">{r.error}</span>}
+                            {r.status === "duplicate" && (
+                              <span className="text-amber-600">Duplicada</span>
+                            )}
+                            {r.status === "invalid" && (
+                              <span className="text-destructive">{r.error}</span>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -409,17 +499,32 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
 
             {progress && (
               <div className="rounded-lg border border-border bg-card p-3 text-sm">
-                <p><strong>{progress.ok}</strong> importadas · <strong>{progress.skip}</strong> puladas · <strong>{progress.err}</strong> com erro.</p>
+                <p>
+                  <strong>{progress.ok}</strong> importadas · <strong>{progress.skip}</strong>{" "}
+                  puladas · <strong>{progress.err}</strong> com erro.
+                </p>
               </div>
             )}
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => { setOpen(false); setRows([]); setProgress(null); }} disabled={importing}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setOpen(false);
+                setRows([]);
+                setProgress(null);
+              }}
+              disabled={importing}
+            >
               Fechar
             </Button>
             <Button onClick={runImport} disabled={importing || okCount === 0}>
-              {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : `Importar ${okCount || ""}`}
+              {importing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                `Importar ${okCount || ""}`
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

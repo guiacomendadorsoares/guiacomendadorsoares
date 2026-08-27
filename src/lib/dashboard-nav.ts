@@ -1,9 +1,30 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  LayoutDashboard, CheckCircle2, Building2, Briefcase, Home, Newspaper,
-  Calendar, Sparkles, Handshake, Users, BarChart3, Settings, Wallet,
-  User, Heart, MessageSquare, Bell, FileEdit, Megaphone, KeyRound, Crown, LifeBuoy,
-  Image as ImageIcon, TrendingUp, ShieldCheck,
+  LayoutDashboard,
+  CheckCircle2,
+  Building2,
+  Briefcase,
+  Home,
+  Newspaper,
+  Calendar,
+  Sparkles,
+  Handshake,
+  Users,
+  BarChart3,
+  Settings,
+  Wallet,
+  User,
+  Heart,
+  MessageSquare,
+  Bell,
+  FileEdit,
+  Megaphone,
+  KeyRound,
+  Crown,
+  LifeBuoy,
+  Image as ImageIcon,
+  TrendingUp,
+  ShieldCheck,
 } from "lucide-react";
 import type { AppRole } from "@/hooks/use-auth";
 
@@ -113,10 +134,15 @@ export const influencerNav: NavSection[] = [
 export function navForRole(role: AppRole): NavSection[] {
   switch (role) {
     case "admin":
-    case "editor": return adminNav;
-    case "partner": return partnerNav;
-    case "broker": return brokerNav;
-    case "influencer": return influencerNav;
-    default: return userNav;
+    case "editor":
+      return adminNav;
+    case "partner":
+      return partnerNav;
+    case "broker":
+      return brokerNav;
+    case "influencer":
+      return influencerNav;
+    default:
+      return userNav;
   }
 }

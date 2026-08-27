@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Loader2, Upload, X, ArrowLeft, ArrowRight, Image as ImageIcon, Film } from "lucide-react";
 import { toast } from "sonner";
-import { uploadImage, uploadMedia, deleteImageByUrl, getDisplayImageUrl, getDisplayImageUrls } from "@/lib/storage";
+import {
+  uploadImage,
+  uploadMedia,
+  deleteImageByUrl,
+  getDisplayImageUrl,
+  getDisplayImageUrls,
+} from "@/lib/storage";
 
 interface SingleProps {
   value: string | null | undefined;
@@ -21,7 +27,9 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
     getDisplayImageUrl(value).then((url) => {
       if (alive) setDisplayUrl(url);
     });
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, [value]);
 
   async function handleFile(file: File) {
@@ -38,7 +46,9 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
 
   async function handleRemove() {
     if (!value) return;
-    try { await deleteImageByUrl(value); } catch {}
+    try {
+      await deleteImageByUrl(value);
+    } catch {}
     onChange(null);
   }
 
@@ -46,7 +56,9 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
 
   return (
     <div className="space-y-2">
-      <div className={`relative ${ratio} w-full overflow-hidden rounded-lg border border-dashed border-border bg-muted/30`}>
+      <div
+        className={`relative ${ratio} w-full overflow-hidden rounded-lg border border-dashed border-border bg-muted/30`}
+      >
         {displayUrl ? (
           <>
             <img src={displayUrl} alt="preview" className="h-full w-full object-cover" />
@@ -100,7 +112,13 @@ interface MediaProps {
 }
 
 /** Uploader que aceita imagem, GIF e vídeo (mp4/webm). */
-export function SingleMediaUploader({ value, mediaType, onChange, folder, aspect = "wide" }: MediaProps) {
+export function SingleMediaUploader({
+  value,
+  mediaType,
+  onChange,
+  folder,
+  aspect = "wide",
+}: MediaProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -117,7 +135,11 @@ export function SingleMediaUploader({ value, mediaType, onChange, folder, aspect
   }
 
   async function handleRemove() {
-    if (value) { try { await deleteImageByUrl(value); } catch {} }
+    if (value) {
+      try {
+        await deleteImageByUrl(value);
+      } catch {}
+    }
     onChange({ url: null });
   }
 
@@ -126,11 +148,20 @@ export function SingleMediaUploader({ value, mediaType, onChange, folder, aspect
 
   return (
     <div className="space-y-2">
-      <div className={`relative ${ratio} w-full overflow-hidden rounded-lg border border-dashed border-border bg-muted/30`}>
+      <div
+        className={`relative ${ratio} w-full overflow-hidden rounded-lg border border-dashed border-border bg-muted/30`}
+      >
         {value ? (
           <>
             {isVideo ? (
-              <video src={value} className="h-full w-full object-cover" muted loop playsInline autoPlay />
+              <video
+                src={value}
+                className="h-full w-full object-cover"
+                muted
+                loop
+                playsInline
+                autoPlay
+              />
             ) : (
               <img src={value} alt="preview" className="h-full w-full object-cover" />
             )}
@@ -194,7 +225,9 @@ export function GalleryUploader({ value, onChange, folder, max }: GalleryProps) 
     getDisplayImageUrls(items).then((urls) => {
       if (alive) setDisplayItems(urls);
     });
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, [items]);
 
   async function handleFiles(files: FileList) {
@@ -235,26 +268,50 @@ export function GalleryUploader({ value, onChange, folder, max }: GalleryProps) 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-        <span>{items.length} / {max} fotos</span>
+        <span>
+          {items.length} / {max} fotos
+        </span>
         {uploading && <Loader2 className="h-3 w-3 animate-spin" />}
       </div>
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
         {items.map((url, i) => (
-          <div key={url + i} className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted">
-            <img src={displayItems[i] ?? url} alt={`foto ${i + 1}`} className="h-full w-full object-cover" />
+          <div
+            key={url + i}
+            className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted"
+          >
+            <img
+              src={displayItems[i] ?? url}
+              alt={`foto ${i + 1}`}
+              className="h-full w-full object-cover"
+            />
             {i === 0 && (
               <span className="absolute left-1 top-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold uppercase text-primary-foreground">
                 Principal
               </span>
             )}
             <div className="absolute inset-x-0 bottom-0 flex justify-between gap-1 bg-gradient-to-t from-black/70 to-transparent p-1 opacity-0 transition-opacity group-hover:opacity-100">
-              <button type="button" onClick={() => move(i, -1)} className="rounded bg-background/80 p-1" aria-label="Mover esquerda">
+              <button
+                type="button"
+                onClick={() => move(i, -1)}
+                className="rounded bg-background/80 p-1"
+                aria-label="Mover esquerda"
+              >
                 <ArrowLeft className="h-3 w-3" />
               </button>
-              <button type="button" onClick={() => remove(i)} className="rounded bg-background/80 p-1 text-destructive" aria-label="Remover">
+              <button
+                type="button"
+                onClick={() => remove(i)}
+                className="rounded bg-background/80 p-1 text-destructive"
+                aria-label="Remover"
+              >
                 <X className="h-3 w-3" />
               </button>
-              <button type="button" onClick={() => move(i, 1)} className="rounded bg-background/80 p-1" aria-label="Mover direita">
+              <button
+                type="button"
+                onClick={() => move(i, 1)}
+                className="rounded bg-background/80 p-1"
+                aria-label="Mover direita"
+              >
                 <ArrowRight className="h-3 w-3" />
               </button>
             </div>

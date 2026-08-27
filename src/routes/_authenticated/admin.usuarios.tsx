@@ -3,7 +3,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { AppRole } from "@/hooks/use-auth";
@@ -16,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/admin/usuarios")({
 
 const ROLES: AppRole[] = ["admin", "editor", "partner", "broker", "influencer", "user"];
 const PLANS = ["free", "destaque", "ouro"] as const;
-type PlanSlug = typeof PLANS[number];
+type PlanSlug = (typeof PLANS)[number];
 
 function UsuariosPage() {
   const qc = useQueryClient();
@@ -47,21 +53,30 @@ function UsuariosPage() {
   const addRole = useMutation({
     mutationFn: ({ userId, role }: { userId: string; role: AppRole }) =>
       grantFn({ data: { userId, role } }),
-    onSuccess: () => { toast.success("Perfil adicionado"); qc.invalidateQueries({ queryKey: ["admin-users"] }); },
+    onSuccess: () => {
+      toast.success("Perfil adicionado");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const removeRole = useMutation({
     mutationFn: ({ userId, role }: { userId: string; role: AppRole }) =>
       revokeFn({ data: { userId, role } }),
-    onSuccess: () => { toast.success("Perfil removido"); qc.invalidateQueries({ queryKey: ["admin-users"] }); },
+    onSuccess: () => {
+      toast.success("Perfil removido");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const changePlan = useMutation({
     mutationFn: ({ userId, plan }: { userId: string; plan: PlanSlug }) =>
       setPlanFn({ data: { userId, plan } }),
-    onSuccess: () => { toast.success("Plano atualizado"); qc.invalidateQueries({ queryKey: ["admin-users"] }); },
+    onSuccess: () => {
+      toast.success("Plano atualizado");
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -83,7 +98,10 @@ function UsuariosPage() {
 }
 
 function UserRow({
-  user, onAdd, onRemove, onPlan,
+  user,
+  onAdd,
+  onRemove,
+  onPlan,
 }: {
   user: any;
   onAdd: (r: AppRole) => void;
@@ -97,16 +115,23 @@ function UserRow({
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <p className="truncate font-semibold">{user.full_name ?? user.email ?? "Sem nome"}</p>
-          <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-            plan === "ouro" ? "gradient-brand text-primary-foreground" :
-            plan === "destaque" ? "bg-primary/10 text-primary" : "bg-secondary text-muted-foreground"
-          }`}>
+          <span
+            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+              plan === "ouro"
+                ? "gradient-brand text-primary-foreground"
+                : plan === "destaque"
+                  ? "bg-primary/10 text-primary"
+                  : "bg-secondary text-muted-foreground"
+            }`}
+          >
             <Crown className="h-3 w-3" /> {plan}
           </span>
         </div>
         <p className="truncate text-xs text-muted-foreground">{user.email}</p>
         <div className="mt-2 flex flex-wrap gap-1">
-          {user.roles.length === 0 && <span className="text-xs text-muted-foreground">Sem perfis</span>}
+          {user.roles.length === 0 && (
+            <span className="text-xs text-muted-foreground">Sem perfis</span>
+          )}
           {user.roles.map((r: AppRole) => (
             <button
               key={r}
@@ -121,18 +146,32 @@ function UserRow({
       </div>
       <div className="flex shrink-0 flex-wrap gap-2">
         <Select value={plan} onValueChange={(v) => onPlan(v as PlanSlug)}>
-          <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-32">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
-            {PLANS.map((p) => <SelectItem key={p} value={p}>Plano {p}</SelectItem>)}
+            {PLANS.map((p) => (
+              <SelectItem key={p} value={p}>
+                Plano {p}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <Select value={picked} onValueChange={(v) => setPicked(v as AppRole)}>
-          <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-32">
+            <SelectValue />
+          </SelectTrigger>
           <SelectContent>
-            {ROLES.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+            {ROLES.map((r) => (
+              <SelectItem key={r} value={r}>
+                {r}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
-        <Button size="sm" onClick={() => onAdd(picked)}>Adicionar perfil</Button>
+        <Button size="sm" onClick={() => onAdd(picked)}>
+          Adicionar perfil
+        </Button>
       </div>
     </div>
   );

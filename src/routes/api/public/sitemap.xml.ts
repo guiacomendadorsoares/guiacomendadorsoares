@@ -74,14 +74,35 @@ export const Route = createFileRoute("/api/public/sitemap/xml")({
 
             const [biz, props, jobs, evts, news, curi] = await Promise.all([
               supabase.from("businesses").select("id, updated_at").eq("status", "approved"),
-              supabase.from("properties").select("id, updated_at").eq("status", "approved").eq("active", true),
-              supabase.from("jobs").select("id, updated_at").eq("status", "approved").eq("active", true),
-              supabase.from("events").select("id, updated_at").eq("status", "approved").eq("active", true),
-              supabase.from("news").select("id, updated_at").eq("status", "approved").eq("published", true),
+              supabase
+                .from("properties")
+                .select("id, updated_at")
+                .eq("status", "approved")
+                .eq("active", true),
+              supabase
+                .from("jobs")
+                .select("id, updated_at")
+                .eq("status", "approved")
+                .eq("active", true),
+              supabase
+                .from("events")
+                .select("id, updated_at")
+                .eq("status", "approved")
+                .eq("active", true),
+              supabase
+                .from("news")
+                .select("id, updated_at")
+                .eq("status", "approved")
+                .eq("published", true),
               supabase.from("curiosities").select("id, updated_at").eq("status", "approved"),
             ]);
 
-            const push = (rows: { id: string; updated_at: string | null }[] | null, prefix: string, priority: string, freq: SitemapEntry["changefreq"]) => {
+            const push = (
+              rows: { id: string; updated_at: string | null }[] | null,
+              prefix: string,
+              priority: string,
+              freq: SitemapEntry["changefreq"],
+            ) => {
               for (const r of rows ?? []) {
                 dynamicEntries.push({
                   path: `${prefix}/${r.id}`,

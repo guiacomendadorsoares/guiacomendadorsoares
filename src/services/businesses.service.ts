@@ -35,11 +35,7 @@ export async function fetchBusinesses(): Promise<Business[]> {
 }
 
 export async function fetchBusinessById(id: string): Promise<Business | null> {
-  const { data, error } = await supabase
-    .from("businesses")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
+  const { data, error } = await supabase.from("businesses").select("*").eq("id", id).maybeSingle();
 
   if (error) {
     console.error("[businesses.service] fetch by id error:", error.message);
@@ -122,10 +118,7 @@ export async function fetchBusinessesPaged(args: BusinessesPageArgs): Promise<Bu
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  let q = supabase
-    .from("businesses")
-    .select("*", { count: "exact" })
-    .eq("status", "approved");
+  let q = supabase.from("businesses").select("*", { count: "exact" }).eq("status", "approved");
 
   if (args.mainCategory) q = q.eq("main_category", args.mainCategory);
   if (args.subcategory) q = q.eq("subcategory", args.subcategory);
@@ -138,10 +131,7 @@ export async function fetchBusinessesPaged(args: BusinessesPageArgs): Promise<Bu
     });
   }
 
-  q = q
-    .order("featured", { ascending: false })
-    .order("name", { ascending: true })
-    .range(from, to);
+  q = q.order("featured", { ascending: false }).order("name", { ascending: true }).range(from, to);
 
   const { data, error, count } = await q;
   if (error) {

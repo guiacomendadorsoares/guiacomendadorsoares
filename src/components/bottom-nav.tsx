@@ -2,7 +2,12 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, Search, LayoutGrid, Heart, User } from "lucide-react";
 import type { ComponentType } from "react";
 
-type Item = { to: string; label: string; icon: ComponentType<{ className?: string }>; exact?: boolean };
+type Item = {
+  to: string;
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  exact?: boolean;
+};
 
 const items: Item[] = [
   { to: "/", label: "Início", icon: Home, exact: true },
@@ -31,9 +36,7 @@ export function BottomNav() {
                 data-active={active}
                 aria-current={active ? "page" : undefined}
               >
-                <span
-                  className="grid h-9 w-9 place-items-center rounded-full transition-all duration-300 ease-out will-change-transform group-hover:-translate-y-0.5 group-active:scale-90 group-data-[active=true]:scale-110 group-data-[active=true]:gradient-brand group-data-[active=true]:text-primary-foreground group-data-[active=true]:shadow-elegant motion-reduce:transform-none motion-reduce:transition-none"
-                >
+                <span className="grid h-9 w-9 place-items-center rounded-full transition-all duration-300 ease-out will-change-transform group-hover:-translate-y-0.5 group-active:scale-90 group-data-[active=true]:scale-110 group-data-[active=true]:gradient-brand group-data-[active=true]:text-primary-foreground group-data-[active=true]:shadow-elegant motion-reduce:transform-none motion-reduce:transition-none">
                   <Icon className="h-[18px] w-[18px]" />
                 </span>
                 <span className="leading-none">{label}</span>
@@ -47,7 +50,6 @@ export function BottomNav() {
             </li>
           );
         })}
-
       </ul>
     </nav>
   );

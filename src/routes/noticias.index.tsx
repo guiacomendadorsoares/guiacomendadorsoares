@@ -14,10 +14,14 @@ export const Route = createFileRoute("/noticias/")({
       { title: "Notícias de Comendador Soares — Guia CS" },
       {
         name: "description",
-        content: "Últimas notícias de Comendador Soares: bairro, segurança, trânsito, obras, saúde e educação em Nova Iguaçu.",
+        content:
+          "Últimas notícias de Comendador Soares: bairro, segurança, trânsito, obras, saúde e educação em Nova Iguaçu.",
       },
       { property: "og:title", content: "Notícias de Comendador Soares — Guia CS" },
-      { property: "og:description", content: "Últimas notícias do bairro Comendador Soares em Nova Iguaçu." },
+      {
+        property: "og:description",
+        content: "Últimas notícias do bairro Comendador Soares em Nova Iguaçu.",
+      },
     ],
   }),
   component: NoticiasPage,
@@ -64,12 +68,17 @@ function NoticiasPage() {
 
       {isLoading ? (
         <ListSkeleton count={4} height="h-28" />
-
       ) : items.length === 0 ? (
         <EmptyState
           icon={<Newspaper className="h-5 w-5" />}
-          title={allNews.length === 0 ? "Nenhuma notícia disponível." : "Sem notícias nesta categoria"}
-          description={allNews.length === 0 ? "A redação está preparando os próximos conteúdos sobre o bairro." : "Volte em breve ou escolha outra editoria."}
+          title={
+            allNews.length === 0 ? "Nenhuma notícia disponível." : "Sem notícias nesta categoria"
+          }
+          description={
+            allNews.length === 0
+              ? "A redação está preparando os próximos conteúdos sobre o bairro."
+              : "Volte em breve ou escolha outra editoria."
+          }
         />
       ) : (
         <div className="flex flex-col gap-4">

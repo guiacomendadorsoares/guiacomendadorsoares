@@ -2,7 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const codeSchema = z.string().min(3).max(40).regex(/^[A-Za-z0-9_-]+$/);
+const codeSchema = z
+  .string()
+  .min(3)
+  .max(40)
+  .regex(/^[A-Za-z0-9_-]+$/);
 
 export const redeemCoupon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -20,7 +24,8 @@ export const redeemCoupon = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!coupon) throw new Error("Cupom inválido");
     if (!coupon.active) throw new Error("Cupom inativo");
-    if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) throw new Error("Cupom expirado");
+    if (coupon.expires_at && new Date(coupon.expires_at) < new Date())
+      throw new Error("Cupom expirado");
     if (coupon.used_count >= coupon.max_uses) throw new Error("Cupom esgotado");
 
     // Prevent double redemption per user
@@ -68,16 +73,16 @@ export const redeemCoupon = createServerFn({ method: "POST" })
       .update({ used_count: coupon.used_count + 1 })
       .eq("id", coupon.id);
 
-    await supabaseAdmin
-      .from("profiles")
-      .update({ current_plan: plan.slug })
-      .eq("user_id", userId);
+    await supabaseAdmin.from("profiles").update({ current_plan: plan.slug }).eq("user_id", userId);
 
     return { ok: true, planName: plan.name, days: coupon.days, expiresAt: expiresAt.toISOString() };
   });
 
 async function assertAdmin(ctx: any) {
-  const { data: isAdmin } = await ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "admin" });
+  const { data: isAdmin } = await ctx.supabase.rpc("has_role", {
+    _user_id: ctx.userId,
+    _role: "admin",
+  });
   if (!isAdmin) throw new Error("Forbidden");
 }
 
@@ -97,13 +102,15 @@ export const adminListCoupons = createServerFn({ method: "POST" })
 export const adminCreateCoupon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
-    z.object({
-      code: codeSchema,
-      plan_slug: z.enum(["destaque", "ouro"]),
-      days: z.number().int().min(1).max(365),
-      max_uses: z.number().int().min(1).max(10000),
-      expires_at: z.string().nullable().optional(),
-    }).parse(data),
+    z
+      .object({
+        code: codeSchema,
+        plan_slug: z.enum(["destaque", "ouro"]),
+        days: z.number().int().min(1).max(365),
+        max_uses: z.number().int().min(1).max(10000),
+        expires_at: z.string().nullable().optional(),
+      })
+      .parse(data),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
@@ -126,11 +133,16 @@ export const adminCreateCoupon = createServerFn({ method: "POST" })
 
 export const adminToggleCoupon = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ id: z.string().uuid(), active: z.boolean() }).parse(data))
+  .inputValidator((data: unknown) =>
+    z.object({ id: z.string().uuid(), active: z.boolean() }).parse(data),
+  )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("coupons").update({ active: data.active }).eq("id", data.id);
+    const { error } = await supabaseAdmin
+      .from("coupons")
+      .update({ active: data.active })
+      .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
