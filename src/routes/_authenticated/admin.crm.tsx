@@ -213,7 +213,10 @@ function CrmPage() {
       </div>
     );
   }
+  return <CrmPageInner />;
+}
 
+function CrmPageInner() {
   const list = useServerFn(listCrmLeads);
   const { data: leads = [], isLoading } = useQuery({
     queryKey: ["crm-leads"],
