@@ -104,10 +104,22 @@ function PainelEmpresa() {
               <Loader2 className="h-4 w-4 animate-spin" />
             </div>
           ) : !businesses?.length ? (
-            <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-              Nenhuma empresa vinculada ainda. Cadastre uma nova ou reivindique uma existente pelo
-              Guia.
-            </p>
+            <div className="space-y-4">
+              <div className="rounded-xl border border-dashed border-border p-6 text-center">
+                <p className="text-sm font-semibold text-foreground">Cadastre sua empresa</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Preencha os dados abaixo para enviar sua empresa para aprovação no Guia.
+                </p>
+              </div>
+              <ContentCrud
+                table="businesses"
+                ownerOnly={user.id}
+                forcePending
+                onSaved={() =>
+                  void qc.invalidateQueries({ queryKey: ["my-businesses", user.id] })
+                }
+              />
+            </div>
           ) : (
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {businesses.map((b) => (
@@ -144,7 +156,14 @@ function PainelEmpresa() {
 
             <TabsContent value="empresa" className="mt-4">
               {canEditBusiness(selected.role, selected.is_primary_owner) ? (
-                <ContentCrud table="businesses" ownerOnly={user.id} forcePending />
+                <ContentCrud
+                  table="businesses"
+                  ownerOnly={user.id}
+                  forcePending
+                  onSaved={() =>
+                    void qc.invalidateQueries({ queryKey: ["my-businesses", user.id] })
+                  }
+                />
               ) : (
                 <ReadOnlyNotice roleLabel={ROLE_LABEL[selected.role]} />
               )}
