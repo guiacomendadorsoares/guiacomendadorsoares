@@ -66,6 +66,7 @@ export const Route = createFileRoute("/_authenticated/painel-empresa")({
 function PainelEmpresa() {
   const { ready } = useRequireAnyRole(["partner", "admin"]);
   const { user } = useCurrentUser();
+  const qc = useQueryClient();
 
   const { data: businesses, isLoading } = useQuery({
     queryKey: ["my-businesses", user?.id],
