@@ -9,13 +9,31 @@ function stripAccents(s: string): string {
   return s.normalize("NFD").replace(/\p{Diacritic}/gu, "");
 }
 
+function normalizeGallery(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
+  }
+  if (typeof value === "string" && value.trim()) {
+    try {
+      return normalizeGallery(JSON.parse(value));
+    } catch {
+      return [value];
+    }
+  }
+  return [];
+}
+
 async function hydrateBusinessImages(row: any): Promise<Business> {
+  const galleryUrls = normalizeGallery(row.gallery_urls);
+  const legacyGallery = normalizeGallery(row.gallery);
+  const gallery = galleryUrls.length ? galleryUrls : legacyGallery;
+
   return {
     ...row,
     logo_url: await getDisplayImageUrl(row.logo_url),
     banner_url: await getDisplayImageUrl(row.banner_url),
     cover_url: await getDisplayImageUrl(row.cover_url ?? row.banner_url ?? row.logo_url),
-    gallery_urls: await getDisplayImageUrls(row.gallery_urls),
+    gallery_urls: await getDisplayImageUrls(gallery),
   } as unknown as Business;
 }
 
