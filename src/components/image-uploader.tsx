@@ -253,11 +253,18 @@ export function SingleMediaUploader({
 interface GalleryProps {
   value: string[] | null | undefined;
   onChange: (urls: string[]) => void;
+  onUploadStateChange?: (uploading: boolean) => void;
   folder: string;
   max: number;
 }
 
-export function GalleryUploader({ value, onChange, folder, max }: GalleryProps) {
+export function GalleryUploader({
+  value,
+  onChange,
+  onUploadStateChange,
+  folder,
+  max,
+}: GalleryProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const items = useMemo(() => value ?? [], [value]);
@@ -280,18 +287,24 @@ export function GalleryUploader({ value, onChange, folder, max }: GalleryProps) 
       return;
     }
     setUploading(true);
+    onUploadStateChange?.(true);
     const slice = Array.from(files).slice(0, remaining);
     const next = [...items];
-    for (const file of slice) {
-      try {
-        const url = await uploadImage(file, folder);
-        next.push(url);
-        onChange([...next]);
-      } catch (e: any) {
-        toast.error(e.message ?? "Erro ao enviar imagem");
+    try {
+      for (const file of slice) {
+        try {
+          const url = await uploadImage(file, folder);
+          next.push(url);
+          onChange([...next]);
+        } catch (e: unknown) {
+          const message = e instanceof Error ? e.message : "Erro ao enviar imagem";
+          toast.error(message);
+        }
       }
+    } finally {
+      setUploading(false);
+      onUploadStateChange?.(false);
     }
-    setUploading(false);
   }
 
   function remove(i: number) {

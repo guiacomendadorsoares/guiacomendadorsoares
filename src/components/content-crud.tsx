@@ -508,6 +508,7 @@ function FieldRender({
         <GalleryUploader
           value={Array.isArray(value) ? value : []}
           onChange={onChange}
+          onUploadStateChange={onUploadStateChange}
           folder={field.folder ?? "misc"}
           max={galleryMax ?? 1}
         />
