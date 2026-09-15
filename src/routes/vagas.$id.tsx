@@ -118,10 +118,13 @@ function formatDate(iso?: string | null) {
 
 function VagaDetalhe() {
   const { id } = Route.useParams();
+  const { job } = Route.useLoaderData();
   const router = useRouter();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["jobs", "detail", id],
+    initialData: job,
+    staleTime: 5 * 60_000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("jobs")
