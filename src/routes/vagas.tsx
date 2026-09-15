@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useMatch } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/ui-bits";
@@ -26,6 +26,7 @@ export const Route = createFileRoute("/vagas")({
 });
 
 function VagasPage() {
+  const detailMatch = useMatch({ from: "/vagas/$id", shouldThrow: false });
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<JobType | "todos">("todos");
 
@@ -41,6 +42,8 @@ function VagasPage() {
       return matchesFilter && matchesQuery;
     });
   }, [activeFilter, query]);
+
+  if (detailMatch) return <Outlet />;
 
   return (
     <AppShell title="Vagas" subtitle="Oportunidades no bairro">
