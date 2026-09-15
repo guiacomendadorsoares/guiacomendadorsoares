@@ -226,8 +226,12 @@ function BusinessTile({
       }`}
     >
       <div className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-lg bg-muted">
-        {b.cover_url ? (
-          <img src={b.cover_url} alt="" className="h-full w-full object-cover" />
+        {b.logo_url || b.cover_url ? (
+          <img
+            src={b.logo_url ?? b.cover_url ?? undefined}
+            alt={`Logo de ${b.name}`}
+            className="h-full w-full object-cover"
+          />
         ) : (
           <Building2 className="h-5 w-5 text-muted-foreground" />
         )}

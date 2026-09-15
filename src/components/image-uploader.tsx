@@ -12,12 +12,19 @@ import {
 interface SingleProps {
   value: string | null | undefined;
   onChange: (url: string | null) => void;
+  onUploadStateChange?: (uploading: boolean) => void;
   folder: string;
   label?: string;
   aspect?: "square" | "wide";
 }
 
-export function SingleImageUploader({ value, onChange, folder, aspect = "square" }: SingleProps) {
+export function SingleImageUploader({
+  value,
+  onChange,
+  onUploadStateChange,
+  folder,
+  aspect = "square",
+}: SingleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const previewRef = useRef<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -47,6 +54,7 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
     previewRef.current = URL.createObjectURL(file);
     setDisplayUrl(previewRef.current);
     setUploading(true);
+    onUploadStateChange?.(true);
     try {
       const url = await uploadImage(file, folder);
       onChange(url);
@@ -63,6 +71,7 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
         previewRef.current = null;
       }
       setUploading(false);
+      onUploadStateChange?.(false);
     }
   }
 

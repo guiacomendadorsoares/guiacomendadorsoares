@@ -253,6 +253,8 @@ function CrudFormDialog({
   saving: boolean;
 }) {
   const [values, setValues] = useState<Record<string, any>>({});
+  const [uploadingFields, setUploadingFields] = useState<Record<string, boolean>>({});
+  const uploading = Object.values(uploadingFields).some(Boolean);
 
   useEffect(() => {
     if (!open) return;
@@ -266,10 +268,15 @@ function CrudFormDialog({
       else init[f.key] = v ?? "";
     }
     setValues(init);
+    setUploadingFields({});
   }, [open, initial]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (uploading) {
+      toast.error("Aguarde a imagem terminar de carregar.");
+      return;
+    }
     for (const f of fields) {
       if (f.required && !String(values[f.key] ?? "").trim()) {
         toast.error(`${f.label.replace(" *", "")} é obrigatório`);
@@ -368,6 +375,9 @@ function CrudFormDialog({
                     locked={locked}
                     onLockedClick={() => setLockedFeature(f.label.replace(" *", ""))}
                     galleryMax={f.type === "gallery" ? galleryMaxFor(f) : undefined}
+                    onUploadStateChange={(isUploading) =>
+                      setUploadingFields((current) => ({ ...current, [f.key]: isUploading }))
+                    }
                   />
                 </div>
               );
@@ -375,11 +385,18 @@ function CrudFormDialog({
           </div>
         </form>
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={onClose} disabled={saving}>
+          <Button type="button" variant="outline" onClick={onClose} disabled={saving || uploading}>
             Cancelar
           </Button>
-          <Button type="submit" form="crud-form" disabled={saving}>
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar"}
+          <Button type="submit" form="crud-form" disabled={saving || uploading}>
+            {saving || uploading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {uploading ? "Carregando imagem…" : "Salvando…"}
+              </>
+            ) : (
+              "Salvar"
+            )}
           </Button>
         </DialogFooter>
         <PremiumModal
@@ -399,6 +416,7 @@ function FieldRender({
   locked,
   onLockedClick,
   galleryMax,
+  onUploadStateChange,
 }: {
   field: FieldDef;
   value: any;
@@ -406,6 +424,7 @@ function FieldRender({
   locked?: boolean;
   onLockedClick?: () => void;
   galleryMax?: number;
+  onUploadStateChange?: (uploading: boolean) => void;
 }) {
   const label = (
     <Label className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
@@ -475,6 +494,7 @@ function FieldRender({
         <SingleImageUploader
           value={value ?? null}
           onChange={onChange}
+          onUploadStateChange={onUploadStateChange}
           folder={field.folder ?? "misc"}
           aspect={field.aspect ?? "square"}
         />
