@@ -363,20 +363,28 @@ export function BusinessesCsvImport({ onDone }: { onDone?: () => void }) {
       err = 0;
     const toInsert = rows
       .filter((r) => r.status === "ok" && r.values)
-      .map((r) => ({ ...r.values!, submitted_by: submittedBy }));
+      .flatMap((r) => (r.values ? [{ ...r.values, submitted_by: submittedBy }] : []));
+    let lastError = "";
     // Insert in chunks of 50
     for (let i = 0; i < toInsert.length; i += 50) {
       const chunk = toInsert.slice(i, i + 50);
       const { error, data } = await (supabase.from("businesses") as any).insert(chunk).select("id");
       if (error) {
         err += chunk.length;
+        lastError = error.message;
         console.error(error);
       } else ok += data?.length ?? chunk.length;
     }
     setImporting(false);
     setProgress({ ok, skip: dupCount, err: err + errCount });
     if (ok > 0) toast.success(`${ok} empresa(s) importada(s).`);
-    if (err > 0) toast.error(`${err} linha(s) falharam no banco.`);
+    if (err > 0) {
+      toast.error(
+        lastError
+          ? `${err} linha(s) falharam: ${lastError}`
+          : `${err} linha(s) falharam no banco.`,
+      );
+    }
     qc.invalidateQueries({ queryKey: ["crud", "businesses"] });
     onDone?.();
   }
