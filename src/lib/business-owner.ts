@@ -24,6 +24,7 @@ export type MyBusiness = {
   category_label: string | null;
   status: string | null;
   cover_url: string | null;
+  logo_url: string | null;
   role: MemberRole;
   is_primary_owner: boolean;
 };
@@ -44,7 +45,7 @@ export async function listMyBusinesses(userId: string): Promise<MyBusiness[]> {
   const { data: memberships, error: mErr } = await (supabase as any)
     .from("business_members")
     .select(
-      "business_id, role, is_primary_owner, status, businesses:business_id(id,name,category_label,status,cover_url)",
+      "business_id, role, is_primary_owner, status, businesses:business_id(id,name,category_label,status,cover_url,logo_url)",
     )
     .eq("user_id", userId)
     .eq("status", "active")
@@ -63,6 +64,7 @@ export async function listMyBusinesses(userId: string): Promise<MyBusiness[]> {
       category_label: b.category_label ?? null,
       status: b.status ?? null,
       cover_url: b.cover_url ?? null,
+      logo_url: b.logo_url ?? null,
       role: (m as any).role as MemberRole,
       is_primary_owner: !!(m as any).is_primary_owner,
     });
@@ -71,7 +73,7 @@ export async function listMyBusinesses(userId: string): Promise<MyBusiness[]> {
   // Legacy: businesses submitted by the user without a membership yet
   const { data: legacy } = await supabase
     .from("businesses")
-    .select("id,name,category_label,status,cover_url")
+    .select("id,name,category_label,status,cover_url,logo_url")
     .eq("submitted_by", userId)
     .limit(200);
   for (const b of legacy ?? []) {
@@ -83,6 +85,7 @@ export async function listMyBusinesses(userId: string): Promise<MyBusiness[]> {
       category_label: (b as any).category_label ?? null,
       status: (b as any).status ?? null,
       cover_url: (b as any).cover_url ?? null,
+      logo_url: (b as any).logo_url ?? null,
       role: "proprietario",
       is_primary_owner: true,
     });
