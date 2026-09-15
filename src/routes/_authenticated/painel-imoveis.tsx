@@ -52,7 +52,7 @@ function PainelImoveis() {
             </Link>
           </div>
         )}
-        <ContentCrud table="properties" ownerOnly={user.id} forcePending />
+        <ContentCrud table="properties" ownerOnly={user.id} />
       </div>
     </DashboardShell>
   );
