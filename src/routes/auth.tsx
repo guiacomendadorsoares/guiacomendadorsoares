@@ -68,8 +68,7 @@ const PROFILES: {
   },
 ];
 
-async function redirectForUser(userId: string, fallback: string, userEmail?: string): Promise<string> {
-  if (userEmail?.toLowerCase() === "douglas288@gmail.com") return "/admin";
+async function redirectForUser(userId: string, fallback: string): Promise<string> {
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
   const roles = (data ?? []).map((r) => r.role as AppRole);
   if (roles.includes("admin") || roles.includes("editor")) return "/admin";
@@ -91,7 +90,7 @@ function AuthPage() {
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
       if (data.user) {
-        const to = await redirectForUser(data.user.id, "/minha-conta", data.user.email);
+        const to = await redirectForUser(data.user.id, "/minha-conta");
         navigate({ to });
       }
     });
@@ -127,7 +126,7 @@ function AuthPage() {
         }
         toast.success("Conta criada! Verifique seu e-mail para confirmar.");
         if (signUp.session) {
-          const to = await redirectForUser(signUp.user!.id, selected.redirect, signUp.user?.email);
+          const to = await redirectForUser(signUp.user!.id, selected.redirect);
           navigate({ to });
         }
       } else {
@@ -145,7 +144,7 @@ function AuthPage() {
           }
         }
         toast.success("Bem-vindo!");
-        const to = await redirectForUser(signIn.user!.id, selected.redirect, signIn.user?.email);
+        const to = await redirectForUser(signIn.user!.id, selected.redirect);
         navigate({ to });
       }
     } catch (err) {
@@ -171,7 +170,7 @@ function AuthPage() {
     if (!result.redirected) {
       const { data } = await supabase.auth.getUser();
       if (data.user) {
-        const to = await redirectForUser(data.user.id, selected.redirect, data.user.email);
+        const to = await redirectForUser(data.user.id, selected.redirect);
         navigate({ to });
       }
     }

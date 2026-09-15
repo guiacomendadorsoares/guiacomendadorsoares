@@ -186,17 +186,23 @@ function RootComponent() {
 
   useEffect(() => {
     let mounted = true;
-    import("@/integrations/supabase/client").then(({ supabase }) => {
+    let unsubscribe: (() => void) | undefined;
+
+    void import("@/integrations/supabase/client").then(({ supabase }) => {
       const { data: sub } = supabase.auth.onAuthStateChange((event) => {
         if (!mounted) return;
         if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
         router.invalidate();
         if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
       });
-      return () => sub.subscription.unsubscribe();
+
+      unsubscribe = () => sub.subscription.unsubscribe();
+      if (!mounted) unsubscribe();
     });
+
     return () => {
       mounted = false;
+      unsubscribe?.();
     };
   }, [queryClient, router]);
 
