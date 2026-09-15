@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -86,10 +86,11 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
+  const authInProgress = useRef(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(async ({ data }) => {
-      if (data.user) {
+      if (data.user && !authInProgress.current) {
         const to = await redirectForUser(data.user.id, "/minha-conta");
         navigate({ to });
       }
@@ -105,6 +106,7 @@ function AuthPage() {
       toast.error(parsed.error.issues[0]?.message ?? "Dados inválidos");
       return;
     }
+    authInProgress.current = true;
     setLoading(true);
     try {
       if (mode === "signup") {
@@ -148,6 +150,7 @@ function AuthPage() {
         navigate({ to });
       }
     } catch (err) {
+      authInProgress.current = false;
       toast.error(err instanceof Error ? err.message : "Erro ao autenticar");
     } finally {
       setLoading(false);
@@ -155,6 +158,7 @@ function AuthPage() {
   }
 
   async function handleGoogle() {
+    authInProgress.current = true;
     setLoading(true);
     if (profile !== "user") {
       sessionStorage.setItem("pending_profile", profile);
@@ -163,6 +167,7 @@ function AuthPage() {
       redirect_uri: window.location.origin + selected.redirect,
     });
     if (result.error) {
+      authInProgress.current = false;
       toast.error("Falha no login com Google");
       setLoading(false);
       return;
