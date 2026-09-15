@@ -47,9 +47,11 @@ interface Props {
   ownerOnly?: string;
   /** when true, new records start as 'pending' instead of 'approved' */
   forcePending?: boolean;
+  /** called after a record is saved */
+  onSaved?: () => void;
 }
 
-export function ContentCrud({ table, ownerOnly, forcePending }: Props) {
+export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) {
   const schema = SCHEMAS[table];
   const qc = useQueryClient();
   const [editing, setEditing] = useState<any>(null);
@@ -124,6 +126,7 @@ export function ContentCrud({ table, ownerOnly, forcePending }: Props) {
     onSuccess: () => {
       toast.success(`${schema.label} salvo`);
       qc.invalidateQueries({ queryKey });
+      onSaved?.();
       setEditing(null);
       setCreating(false);
     },
