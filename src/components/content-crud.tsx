@@ -125,7 +125,11 @@ export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) 
     },
     onSuccess: () => {
       toast.success(`${schema.label} salvo`);
-      qc.invalidateQueries({ queryKey });
+      void qc.invalidateQueries({ queryKey });
+      void qc.invalidateQueries({ queryKey: ["home-items", table] });
+      if (table === "businesses") {
+        void qc.invalidateQueries({ queryKey: ["home", "open-now"] });
+      }
       onSaved?.();
       setEditing(null);
       setCreating(false);
@@ -140,7 +144,12 @@ export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) 
     },
     onSuccess: () => {
       toast.success("Removido");
-      qc.invalidateQueries({ queryKey });
+      void qc.invalidateQueries({ queryKey });
+      void qc.invalidateQueries({ queryKey: ["home-items", table] });
+      if (table === "businesses") {
+        void qc.invalidateQueries({ queryKey: ["home", "open-now"] });
+      }
+      onSaved?.();
       setConfirmDelete(null);
     },
     onError: (e: Error) => toast.error(e.message),
