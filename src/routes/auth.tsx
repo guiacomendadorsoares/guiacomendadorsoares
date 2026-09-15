@@ -140,7 +140,7 @@ function AuthPage() {
             await requestSelfRole({ data: { role: profile } });
           } catch (e) {
             console.error("requestSelfRole failed", e);
-            toast.error("Não foi possível ativar este perfil. Verifique sua conta.");
+            throw new Error("Não foi possível ativar este perfil. Verifique sua conta.");
           }
         }
         toast.success("Bem-vindo!");
