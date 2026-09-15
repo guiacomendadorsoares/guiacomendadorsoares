@@ -139,7 +139,9 @@ function EmpresaPage() {
       : Array.isArray(b.gallery)
         ? (b.gallery as string[])
         : [];
-  const gallery = showGallery ? rawGallery : [];
+  // O painel permite uma foto mesmo no plano gratuito; mantenha essa foto visível
+  // no perfil público e libere a galeria completa quando o plano incluir o recurso.
+  const gallery = showGallery ? rawGallery : rawGallery.slice(0, 1);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
