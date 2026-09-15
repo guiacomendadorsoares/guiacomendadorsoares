@@ -79,7 +79,7 @@ export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) 
     mutationFn: async (values: Record<string, any> & { id?: string }) => {
       const payload: Record<string, any> = { ...schema.defaults, ...values };
       delete payload.id;
-      if (forcePending) payload.status = "pending";
+      if (forcePending && !values.id) payload.status = "pending";
       // Coerce empty strings to null and numbers; pass arrays through
       for (const f of schema.fields) {
         const v = payload[f.key];
