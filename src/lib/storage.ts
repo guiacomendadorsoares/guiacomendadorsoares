@@ -7,10 +7,13 @@ export async function uploadImage(file: File, folder: string): Promise<string> {
   const { data: u } = await supabase.auth.getUser();
   const uid = u.user?.id;
   if (!uid) throw new Error("Faça login para enviar imagens.");
-  if (!file.type.startsWith("image/")) throw new Error("Selecione um arquivo de imagem.");
-  if (file.size > 10 * 1024 * 1024) throw new Error("Imagem acima de 10MB.");
-
   const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const supportedExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif"]);
+  if (!file.type.startsWith("image/") || !supportedExtensions.has(ext)) {
+    throw new Error("Use uma imagem JPG, PNG, WEBP ou GIF.");
+  }
+  if (file.size > 20 * 1024 * 1024) throw new Error("Imagem acima de 20MB.");
+
   const path = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
 
   const { error } = await supabase.storage.from(BUCKET).upload(path, file, {

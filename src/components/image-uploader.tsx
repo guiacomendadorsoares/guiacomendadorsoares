@@ -19,8 +19,10 @@ interface SingleProps {
 
 export function SingleImageUploader({ value, onChange, folder, aspect = "square" }: SingleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [displayUrl, setDisplayUrl] = useState<string | null>(value ?? null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -32,14 +34,34 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
     };
   }, [value]);
 
+  useEffect(
+    () => () => {
+      if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+    },
+    [],
+  );
+
   async function handleFile(file: File) {
+    setUploadError(null);
+    if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+    previewRef.current = URL.createObjectURL(file);
+    setDisplayUrl(previewRef.current);
     setUploading(true);
     try {
       const url = await uploadImage(file, folder);
       onChange(url);
-    } catch (e: any) {
-      toast.error(e.message ?? "Erro ao enviar imagem");
+      setDisplayUrl(url);
+      toast.success("Imagem carregada");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Erro ao enviar imagem";
+      setUploadError(message);
+      setDisplayUrl((await getDisplayImageUrl(value)) ?? null);
+      toast.error(message);
     } finally {
+      if (previewRef.current) {
+        URL.revokeObjectURL(previewRef.current);
+        previewRef.current = null;
+      }
       setUploading(false);
     }
   }
@@ -62,9 +84,17 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
         {displayUrl ? (
           <>
             <img src={displayUrl} alt="preview" className="h-full w-full object-cover" />
+            {uploading && (
+              <div className="absolute inset-0 grid place-items-center bg-background/70" role="status">
+                <div className="flex items-center gap-2 text-xs font-semibold text-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" /> Enviando…
+                </div>
+              </div>
+            )}
             <button
               type="button"
               onClick={handleRemove}
+              disabled={uploading}
               className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-background/90 text-destructive shadow-card"
               aria-label="Remover"
             >
@@ -88,6 +118,11 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
           </button>
         )}
       </div>
+      {uploadError && (
+        <p className="text-xs font-medium text-destructive" role="alert">
+          {uploadError}
+        </p>
+      )}
       <input
         ref={inputRef}
         type="file"
@@ -96,7 +131,7 @@ export function SingleImageUploader({ value, onChange, folder, aspect = "square"
         onChange={(e) => {
           const f = e.target.files?.[0];
           e.target.value = "";
-          if (f) handleFile(f);
+          if (f) void handleFile(f);
         }}
       />
     </div>
