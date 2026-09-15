@@ -281,14 +281,14 @@ export function GalleryUploader({
     };
   }, [items]);
 
-  async function handleFiles(files: FileList) {
+  async function handleFiles(files: File[]) {
     if (remaining === 0) {
       toast.error(`Limite de ${max} fotos atingido para o seu plano.`);
       return;
     }
     setUploading(true);
     onUploadStateChange?.(true);
-    const slice = Array.from(files).slice(0, remaining);
+    const slice = files.slice(0, remaining);
     const next = [...items];
     try {
       for (const file of slice) {
@@ -392,9 +392,9 @@ export function GalleryUploader({
         multiple
         className="hidden"
         onChange={(e) => {
-          const f = e.target.files;
+          const files = Array.from(e.target.files ?? []);
           e.target.value = "";
-          if (f && f.length) handleFiles(f);
+          if (files.length) void handleFiles(files);
         }}
       />
     </div>
