@@ -92,8 +92,10 @@ export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) 
         else if (v === "" || v === undefined) payload[f.key] = null;
         else if (f.type === "number" && v !== null) {
           const s = String(v).trim();
-          // Brazilian format: thousands "." and decimal ",". Strip "." then replace "," with ".".
-          const normalized = s.includes(",") ? s.replace(/\./g, "").replace(",", ".") : s;
+          // Aceita valores brasileiros com ou sem centavos, como "20.000" e "20.000,00".
+          const normalized = s.includes(",")
+            ? s.replace(/\./g, "").replace(",", ".")
+            : s.replace(/\.(?=\d{3}(?:\D|$))/g, "");
           const n = Number(normalized);
           payload[f.key] = Number.isFinite(n) ? n : null;
         } else if (f.type === "datetime" && v) payload[f.key] = new Date(v).toISOString();
