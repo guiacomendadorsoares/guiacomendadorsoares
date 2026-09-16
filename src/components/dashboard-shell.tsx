@@ -129,9 +129,11 @@ export function DashboardShell({
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-72 p-0">
-              <Brand />
-              <div className="px-3">
+            <SheetContent side="left" className="flex h-dvh w-72 flex-col overflow-hidden p-0">
+              <div className="shrink-0 border-b border-border">
+                <Brand />
+              </div>
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
                 <NavList sections={sections} onNavigate={() => setOpen(false)} />
               </div>
             </SheetContent>
