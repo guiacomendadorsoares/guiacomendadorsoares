@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/ui-bits";
@@ -31,8 +31,15 @@ export const Route = createFileRoute("/imoveis")({
       },
     ],
   }),
-  component: ImoveisPage,
+  component: ImoveisRoute,
 });
+
+function ImoveisRoute() {
+  const matchRoute = useMatchRoute();
+  const isPropertyDetail = matchRoute({ to: "/imoveis/$id", fuzzy: false });
+
+  return isPropertyDetail ? <Outlet /> : <ImoveisPage />;
+}
 
 const KIND_LABELS: Record<string, string> = {
   casa: "Casa",
