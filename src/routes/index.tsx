@@ -366,6 +366,7 @@ type ApprovedItem = {
   logo_url?: string | null;
   banner_url?: string | null;
   featured?: boolean;
+  submitted_by?: string | null;
 };
 
 function useApprovedItems(
@@ -386,20 +387,62 @@ function useApprovedItems(
             ? "id,title,company,urgent"
             : table === "news"
               ? "id,title,summary,cover_url"
-              : hasFeatured
-                ? "id,title,cover_url,featured"
+              : table === "properties"
+                ? "id,title,cover_url,featured,submitted_by"
                 : "id,title,cover_url";
       let q = supabase.from(table).select(cols).eq("status", "approved");
       if (table === "businesses" && mainCategory) q = (q as any).eq("main_category", mainCategory);
       if (hasFeatured) q = q.order("featured", { ascending: false });
       else q = q.order("created_at", { ascending: false });
-      const { data, error } = await q.limit(limit);
+      const { data, error } = await q.limit(table === "properties" ? 100 : limit);
       if (error) {
         console.error(`[home] ${table} fetch error:`, error.message);
         return [];
       }
+
+      let approvedItems = (data ?? []) as unknown as ApprovedItem[];
+      if (table === "properties") {
+        const ownerIds = [...new Set(approvedItems.map((item) => item.submitted_by).filter(Boolean))] as string[];
+        if (ownerIds.length === 0) return [];
+
+        const [{ data: profiles, error: profilesError }, { data: plans, error: plansError }] =
+          await Promise.all([
+            (supabase as any)
+              .from("profiles")
+              .select("user_id,current_plan,plan_status,plan_expires_at")
+              .in("user_id", ownerIds),
+            (supabase as any).from("subscription_plans").select("slug,features").eq("active", true),
+          ]);
+        if (profilesError || plansError) {
+          console.error(
+            "[home] property plan fetch error:",
+            profilesError?.message ?? plansError?.message,
+          );
+          return [];
+        }
+
+        const featuredPlans = new Set(
+          (plans ?? [])
+            .filter((plan: any) => !!plan.features?.properties?.featured_home)
+            .map((plan: any) => plan.slug),
+        );
+        const eligibleOwners = new Set(
+          (profiles ?? [])
+            .filter((profile: any) => {
+              const active = profile.plan_status !== "suspended" && profile.plan_status !== "canceled";
+              const unexpired =
+                !profile.plan_expires_at || new Date(profile.plan_expires_at).getTime() >= Date.now();
+              return active && unexpired && featuredPlans.has(profile.current_plan ?? "free");
+            })
+            .map((profile: any) => profile.user_id),
+        );
+        approvedItems = approvedItems
+          .filter((item) => !!item.submitted_by && eligibleOwners.has(item.submitted_by))
+          .slice(0, limit);
+      }
+
       return Promise.all(
-        ((data ?? []) as unknown as ApprovedItem[]).map(async (item) => ({
+        approvedItems.map(async (item) => ({
           ...item,
           subtitle: item.company ?? item.summary ?? item.address ?? null,
           cover_url: await getDisplayImageUrl(
