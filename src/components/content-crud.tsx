@@ -295,6 +295,22 @@ function CrudFormDialog({
     onSubmit(values);
   }
 
+  function normalizeNumberInput(value: unknown): number | null {
+    const raw = String(value ?? "").trim();
+    if (!raw) return null;
+    const normalized = raw.includes(",")
+      ? raw.replace(/\./g, "").replace(",", ".")
+      : raw.replace(/\.(?=\d{3}(?:\D|$))/g, "");
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  function formatNumberInput(value: unknown): string {
+    const parsed = normalizeNumberInput(value);
+    if (parsed === null) return String(value ?? "");
+    return new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 }).format(parsed);
+  }
+
   const { plan } = useCurrentPlan();
   const businessFeatures = (plan?.features as any)?.business ?? {};
   const propertyFeatures = (plan?.features as any)?.properties ?? {};
@@ -533,6 +549,19 @@ function FieldRender({
           inputMode="decimal"
           value={value ?? ""}
           onChange={(e) => onChange(e.target.value.replace(/[^\d.,-]/g, ""))}
+          onBlur={(e) => {
+            const raw = e.target.value.trim();
+            if (!raw) return;
+            const normalized = raw.includes(",")
+              ? raw.replace(/\./g, "").replace(",", ".")
+              : raw.replace(/\.(?=\d{3}(?:\D|$))/g, "");
+            const parsed = Number(normalized);
+            if (Number.isFinite(parsed)) {
+              onChange(
+                new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 }).format(parsed),
+              );
+            }
+          }}
           placeholder={field.placeholder ?? "Ex: 1.500,00"}
         />
       </div>

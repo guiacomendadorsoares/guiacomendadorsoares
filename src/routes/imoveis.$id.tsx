@@ -114,7 +114,13 @@ function ImovelPage() {
   const price = p.price_label ?? formatPrice(p.price as any, listing);
   const cover =
     p.cover_url || (Array.isArray(p.gallery_urls) && p.gallery_urls[0]) || "/placeholder.svg";
-  const gallery: string[] = Array.isArray(p.gallery_urls) ? p.gallery_urls : [];
+  const gallery: string[] = Array.from(
+    new Set(
+      [cover, ...(Array.isArray(p.gallery_urls) ? p.gallery_urls : [])].filter(
+        (src): src is string => typeof src === "string" && !!src && src !== "/placeholder.svg",
+      ),
+    ),
+  );
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col bg-background">
@@ -197,18 +203,22 @@ function ImovelPage() {
             <h2 className="mb-3 font-display text-sm font-bold uppercase tracking-wider text-muted-foreground">
               Galeria
             </h2>
-            <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              <div className="flex gap-3 pb-1">
-                {gallery.map((src, i) => (
+            <div className="grid grid-cols-2 gap-3">
+              {gallery.map((src, i) => (
+                <div
+                  key={`${src}-${i}`}
+                  className={`overflow-hidden rounded-2xl bg-muted shadow-card ${
+                    gallery.length % 2 === 1 && i === gallery.length - 1 ? "col-span-2" : ""
+                  }`}
+                >
                   <img
-                    key={i}
                     src={src}
-                    alt={`Foto ${i + 1}`}
+                    alt={`Foto ${i + 1} do imóvel`}
                     loading="lazy"
-                    className="h-40 w-40 shrink-0 rounded-2xl object-cover shadow-card"
+                    className="aspect-[4/3] h-full w-full object-contain"
                   />
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </section>
         )}
