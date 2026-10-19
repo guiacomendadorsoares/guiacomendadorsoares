@@ -18,6 +18,14 @@ import { toast } from "sonner";
 import { Check, X, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin/aprovacoes")({
+  head: () => ({ meta: [
+    { title: "Aprovações — Administração Guia Comendador Soares" },
+    { name: "description", content: "Revisão das publicações enviadas ao Guia Comendador Soares." },
+    { property: "og:title", content: "Aprovações — Guia Comendador Soares" },
+    { property: "og:description", content: "Revisão administrativa das publicações do Guia." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: AprovacoesPage,
 });
 
@@ -58,21 +66,29 @@ function ApprovalList({ table }: { table: ContentTable }) {
       toast.success("Aprovado");
       qc.invalidateQueries({ queryKey: ["pending", table] });
       qc.invalidateQueries({ queryKey: ["admin-counts"] });
+      qc.invalidateQueries({ queryKey: ["home-items", table] });
+      qc.invalidateQueries({ queryKey: [table] });
+      qc.invalidateQueries({ queryKey: ["crud", table] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const rejectMut = useMutation({
-    mutationFn: () =>
-      rejectFn({
-        data: { table, id: rejecting!, reason: reason.trim() || "Sem motivo informado" },
-      }),
+    mutationFn: () => {
+      if (!rejecting) throw new Error("Selecione uma publicação para rejeitar.");
+      return rejectFn({
+        data: { table, id: rejecting, reason: reason.trim() || "Sem motivo informado" },
+      });
+    },
     onSuccess: () => {
       toast.success("Rejeitado");
       setRejecting(null);
       setReason("");
       qc.invalidateQueries({ queryKey: ["pending", table] });
       qc.invalidateQueries({ queryKey: ["admin-counts"] });
+      qc.invalidateQueries({ queryKey: ["home-items", table] });
+      qc.invalidateQueries({ queryKey: [table] });
+      qc.invalidateQueries({ queryKey: ["crud", table] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
