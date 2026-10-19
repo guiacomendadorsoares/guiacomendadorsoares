@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { supabase } from "@/integrations/supabase/client";
 import { getDisplayImageUrl } from "@/lib/storage";
 import fallback from "@/assets/placeholders/curiosidade.jpg.asset.json";
