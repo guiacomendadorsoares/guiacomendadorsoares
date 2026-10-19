@@ -18,13 +18,13 @@ async function assertAdminOrEditor(context: { supabase: any; userId: string; cla
     _user_id: context.userId,
     _role: "admin",
   });
-  if (isAdmin) return;
+  if (canModerateProperties(isAdmin ? ["admin"] : [])) return;
   if (allowEditor) {
     const { data: isEditor } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
       _role: "editor",
     });
-    if (isEditor && (allowEditor || canModerateProperties(["editor"]))) return;
+    if (isEditor) return;
   }
   throw new Error("Forbidden");
 }

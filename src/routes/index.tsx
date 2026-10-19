@@ -397,7 +397,7 @@ function useApprovedItems(
                 : "id,title,cover_url";
       let q = supabase.from(table).select(cols).eq("status", "approved");
       if (table === "businesses" && mainCategory) q = (q as any).eq("main_category", mainCategory);
-      if (table === "properties") q = q.eq("active", true);
+      if (table === "properties") q = (q as any).eq("active", true);
       if (hasFeatured) q = q.order("featured", { ascending: false });
       q = q.order("created_at", { ascending: false });
       const { data, error } = await q.limit(limit);
