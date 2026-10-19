@@ -91,11 +91,7 @@ export const Route = createFileRoute("/eventos/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: EventoDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Evento">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Evento" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Evento">
       <p className="text-sm text-muted-foreground">Evento não encontrado.</p>

@@ -57,11 +57,7 @@ export const Route = createFileRoute("/curiosidades/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: CuriosidadeDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Curiosidade">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Curiosidade" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Curiosidade">
       <p className="text-sm text-muted-foreground">Curiosidade não encontrada.</p>

@@ -72,11 +72,7 @@ export const Route = createFileRoute("/noticias/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: NoticiaDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Notícia">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Notícia" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Notícia">
       <p className="text-sm text-muted-foreground">Notícia não encontrada.</p>

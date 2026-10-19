@@ -40,11 +40,7 @@ export const Route = createFileRoute("/guia/$categoria")({
       </Link>
     </AppShell>
   ),
-  errorComponent: ({ error }) => (
-    <AppShell title="Erro">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Erro" error={error} />,
   component: CategoryPage,
 });
 

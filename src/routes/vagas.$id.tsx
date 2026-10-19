@@ -88,11 +88,7 @@ export const Route = createFileRoute("/vagas/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: VagaDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Vaga">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Vaga" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Vaga">
       <p className="text-sm text-muted-foreground">Vaga não encontrada.</p>
