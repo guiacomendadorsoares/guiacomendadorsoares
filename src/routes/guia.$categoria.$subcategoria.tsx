@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { EmptyState } from "@/components/ui-bits";
 import { GuiaBusinessCard } from "@/components/guia-business-card";
 import { findCategory, findSubcategory } from "@/lib/guia-taxonomy";
@@ -40,11 +41,7 @@ export const Route = createFileRoute("/guia/$categoria/$subcategoria")({
       </Link>
     </AppShell>
   ),
-  errorComponent: ({ error }) => (
-    <AppShell title="Erro">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Erro" error={error} />,
   component: SubPage,
 });
 

@@ -9,117 +9,71 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VagasRouteImport } from './routes/vagas'
-import { Route as UtilidadePublicaRouteImport } from './routes/utilidade-publica'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as PlanosRouteImport } from './routes/planos'
-import { Route as PerfilRouteImport } from './routes/perfil'
-import { Route as OndeComerRouteImport } from './routes/onde-comer'
-import { Route as ImoveisRouteImport } from './routes/imoveis'
-import { Route as FavoritosRouteImport } from './routes/favoritos'
-import { Route as FarmaciasRouteImport } from './routes/farmacias'
-import { Route as BuscarRouteImport } from './routes/buscar'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AnuncieRouteImport } from './routes/anuncie'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as NoticiasIndexRouteImport } from './routes/noticias.index'
-import { Route as GuiaIndexRouteImport } from './routes/guia.index'
-import { Route as VagasIdRouteImport } from './routes/vagas.$id'
-import { Route as NoticiasIdRouteImport } from './routes/noticias.$id'
-import { Route as ImoveisIdRouteImport } from './routes/imoveis.$id'
-import { Route as GuiaCategoriaRouteImport } from './routes/guia.$categoria'
-import { Route as EventosIdRouteImport } from './routes/eventos.$id'
-import { Route as EmpresaIdRouteImport } from './routes/empresa.$id'
-import { Route as CuriosidadesIdRouteImport } from './routes/curiosidades.$id'
-import { Route as AuthenticatedPortalImprensaRouteImport } from './routes/_authenticated/portal-imprensa'
-import { Route as AuthenticatedPainelImoveisRouteImport } from './routes/_authenticated/painel-imoveis'
-import { Route as AuthenticatedPainelEmpresaRouteImport } from './routes/_authenticated/painel-empresa'
-import { Route as AuthenticatedMinhaContaRouteImport } from './routes/_authenticated/minha-conta'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AnuncieRouteImport } from './routes/anuncie'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BuscarRouteImport } from './routes/buscar'
+import { Route as FarmaciasRouteImport } from './routes/farmacias'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as ImoveisRouteImport } from './routes/imoveis'
+import { Route as OndeComerRouteImport } from './routes/onde-comer'
+import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as PlanosRouteImport } from './routes/planos'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as UtilidadePublicaRouteImport } from './routes/utilidade-publica'
+import { Route as VagasRouteImport } from './routes/vagas'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedMinhaContaRouteImport } from './routes/_authenticated/minha-conta'
+import { Route as AuthenticatedPainelEmpresaRouteImport } from './routes/_authenticated/painel-empresa'
+import { Route as AuthenticatedPainelImoveisRouteImport } from './routes/_authenticated/painel-imoveis'
+import { Route as AuthenticatedPortalImprensaRouteImport } from './routes/_authenticated/portal-imprensa'
+import { Route as CuriosidadesIdRouteImport } from './routes/curiosidades.$id'
+import { Route as EmpresaIdRouteImport } from './routes/empresa.$id'
+import { Route as EventosIdRouteImport } from './routes/eventos.$id'
+import { Route as GuiaIndexRouteImport } from './routes/guia.index'
+import { Route as GuiaCategoriaRouteImport } from './routes/guia.$categoria'
+import { Route as ImoveisIdRouteImport } from './routes/imoveis.$id'
+import { Route as NoticiasIndexRouteImport } from './routes/noticias.index'
+import { Route as NoticiasIdRouteImport } from './routes/noticias.$id'
+import { Route as VagasIdRouteImport } from './routes/vagas.$id'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
-import { Route as GuiaCategoriaSubcategoriaRouteImport } from './routes/guia.$categoria.$subcategoria'
-import { Route as EmpresaIdReivindicarRouteImport } from './routes/empresa.$id.reivindicar'
-import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
-import { Route as AuthenticatedAdminVagasRouteImport } from './routes/_authenticated/admin.vagas'
-import { Route as AuthenticatedAdminUtilidadePublicaRouteImport } from './routes/_authenticated/admin.utilidade-publica'
-import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
-import { Route as AuthenticatedAdminTestarNotificacoesRouteImport } from './routes/_authenticated/admin.testar-notificacoes'
-import { Route as AuthenticatedAdminRelatoriosRouteImport } from './routes/_authenticated/admin.relatorios'
-import { Route as AuthenticatedAdminReivindicacoesRouteImport } from './routes/_authenticated/admin.reivindicacoes'
-import { Route as AuthenticatedAdminPopupsRouteImport } from './routes/_authenticated/admin.popups'
-import { Route as AuthenticatedAdminPlanosRouteImport } from './routes/_authenticated/admin.planos'
-import { Route as AuthenticatedAdminParceirosRouteImport } from './routes/_authenticated/admin.parceiros'
-import { Route as AuthenticatedAdminNotificacoesRouteImport } from './routes/_authenticated/admin.notificacoes'
-import { Route as AuthenticatedAdminNoticiasRouteImport } from './routes/_authenticated/admin.noticias'
-import { Route as AuthenticatedAdminInfluenciadoresRouteImport } from './routes/_authenticated/admin.influenciadores'
-import { Route as AuthenticatedAdminImoveisRouteImport } from './routes/_authenticated/admin.imoveis'
-import { Route as AuthenticatedAdminGerenciarPlanosRouteImport } from './routes/_authenticated/admin.gerenciar-planos'
-import { Route as AuthenticatedAdminFinanceiroRouteImport } from './routes/_authenticated/admin.financeiro'
-import { Route as AuthenticatedAdminEventosRouteImport } from './routes/_authenticated/admin.eventos'
-import { Route as AuthenticatedAdminEmpresasRouteImport } from './routes/_authenticated/admin.empresas'
-import { Route as AuthenticatedAdminCuriosidadesRouteImport } from './routes/_authenticated/admin.curiosidades'
-import { Route as AuthenticatedAdminCuponsRouteImport } from './routes/_authenticated/admin.cupons'
-import { Route as AuthenticatedAdminCrmRouteImport } from './routes/_authenticated/admin.crm'
-import { Route as AuthenticatedAdminCorretoresRouteImport } from './routes/_authenticated/admin.corretores'
-import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
-import { Route as AuthenticatedAdminBannersRouteImport } from './routes/_authenticated/admin.banners'
 import { Route as AuthenticatedAdminAprovacoesRouteImport } from './routes/_authenticated/admin.aprovacoes'
+import { Route as AuthenticatedAdminBannersRouteImport } from './routes/_authenticated/admin.banners'
+import { Route as AuthenticatedAdminConfiguracoesRouteImport } from './routes/_authenticated/admin.configuracoes'
+import { Route as AuthenticatedAdminCorretoresRouteImport } from './routes/_authenticated/admin.corretores'
+import { Route as AuthenticatedAdminCrmRouteImport } from './routes/_authenticated/admin.crm'
+import { Route as AuthenticatedAdminCuponsRouteImport } from './routes/_authenticated/admin.cupons'
+import { Route as AuthenticatedAdminCuriosidadesRouteImport } from './routes/_authenticated/admin.curiosidades'
+import { Route as AuthenticatedAdminEmpresasRouteImport } from './routes/_authenticated/admin.empresas'
+import { Route as AuthenticatedAdminEventosRouteImport } from './routes/_authenticated/admin.eventos'
+import { Route as AuthenticatedAdminFinanceiroRouteImport } from './routes/_authenticated/admin.financeiro'
+import { Route as AuthenticatedAdminGerenciarPlanosRouteImport } from './routes/_authenticated/admin.gerenciar-planos'
+import { Route as AuthenticatedAdminImoveisRouteImport } from './routes/_authenticated/admin.imoveis'
+import { Route as AuthenticatedAdminInfluenciadoresRouteImport } from './routes/_authenticated/admin.influenciadores'
+import { Route as AuthenticatedAdminNoticiasRouteImport } from './routes/_authenticated/admin.noticias'
+import { Route as AuthenticatedAdminNotificacoesRouteImport } from './routes/_authenticated/admin.notificacoes'
+import { Route as AuthenticatedAdminParceirosRouteImport } from './routes/_authenticated/admin.parceiros'
+import { Route as AuthenticatedAdminPlanosRouteImport } from './routes/_authenticated/admin.planos'
+import { Route as AuthenticatedAdminPopupsRouteImport } from './routes/_authenticated/admin.popups'
+import { Route as AuthenticatedAdminReivindicacoesRouteImport } from './routes/_authenticated/admin.reivindicacoes'
+import { Route as AuthenticatedAdminRelatoriosRouteImport } from './routes/_authenticated/admin.relatorios'
+import { Route as AuthenticatedAdminTestarNotificacoesRouteImport } from './routes/_authenticated/admin.testar-notificacoes'
+import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
+import { Route as AuthenticatedAdminUtilidadePublicaRouteImport } from './routes/_authenticated/admin.utilidade-publica'
+import { Route as AuthenticatedAdminVagasRouteImport } from './routes/_authenticated/admin.vagas'
+import { Route as ApiPublicAsaasWebhookRouteImport } from './routes/api/public/asaas-webhook'
+import { Route as EmpresaIdReivindicarRouteImport } from './routes/empresa.$id.reivindicar'
+import { Route as GuiaCategoriaSubcategoriaRouteImport } from './routes/guia.$categoria.$subcategoria'
 import { Route as ApiPublicSitemapXmlRouteImport } from './routes/api/public/sitemap.xml'
 
-const VagasRoute = VagasRouteImport.update({
-  id: '/vagas',
-  path: '/vagas',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UtilidadePublicaRoute = UtilidadePublicaRouteImport.update({
-  id: '/utilidade-publica',
-  path: '/utilidade-publica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlanosRoute = PlanosRouteImport.update({
-  id: '/planos',
-  path: '/planos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PerfilRoute = PerfilRouteImport.update({
-  id: '/perfil',
-  path: '/perfil',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OndeComerRoute = OndeComerRouteImport.update({
-  id: '/onde-comer',
-  path: '/onde-comer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImoveisRoute = ImoveisRouteImport.update({
-  id: '/imoveis',
-  path: '/imoveis',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FavoritosRoute = FavoritosRouteImport.update({
-  id: '/favoritos',
-  path: '/favoritos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmaciasRoute = FarmaciasRouteImport.update({
-  id: '/farmacias',
-  path: '/farmacias',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BuscarRoute = BuscarRouteImport.update({
-  id: '/buscar',
-  path: '/buscar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnuncieRoute = AnuncieRouteImport.update({
@@ -127,64 +81,75 @@ const AnuncieRoute = AnuncieRouteImport.update({
   path: '/anuncie',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BuscarRoute = BuscarRouteImport.update({
+  id: '/buscar',
+  path: '/buscar',
   getParentRoute: () => rootRouteImport,
 } as any)
-const NoticiasIndexRoute = NoticiasIndexRouteImport.update({
-  id: '/noticias/',
-  path: '/noticias/',
+const FarmaciasRoute = FarmaciasRouteImport.update({
+  id: '/farmacias',
+  path: '/farmacias',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuiaIndexRoute = GuiaIndexRouteImport.update({
-  id: '/guia/',
-  path: '/guia/',
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VagasIdRoute = VagasIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => VagasRoute,
-} as any)
-const NoticiasIdRoute = NoticiasIdRouteImport.update({
-  id: '/noticias/$id',
-  path: '/noticias/$id',
+const ImoveisRoute = ImoveisRouteImport.update({
+  id: '/imoveis',
+  path: '/imoveis',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ImoveisIdRoute = ImoveisIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ImoveisRoute,
-} as any)
-const GuiaCategoriaRoute = GuiaCategoriaRouteImport.update({
-  id: '/guia/$categoria',
-  path: '/guia/$categoria',
+const OndeComerRoute = OndeComerRouteImport.update({
+  id: '/onde-comer',
+  path: '/onde-comer',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EventosIdRoute = EventosIdRouteImport.update({
-  id: '/eventos/$id',
-  path: '/eventos/$id',
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EmpresaIdRoute = EmpresaIdRouteImport.update({
-  id: '/empresa/$id',
-  path: '/empresa/$id',
+const PlanosRoute = PlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CuriosidadesIdRoute = CuriosidadesIdRouteImport.update({
-  id: '/curiosidades/$id',
-  path: '/curiosidades/$id',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPortalImprensaRoute =
-  AuthenticatedPortalImprensaRouteImport.update({
-    id: '/portal-imprensa',
-    path: '/portal-imprensa',
+const UtilidadePublicaRoute = UtilidadePublicaRouteImport.update({
+  id: '/utilidade-publica',
+  path: '/utilidade-publica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VagasRoute = VagasRouteImport.update({
+  id: '/vagas',
+  path: '/vagas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMinhaContaRoute = AuthenticatedMinhaContaRouteImport.update({
+  id: '/minha-conta',
+  path: '/minha-conta',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPainelEmpresaRoute =
+  AuthenticatedPainelEmpresaRouteImport.update({
+    id: '/painel-empresa',
+    path: '/painel-empresa',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedPainelImoveisRoute =
@@ -193,171 +158,66 @@ const AuthenticatedPainelImoveisRoute =
     path: '/painel-imoveis',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedPainelEmpresaRoute =
-  AuthenticatedPainelEmpresaRouteImport.update({
-    id: '/painel-empresa',
-    path: '/painel-empresa',
+const AuthenticatedPortalImprensaRoute =
+  AuthenticatedPortalImprensaRouteImport.update({
+    id: '/portal-imprensa',
+    path: '/portal-imprensa',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedMinhaContaRoute = AuthenticatedMinhaContaRouteImport.update({
-  id: '/minha-conta',
-  path: '/minha-conta',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const CuriosidadesIdRoute = CuriosidadesIdRouteImport.update({
+  id: '/curiosidades/$id',
+  path: '/curiosidades/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const EmpresaIdRoute = EmpresaIdRouteImport.update({
+  id: '/empresa/$id',
+  path: '/empresa/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventosIdRoute = EventosIdRouteImport.update({
+  id: '/eventos/$id',
+  path: '/eventos/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuiaIndexRoute = GuiaIndexRouteImport.update({
+  id: '/guia/',
+  path: '/guia/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuiaCategoriaRoute = GuiaCategoriaRouteImport.update({
+  id: '/guia/$categoria',
+  path: '/guia/$categoria',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImoveisIdRoute = ImoveisIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ImoveisRoute,
+} as any)
+const NoticiasIndexRoute = NoticiasIndexRouteImport.update({
+  id: '/noticias/',
+  path: '/noticias/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoticiasIdRoute = NoticiasIdRouteImport.update({
+  id: '/noticias/$id',
+  path: '/noticias/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VagasIdRoute = VagasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => VagasRoute,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAdminRoute,
 } as any)
-const GuiaCategoriaSubcategoriaRoute =
-  GuiaCategoriaSubcategoriaRouteImport.update({
-    id: '/$subcategoria',
-    path: '/$subcategoria',
-    getParentRoute: () => GuiaCategoriaRoute,
-  } as any)
-const EmpresaIdReivindicarRoute = EmpresaIdReivindicarRouteImport.update({
-  id: '/reivindicar',
-  path: '/reivindicar',
-  getParentRoute: () => EmpresaIdRoute,
-} as any)
-const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
-  id: '/api/public/asaas-webhook',
-  path: '/api/public/asaas-webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedAdminVagasRoute = AuthenticatedAdminVagasRouteImport.update({
-  id: '/vagas',
-  path: '/vagas',
-  getParentRoute: () => AuthenticatedAdminRoute,
-} as any)
-const AuthenticatedAdminUtilidadePublicaRoute =
-  AuthenticatedAdminUtilidadePublicaRouteImport.update({
-    id: '/utilidade-publica',
-    path: '/utilidade-publica',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminUsuariosRoute =
-  AuthenticatedAdminUsuariosRouteImport.update({
-    id: '/usuarios',
-    path: '/usuarios',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminTestarNotificacoesRoute =
-  AuthenticatedAdminTestarNotificacoesRouteImport.update({
-    id: '/testar-notificacoes',
-    path: '/testar-notificacoes',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminRelatoriosRoute =
-  AuthenticatedAdminRelatoriosRouteImport.update({
-    id: '/relatorios',
-    path: '/relatorios',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminReivindicacoesRoute =
-  AuthenticatedAdminReivindicacoesRouteImport.update({
-    id: '/reivindicacoes',
-    path: '/reivindicacoes',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminPopupsRoute =
-  AuthenticatedAdminPopupsRouteImport.update({
-    id: '/popups',
-    path: '/popups',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminPlanosRoute =
-  AuthenticatedAdminPlanosRouteImport.update({
-    id: '/planos',
-    path: '/planos',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminParceirosRoute =
-  AuthenticatedAdminParceirosRouteImport.update({
-    id: '/parceiros',
-    path: '/parceiros',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminNotificacoesRoute =
-  AuthenticatedAdminNotificacoesRouteImport.update({
-    id: '/notificacoes',
-    path: '/notificacoes',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminNoticiasRoute =
-  AuthenticatedAdminNoticiasRouteImport.update({
-    id: '/noticias',
-    path: '/noticias',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminInfluenciadoresRoute =
-  AuthenticatedAdminInfluenciadoresRouteImport.update({
-    id: '/influenciadores',
-    path: '/influenciadores',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminImoveisRoute =
-  AuthenticatedAdminImoveisRouteImport.update({
-    id: '/imoveis',
-    path: '/imoveis',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminGerenciarPlanosRoute =
-  AuthenticatedAdminGerenciarPlanosRouteImport.update({
-    id: '/gerenciar-planos',
-    path: '/gerenciar-planos',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminFinanceiroRoute =
-  AuthenticatedAdminFinanceiroRouteImport.update({
-    id: '/financeiro',
-    path: '/financeiro',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminEventosRoute =
-  AuthenticatedAdminEventosRouteImport.update({
-    id: '/eventos',
-    path: '/eventos',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminEmpresasRoute =
-  AuthenticatedAdminEmpresasRouteImport.update({
-    id: '/empresas',
-    path: '/empresas',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminCuriosidadesRoute =
-  AuthenticatedAdminCuriosidadesRouteImport.update({
-    id: '/curiosidades',
-    path: '/curiosidades',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminCuponsRoute =
-  AuthenticatedAdminCuponsRouteImport.update({
-    id: '/cupons',
-    path: '/cupons',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminCrmRoute = AuthenticatedAdminCrmRouteImport.update({
-  id: '/crm',
-  path: '/crm',
-  getParentRoute: () => AuthenticatedAdminRoute,
-} as any)
-const AuthenticatedAdminCorretoresRoute =
-  AuthenticatedAdminCorretoresRouteImport.update({
-    id: '/corretores',
-    path: '/corretores',
-    getParentRoute: () => AuthenticatedAdminRoute,
-  } as any)
-const AuthenticatedAdminConfiguracoesRoute =
-  AuthenticatedAdminConfiguracoesRouteImport.update({
-    id: '/configuracoes',
-    path: '/configuracoes',
+const AuthenticatedAdminAprovacoesRoute =
+  AuthenticatedAdminAprovacoesRouteImport.update({
+    id: '/aprovacoes',
+    path: '/aprovacoes',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminBannersRoute =
@@ -366,11 +226,151 @@ const AuthenticatedAdminBannersRoute =
     path: '/banners',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
-const AuthenticatedAdminAprovacoesRoute =
-  AuthenticatedAdminAprovacoesRouteImport.update({
-    id: '/aprovacoes',
-    path: '/aprovacoes',
+const AuthenticatedAdminConfiguracoesRoute =
+  AuthenticatedAdminConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
     getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCorretoresRoute =
+  AuthenticatedAdminCorretoresRouteImport.update({
+    id: '/corretores',
+    path: '/corretores',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCrmRoute = AuthenticatedAdminCrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminCuponsRoute =
+  AuthenticatedAdminCuponsRouteImport.update({
+    id: '/cupons',
+    path: '/cupons',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminCuriosidadesRoute =
+  AuthenticatedAdminCuriosidadesRouteImport.update({
+    id: '/curiosidades',
+    path: '/curiosidades',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminEmpresasRoute =
+  AuthenticatedAdminEmpresasRouteImport.update({
+    id: '/empresas',
+    path: '/empresas',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminEventosRoute =
+  AuthenticatedAdminEventosRouteImport.update({
+    id: '/eventos',
+    path: '/eventos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminFinanceiroRoute =
+  AuthenticatedAdminFinanceiroRouteImport.update({
+    id: '/financeiro',
+    path: '/financeiro',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminGerenciarPlanosRoute =
+  AuthenticatedAdminGerenciarPlanosRouteImport.update({
+    id: '/gerenciar-planos',
+    path: '/gerenciar-planos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminImoveisRoute =
+  AuthenticatedAdminImoveisRouteImport.update({
+    id: '/imoveis',
+    path: '/imoveis',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminInfluenciadoresRoute =
+  AuthenticatedAdminInfluenciadoresRouteImport.update({
+    id: '/influenciadores',
+    path: '/influenciadores',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminNoticiasRoute =
+  AuthenticatedAdminNoticiasRouteImport.update({
+    id: '/noticias',
+    path: '/noticias',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminNotificacoesRoute =
+  AuthenticatedAdminNotificacoesRouteImport.update({
+    id: '/notificacoes',
+    path: '/notificacoes',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminParceirosRoute =
+  AuthenticatedAdminParceirosRouteImport.update({
+    id: '/parceiros',
+    path: '/parceiros',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPlanosRoute =
+  AuthenticatedAdminPlanosRouteImport.update({
+    id: '/planos',
+    path: '/planos',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPopupsRoute =
+  AuthenticatedAdminPopupsRouteImport.update({
+    id: '/popups',
+    path: '/popups',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminReivindicacoesRoute =
+  AuthenticatedAdminReivindicacoesRouteImport.update({
+    id: '/reivindicacoes',
+    path: '/reivindicacoes',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminRelatoriosRoute =
+  AuthenticatedAdminRelatoriosRouteImport.update({
+    id: '/relatorios',
+    path: '/relatorios',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminTestarNotificacoesRoute =
+  AuthenticatedAdminTestarNotificacoesRouteImport.update({
+    id: '/testar-notificacoes',
+    path: '/testar-notificacoes',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminUsuariosRoute =
+  AuthenticatedAdminUsuariosRouteImport.update({
+    id: '/usuarios',
+    path: '/usuarios',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminUtilidadePublicaRoute =
+  AuthenticatedAdminUtilidadePublicaRouteImport.update({
+    id: '/utilidade-publica',
+    path: '/utilidade-publica',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminVagasRoute = AuthenticatedAdminVagasRouteImport.update({
+  id: '/vagas',
+  path: '/vagas',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const ApiPublicAsaasWebhookRoute = ApiPublicAsaasWebhookRouteImport.update({
+  id: '/api/public/asaas-webhook',
+  path: '/api/public/asaas-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmpresaIdReivindicarRoute = EmpresaIdReivindicarRouteImport.update({
+  id: '/reivindicar',
+  path: '/reivindicar',
+  getParentRoute: () => EmpresaIdRoute,
+} as any)
+const GuiaCategoriaSubcategoriaRoute =
+  GuiaCategoriaSubcategoriaRouteImport.update({
+    id: '/$subcategoria',
+    path: '/$subcategoria',
+    getParentRoute: () => GuiaCategoriaRoute,
   } as any)
 const ApiPublicSitemapXmlRoute = ApiPublicSitemapXmlRouteImport.update({
   id: '/api/public/sitemap/xml',
@@ -758,88 +758,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vagas': {
-      id: '/vagas'
-      path: '/vagas'
-      fullPath: '/vagas'
-      preLoaderRoute: typeof VagasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/utilidade-publica': {
-      id: '/utilidade-publica'
-      path: '/utilidade-publica'
-      fullPath: '/utilidade-publica'
-      preLoaderRoute: typeof UtilidadePublicaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/planos': {
-      id: '/planos'
-      path: '/planos'
-      fullPath: '/planos'
-      preLoaderRoute: typeof PlanosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/perfil': {
-      id: '/perfil'
-      path: '/perfil'
-      fullPath: '/perfil'
-      preLoaderRoute: typeof PerfilRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onde-comer': {
-      id: '/onde-comer'
-      path: '/onde-comer'
-      fullPath: '/onde-comer'
-      preLoaderRoute: typeof OndeComerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/imoveis': {
-      id: '/imoveis'
-      path: '/imoveis'
-      fullPath: '/imoveis'
-      preLoaderRoute: typeof ImoveisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/favoritos': {
-      id: '/favoritos'
-      path: '/favoritos'
-      fullPath: '/favoritos'
-      preLoaderRoute: typeof FavoritosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farmacias': {
-      id: '/farmacias'
-      path: '/farmacias'
-      fullPath: '/farmacias'
-      preLoaderRoute: typeof FarmaciasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/buscar': {
-      id: '/buscar'
-      path: '/buscar'
-      fullPath: '/buscar'
-      preLoaderRoute: typeof BuscarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/anuncie': {
-      id: '/anuncie'
-      path: '/anuncie'
-      fullPath: '/anuncie'
-      preLoaderRoute: typeof AnuncieRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -849,95 +772,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/anuncie': {
+      id: '/anuncie'
+      path: '/anuncie'
+      fullPath: '/anuncie'
+      preLoaderRoute: typeof AnuncieRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/noticias/': {
-      id: '/noticias/'
-      path: '/noticias'
-      fullPath: '/noticias/'
-      preLoaderRoute: typeof NoticiasIndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/guia/': {
-      id: '/guia/'
-      path: '/guia'
-      fullPath: '/guia/'
-      preLoaderRoute: typeof GuiaIndexRouteImport
+    '/buscar': {
+      id: '/buscar'
+      path: '/buscar'
+      fullPath: '/buscar'
+      preLoaderRoute: typeof BuscarRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/vagas/$id': {
-      id: '/vagas/$id'
-      path: '/$id'
-      fullPath: '/vagas/$id'
-      preLoaderRoute: typeof VagasIdRouteImport
-      parentRoute: typeof VagasRoute
-    }
-    '/noticias/$id': {
-      id: '/noticias/$id'
-      path: '/noticias/$id'
-      fullPath: '/noticias/$id'
-      preLoaderRoute: typeof NoticiasIdRouteImport
+    '/farmacias': {
+      id: '/farmacias'
+      path: '/farmacias'
+      fullPath: '/farmacias'
+      preLoaderRoute: typeof FarmaciasRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/imoveis/$id': {
-      id: '/imoveis/$id'
-      path: '/$id'
-      fullPath: '/imoveis/$id'
-      preLoaderRoute: typeof ImoveisIdRouteImport
-      parentRoute: typeof ImoveisRoute
-    }
-    '/guia/$categoria': {
-      id: '/guia/$categoria'
-      path: '/guia/$categoria'
-      fullPath: '/guia/$categoria'
-      preLoaderRoute: typeof GuiaCategoriaRouteImport
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/eventos/$id': {
-      id: '/eventos/$id'
-      path: '/eventos/$id'
-      fullPath: '/eventos/$id'
-      preLoaderRoute: typeof EventosIdRouteImport
+    '/imoveis': {
+      id: '/imoveis'
+      path: '/imoveis'
+      fullPath: '/imoveis'
+      preLoaderRoute: typeof ImoveisRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/empresa/$id': {
-      id: '/empresa/$id'
-      path: '/empresa/$id'
-      fullPath: '/empresa/$id'
-      preLoaderRoute: typeof EmpresaIdRouteImport
+    '/onde-comer': {
+      id: '/onde-comer'
+      path: '/onde-comer'
+      fullPath: '/onde-comer'
+      preLoaderRoute: typeof OndeComerRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/curiosidades/$id': {
-      id: '/curiosidades/$id'
-      path: '/curiosidades/$id'
-      fullPath: '/curiosidades/$id'
-      preLoaderRoute: typeof CuriosidadesIdRouteImport
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/portal-imprensa': {
-      id: '/_authenticated/portal-imprensa'
-      path: '/portal-imprensa'
-      fullPath: '/portal-imprensa'
-      preLoaderRoute: typeof AuthenticatedPortalImprensaRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/planos': {
+      id: '/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof PlanosRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/painel-imoveis': {
-      id: '/_authenticated/painel-imoveis'
-      path: '/painel-imoveis'
-      fullPath: '/painel-imoveis'
-      preLoaderRoute: typeof AuthenticatedPainelImoveisRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/painel-empresa': {
-      id: '/_authenticated/painel-empresa'
-      path: '/painel-empresa'
-      fullPath: '/painel-empresa'
-      preLoaderRoute: typeof AuthenticatedPainelEmpresaRouteImport
+    '/utilidade-publica': {
+      id: '/utilidade-publica'
+      path: '/utilidade-publica'
+      fullPath: '/utilidade-publica'
+      preLoaderRoute: typeof UtilidadePublicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vagas': {
+      id: '/vagas'
+      path: '/vagas'
+      fullPath: '/vagas'
+      preLoaderRoute: typeof VagasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/minha-conta': {
@@ -947,12 +870,89 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMinhaContaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+    '/_authenticated/painel-empresa': {
+      id: '/_authenticated/painel-empresa'
+      path: '/painel-empresa'
+      fullPath: '/painel-empresa'
+      preLoaderRoute: typeof AuthenticatedPainelEmpresaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/painel-imoveis': {
+      id: '/_authenticated/painel-imoveis'
+      path: '/painel-imoveis'
+      fullPath: '/painel-imoveis'
+      preLoaderRoute: typeof AuthenticatedPainelImoveisRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/portal-imprensa': {
+      id: '/_authenticated/portal-imprensa'
+      path: '/portal-imprensa'
+      fullPath: '/portal-imprensa'
+      preLoaderRoute: typeof AuthenticatedPortalImprensaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/curiosidades/$id': {
+      id: '/curiosidades/$id'
+      path: '/curiosidades/$id'
+      fullPath: '/curiosidades/$id'
+      preLoaderRoute: typeof CuriosidadesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/empresa/$id': {
+      id: '/empresa/$id'
+      path: '/empresa/$id'
+      fullPath: '/empresa/$id'
+      preLoaderRoute: typeof EmpresaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eventos/$id': {
+      id: '/eventos/$id'
+      path: '/eventos/$id'
+      fullPath: '/eventos/$id'
+      preLoaderRoute: typeof EventosIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guia/': {
+      id: '/guia/'
+      path: '/guia'
+      fullPath: '/guia/'
+      preLoaderRoute: typeof GuiaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guia/$categoria': {
+      id: '/guia/$categoria'
+      path: '/guia/$categoria'
+      fullPath: '/guia/$categoria'
+      preLoaderRoute: typeof GuiaCategoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imoveis/$id': {
+      id: '/imoveis/$id'
+      path: '/$id'
+      fullPath: '/imoveis/$id'
+      preLoaderRoute: typeof ImoveisIdRouteImport
+      parentRoute: typeof ImoveisRoute
+    }
+    '/noticias/': {
+      id: '/noticias/'
+      path: '/noticias'
+      fullPath: '/noticias/'
+      preLoaderRoute: typeof NoticiasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noticias/$id': {
+      id: '/noticias/$id'
+      path: '/noticias/$id'
+      fullPath: '/noticias/$id'
+      preLoaderRoute: typeof NoticiasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vagas/$id': {
+      id: '/vagas/$id'
+      path: '/$id'
+      fullPath: '/vagas/$id'
+      preLoaderRoute: typeof VagasIdRouteImport
+      parentRoute: typeof VagasRoute
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -961,179 +961,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/guia/$categoria/$subcategoria': {
-      id: '/guia/$categoria/$subcategoria'
-      path: '/$subcategoria'
-      fullPath: '/guia/$categoria/$subcategoria'
-      preLoaderRoute: typeof GuiaCategoriaSubcategoriaRouteImport
-      parentRoute: typeof GuiaCategoriaRoute
-    }
-    '/empresa/$id/reivindicar': {
-      id: '/empresa/$id/reivindicar'
-      path: '/reivindicar'
-      fullPath: '/empresa/$id/reivindicar'
-      preLoaderRoute: typeof EmpresaIdReivindicarRouteImport
-      parentRoute: typeof EmpresaIdRoute
-    }
-    '/api/public/asaas-webhook': {
-      id: '/api/public/asaas-webhook'
-      path: '/api/public/asaas-webhook'
-      fullPath: '/api/public/asaas-webhook'
-      preLoaderRoute: typeof ApiPublicAsaasWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/admin/vagas': {
-      id: '/_authenticated/admin/vagas'
-      path: '/vagas'
-      fullPath: '/admin/vagas'
-      preLoaderRoute: typeof AuthenticatedAdminVagasRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/utilidade-publica': {
-      id: '/_authenticated/admin/utilidade-publica'
-      path: '/utilidade-publica'
-      fullPath: '/admin/utilidade-publica'
-      preLoaderRoute: typeof AuthenticatedAdminUtilidadePublicaRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/usuarios': {
-      id: '/_authenticated/admin/usuarios'
-      path: '/usuarios'
-      fullPath: '/admin/usuarios'
-      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/testar-notificacoes': {
-      id: '/_authenticated/admin/testar-notificacoes'
-      path: '/testar-notificacoes'
-      fullPath: '/admin/testar-notificacoes'
-      preLoaderRoute: typeof AuthenticatedAdminTestarNotificacoesRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/relatorios': {
-      id: '/_authenticated/admin/relatorios'
-      path: '/relatorios'
-      fullPath: '/admin/relatorios'
-      preLoaderRoute: typeof AuthenticatedAdminRelatoriosRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/reivindicacoes': {
-      id: '/_authenticated/admin/reivindicacoes'
-      path: '/reivindicacoes'
-      fullPath: '/admin/reivindicacoes'
-      preLoaderRoute: typeof AuthenticatedAdminReivindicacoesRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/popups': {
-      id: '/_authenticated/admin/popups'
-      path: '/popups'
-      fullPath: '/admin/popups'
-      preLoaderRoute: typeof AuthenticatedAdminPopupsRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/planos': {
-      id: '/_authenticated/admin/planos'
-      path: '/planos'
-      fullPath: '/admin/planos'
-      preLoaderRoute: typeof AuthenticatedAdminPlanosRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/parceiros': {
-      id: '/_authenticated/admin/parceiros'
-      path: '/parceiros'
-      fullPath: '/admin/parceiros'
-      preLoaderRoute: typeof AuthenticatedAdminParceirosRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/notificacoes': {
-      id: '/_authenticated/admin/notificacoes'
-      path: '/notificacoes'
-      fullPath: '/admin/notificacoes'
-      preLoaderRoute: typeof AuthenticatedAdminNotificacoesRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/noticias': {
-      id: '/_authenticated/admin/noticias'
-      path: '/noticias'
-      fullPath: '/admin/noticias'
-      preLoaderRoute: typeof AuthenticatedAdminNoticiasRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/influenciadores': {
-      id: '/_authenticated/admin/influenciadores'
-      path: '/influenciadores'
-      fullPath: '/admin/influenciadores'
-      preLoaderRoute: typeof AuthenticatedAdminInfluenciadoresRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/imoveis': {
-      id: '/_authenticated/admin/imoveis'
-      path: '/imoveis'
-      fullPath: '/admin/imoveis'
-      preLoaderRoute: typeof AuthenticatedAdminImoveisRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/gerenciar-planos': {
-      id: '/_authenticated/admin/gerenciar-planos'
-      path: '/gerenciar-planos'
-      fullPath: '/admin/gerenciar-planos'
-      preLoaderRoute: typeof AuthenticatedAdminGerenciarPlanosRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/financeiro': {
-      id: '/_authenticated/admin/financeiro'
-      path: '/financeiro'
-      fullPath: '/admin/financeiro'
-      preLoaderRoute: typeof AuthenticatedAdminFinanceiroRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/eventos': {
-      id: '/_authenticated/admin/eventos'
-      path: '/eventos'
-      fullPath: '/admin/eventos'
-      preLoaderRoute: typeof AuthenticatedAdminEventosRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/empresas': {
-      id: '/_authenticated/admin/empresas'
-      path: '/empresas'
-      fullPath: '/admin/empresas'
-      preLoaderRoute: typeof AuthenticatedAdminEmpresasRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/curiosidades': {
-      id: '/_authenticated/admin/curiosidades'
-      path: '/curiosidades'
-      fullPath: '/admin/curiosidades'
-      preLoaderRoute: typeof AuthenticatedAdminCuriosidadesRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/cupons': {
-      id: '/_authenticated/admin/cupons'
-      path: '/cupons'
-      fullPath: '/admin/cupons'
-      preLoaderRoute: typeof AuthenticatedAdminCuponsRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/crm': {
-      id: '/_authenticated/admin/crm'
-      path: '/crm'
-      fullPath: '/admin/crm'
-      preLoaderRoute: typeof AuthenticatedAdminCrmRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/corretores': {
-      id: '/_authenticated/admin/corretores'
-      path: '/corretores'
-      fullPath: '/admin/corretores'
-      preLoaderRoute: typeof AuthenticatedAdminCorretoresRouteImport
-      parentRoute: typeof AuthenticatedAdminRoute
-    }
-    '/_authenticated/admin/configuracoes': {
-      id: '/_authenticated/admin/configuracoes'
-      path: '/configuracoes'
-      fullPath: '/admin/configuracoes'
-      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
+    '/_authenticated/admin/aprovacoes': {
+      id: '/_authenticated/admin/aprovacoes'
+      path: '/aprovacoes'
+      fullPath: '/admin/aprovacoes'
+      preLoaderRoute: typeof AuthenticatedAdminAprovacoesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/banners': {
@@ -1143,12 +975,180 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBannersRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
-    '/_authenticated/admin/aprovacoes': {
-      id: '/_authenticated/admin/aprovacoes'
-      path: '/aprovacoes'
-      fullPath: '/admin/aprovacoes'
-      preLoaderRoute: typeof AuthenticatedAdminAprovacoesRouteImport
+    '/_authenticated/admin/configuracoes': {
+      id: '/_authenticated/admin/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/admin/configuracoes'
+      preLoaderRoute: typeof AuthenticatedAdminConfiguracoesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/corretores': {
+      id: '/_authenticated/admin/corretores'
+      path: '/corretores'
+      fullPath: '/admin/corretores'
+      preLoaderRoute: typeof AuthenticatedAdminCorretoresRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/crm': {
+      id: '/_authenticated/admin/crm'
+      path: '/crm'
+      fullPath: '/admin/crm'
+      preLoaderRoute: typeof AuthenticatedAdminCrmRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/cupons': {
+      id: '/_authenticated/admin/cupons'
+      path: '/cupons'
+      fullPath: '/admin/cupons'
+      preLoaderRoute: typeof AuthenticatedAdminCuponsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/curiosidades': {
+      id: '/_authenticated/admin/curiosidades'
+      path: '/curiosidades'
+      fullPath: '/admin/curiosidades'
+      preLoaderRoute: typeof AuthenticatedAdminCuriosidadesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/empresas': {
+      id: '/_authenticated/admin/empresas'
+      path: '/empresas'
+      fullPath: '/admin/empresas'
+      preLoaderRoute: typeof AuthenticatedAdminEmpresasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/eventos': {
+      id: '/_authenticated/admin/eventos'
+      path: '/eventos'
+      fullPath: '/admin/eventos'
+      preLoaderRoute: typeof AuthenticatedAdminEventosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/financeiro': {
+      id: '/_authenticated/admin/financeiro'
+      path: '/financeiro'
+      fullPath: '/admin/financeiro'
+      preLoaderRoute: typeof AuthenticatedAdminFinanceiroRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/gerenciar-planos': {
+      id: '/_authenticated/admin/gerenciar-planos'
+      path: '/gerenciar-planos'
+      fullPath: '/admin/gerenciar-planos'
+      preLoaderRoute: typeof AuthenticatedAdminGerenciarPlanosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/imoveis': {
+      id: '/_authenticated/admin/imoveis'
+      path: '/imoveis'
+      fullPath: '/admin/imoveis'
+      preLoaderRoute: typeof AuthenticatedAdminImoveisRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/influenciadores': {
+      id: '/_authenticated/admin/influenciadores'
+      path: '/influenciadores'
+      fullPath: '/admin/influenciadores'
+      preLoaderRoute: typeof AuthenticatedAdminInfluenciadoresRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/noticias': {
+      id: '/_authenticated/admin/noticias'
+      path: '/noticias'
+      fullPath: '/admin/noticias'
+      preLoaderRoute: typeof AuthenticatedAdminNoticiasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/notificacoes': {
+      id: '/_authenticated/admin/notificacoes'
+      path: '/notificacoes'
+      fullPath: '/admin/notificacoes'
+      preLoaderRoute: typeof AuthenticatedAdminNotificacoesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/parceiros': {
+      id: '/_authenticated/admin/parceiros'
+      path: '/parceiros'
+      fullPath: '/admin/parceiros'
+      preLoaderRoute: typeof AuthenticatedAdminParceirosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/planos': {
+      id: '/_authenticated/admin/planos'
+      path: '/planos'
+      fullPath: '/admin/planos'
+      preLoaderRoute: typeof AuthenticatedAdminPlanosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/popups': {
+      id: '/_authenticated/admin/popups'
+      path: '/popups'
+      fullPath: '/admin/popups'
+      preLoaderRoute: typeof AuthenticatedAdminPopupsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/reivindicacoes': {
+      id: '/_authenticated/admin/reivindicacoes'
+      path: '/reivindicacoes'
+      fullPath: '/admin/reivindicacoes'
+      preLoaderRoute: typeof AuthenticatedAdminReivindicacoesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/relatorios': {
+      id: '/_authenticated/admin/relatorios'
+      path: '/relatorios'
+      fullPath: '/admin/relatorios'
+      preLoaderRoute: typeof AuthenticatedAdminRelatoriosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/testar-notificacoes': {
+      id: '/_authenticated/admin/testar-notificacoes'
+      path: '/testar-notificacoes'
+      fullPath: '/admin/testar-notificacoes'
+      preLoaderRoute: typeof AuthenticatedAdminTestarNotificacoesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/usuarios': {
+      id: '/_authenticated/admin/usuarios'
+      path: '/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/utilidade-publica': {
+      id: '/_authenticated/admin/utilidade-publica'
+      path: '/utilidade-publica'
+      fullPath: '/admin/utilidade-publica'
+      preLoaderRoute: typeof AuthenticatedAdminUtilidadePublicaRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/vagas': {
+      id: '/_authenticated/admin/vagas'
+      path: '/vagas'
+      fullPath: '/admin/vagas'
+      preLoaderRoute: typeof AuthenticatedAdminVagasRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/api/public/asaas-webhook': {
+      id: '/api/public/asaas-webhook'
+      path: '/api/public/asaas-webhook'
+      fullPath: '/api/public/asaas-webhook'
+      preLoaderRoute: typeof ApiPublicAsaasWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/empresa/$id/reivindicar': {
+      id: '/empresa/$id/reivindicar'
+      path: '/reivindicar'
+      fullPath: '/empresa/$id/reivindicar'
+      preLoaderRoute: typeof EmpresaIdReivindicarRouteImport
+      parentRoute: typeof EmpresaIdRoute
+    }
+    '/guia/$categoria/$subcategoria': {
+      id: '/guia/$categoria/$subcategoria'
+      path: '/$subcategoria'
+      fullPath: '/guia/$categoria/$subcategoria'
+      preLoaderRoute: typeof GuiaCategoriaSubcategoriaRouteImport
+      parentRoute: typeof GuiaCategoriaRoute
     }
     '/api/public/sitemap/xml': {
       id: '/api/public/sitemap/xml'

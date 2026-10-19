@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Loader2, MapPin, Ticket } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { supabase } from "@/integrations/supabase/client";
 import { getDisplayImageUrl } from "@/lib/storage";
 import fallback from "@/assets/placeholders/evento.jpg.asset.json";
@@ -91,11 +92,7 @@ export const Route = createFileRoute("/eventos/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: EventoDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Evento">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Evento" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Evento">
       <p className="text-sm text-muted-foreground">Evento não encontrado.</p>

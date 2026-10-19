@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { supabase } from "@/integrations/supabase/client";
 import { getDisplayImageUrl } from "@/lib/storage";
 import fallback from "@/assets/placeholders/curiosidade.jpg.asset.json";
@@ -57,11 +58,7 @@ export const Route = createFileRoute("/curiosidades/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: CuriosidadeDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Curiosidade">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Curiosidade" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Curiosidade">
       <p className="text-sm text-muted-foreground">Curiosidade não encontrada.</p>

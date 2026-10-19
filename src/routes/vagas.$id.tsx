@@ -11,6 +11,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { supabase } from "@/integrations/supabase/client";
 
 async function fetchJobById(id: string) {
@@ -88,11 +89,7 @@ export const Route = createFileRoute("/vagas/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: VagaDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Vaga">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Vaga" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Vaga">
       <p className="text-sm text-muted-foreground">Vaga não encontrada.</p>

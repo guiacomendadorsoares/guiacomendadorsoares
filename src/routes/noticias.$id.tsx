@@ -2,6 +2,7 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Calendar, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { supabase } from "@/integrations/supabase/client";
 import { getDisplayImageUrl } from "@/lib/storage";
 import { formatNewsDate, getCategoryColor, NEWS_FILTERS, type NewsCategory } from "@/lib/news";
@@ -72,11 +73,7 @@ export const Route = createFileRoute("/noticias/$id")({
     return { meta, links: [{ rel: "canonical", href: url }], scripts };
   },
   component: NoticiaDetalhe,
-  errorComponent: ({ error }) => (
-    <AppShell title="Notícia">
-      <p className="text-sm text-destructive">{error.message}</p>
-    </AppShell>
-  ),
+  errorComponent: ({ error }) => <RouteError title="Notícia" error={error} />,
   notFoundComponent: () => (
     <AppShell title="Notícia">
       <p className="text-sm text-muted-foreground">Notícia não encontrada.</p>
