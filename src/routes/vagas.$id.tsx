@@ -11,6 +11,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import { AppShell } from "@/components/app-shell";
+import { RouteError } from "@/components/route-error";
 import { supabase } from "@/integrations/supabase/client";
 
 async function fetchJobById(id: string) {
