@@ -129,6 +129,9 @@ export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) 
       toast.success(`${schema.label} salvo`);
       void qc.invalidateQueries({ queryKey });
       void qc.invalidateQueries({ queryKey: ["home-items", table] });
+      void qc.invalidateQueries({ queryKey: [table] });
+      void qc.invalidateQueries({ queryKey: ["pending", table] });
+      void qc.invalidateQueries({ queryKey: ["admin-counts"] });
       if (table === "businesses") {
         void qc.invalidateQueries({ queryKey: ["home", "open-now"] });
       }
@@ -148,6 +151,9 @@ export function ContentCrud({ table, ownerOnly, forcePending, onSaved }: Props) 
       toast.success("Removido");
       void qc.invalidateQueries({ queryKey });
       void qc.invalidateQueries({ queryKey: ["home-items", table] });
+      void qc.invalidateQueries({ queryKey: [table] });
+      void qc.invalidateQueries({ queryKey: ["pending", table] });
+      void qc.invalidateQueries({ queryKey: ["admin-counts"] });
       if (table === "businesses") {
         void qc.invalidateQueries({ queryKey: ["home", "open-now"] });
       }

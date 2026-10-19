@@ -10,6 +10,7 @@ import { CategoriesGrid } from "@/components/categories-grid";
 import { SectionHeader } from "@/components/cards";
 import { Reveal } from "@/components/reveal";
 import { getDisplayImageUrl } from "@/lib/storage";
+import { isPublicProperty } from "@/lib/property-publication";
 import {
   MapPin,
   Search,
@@ -61,6 +62,8 @@ export const Route = createFileRoute("/")({
           "O guia oficial do bairro Comendador Soares em Nova Iguaçu: comércio, vagas, imóveis e comunidade.",
       },
       { property: "og:url", content: "https://comendadorsoares.com.br/" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://comendadorsoares.com.br/" }],
   }),
@@ -367,6 +370,8 @@ type ApprovedItem = {
   banner_url?: string | null;
   featured?: boolean;
   submitted_by?: string | null;
+  status?: string;
+  active?: boolean;
 };
 
 function useApprovedItems(
@@ -388,13 +393,14 @@ function useApprovedItems(
             : table === "news"
               ? "id,title,summary,cover_url"
               : table === "properties"
-                ? "id,title,cover_url,featured,submitted_by"
+                ? "id,title,cover_url,featured,status,active"
                 : "id,title,cover_url";
       let q = supabase.from(table).select(cols).eq("status", "approved");
       if (table === "businesses" && mainCategory) q = (q as any).eq("main_category", mainCategory);
+      if (table === "properties") q = (q as any).eq("active", true);
       if (hasFeatured) q = q.order("featured", { ascending: false });
-      else q = q.order("created_at", { ascending: false });
-      const { data, error } = await q.limit(table === "properties" ? 100 : limit);
+      q = q.order("created_at", { ascending: false });
+      const { data, error } = await q.limit(limit);
       if (error) {
         console.error(`[home] ${table} fetch error:`, error.message);
         return [];
@@ -402,43 +408,9 @@ function useApprovedItems(
 
       let approvedItems = (data ?? []) as unknown as ApprovedItem[];
       if (table === "properties") {
-        const ownerIds = [...new Set(approvedItems.map((item) => item.submitted_by).filter(Boolean))] as string[];
-        if (ownerIds.length === 0) return [];
-
-        const [{ data: profiles, error: profilesError }, { data: plans, error: plansError }] =
-          await Promise.all([
-            (supabase as any)
-              .from("profiles")
-              .select("user_id,current_plan,plan_status,plan_expires_at")
-              .in("user_id", ownerIds),
-            (supabase as any).from("subscription_plans").select("slug,features").eq("active", true),
-          ]);
-        if (profilesError || plansError) {
-          console.error(
-            "[home] property plan fetch error:",
-            profilesError?.message ?? plansError?.message,
-          );
-          return [];
-        }
-
-        const featuredPlans = new Set(
-          (plans ?? [])
-            .filter((plan: any) => !!plan.features?.properties?.featured_home)
-            .map((plan: any) => plan.slug),
+        approvedItems = approvedItems.filter((item) =>
+          isPublicProperty({ status: item.status ?? "", active: item.active === true }),
         );
-        const eligibleOwners = new Set(
-          (profiles ?? [])
-            .filter((profile: any) => {
-              const active = profile.plan_status !== "suspended" && profile.plan_status !== "canceled";
-              const unexpired =
-                !profile.plan_expires_at || new Date(profile.plan_expires_at).getTime() >= Date.now();
-              return active && unexpired && featuredPlans.has(profile.current_plan ?? "free");
-            })
-            .map((profile: any) => profile.user_id),
-        );
-        approvedItems = approvedItems
-          .filter((item) => !!item.submitted_by && eligibleOwners.has(item.submitted_by))
-          .slice(0, limit);
       }
 
       return Promise.all(

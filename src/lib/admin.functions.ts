@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { canModerateProperties } from "@/lib/property-publication";
 
 const CONTENT_TABLES = [
   "businesses",
@@ -17,7 +18,7 @@ async function assertAdminOrEditor(context: { supabase: any; userId: string; cla
     _user_id: context.userId,
     _role: "admin",
   });
-  if (isAdmin) return;
+  if (canModerateProperties(isAdmin ? ["admin"] : [])) return;
   if (allowEditor) {
     const { data: isEditor } = await context.supabase.rpc("has_role", {
       _user_id: context.userId,
@@ -37,7 +38,7 @@ export const approveContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => approveSchema.parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdminOrEditor(context);
+    await assertAdminOrEditor(context, data.table !== "properties");
     const { error } = await context.supabase
       .from(data.table)
       .update({
@@ -46,7 +47,9 @@ export const approveContent = createServerFn({ method: "POST" })
         approved_at: new Date().toISOString(),
         rejection_reason: null,
       })
-      .eq("id", data.id);
+      .eq("id", data.id)
+      .select("id")
+      .single();
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -59,7 +62,7 @@ export const rejectContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => rejectSchema.parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdminOrEditor(context);
+    await assertAdminOrEditor(context, data.table !== "properties");
     const { error } = await context.supabase
       .from(data.table)
       .update({
@@ -68,7 +71,9 @@ export const rejectContent = createServerFn({ method: "POST" })
         approved_at: new Date().toISOString(),
         rejection_reason: data.reason,
       })
-      .eq("id", data.id);
+      .eq("id", data.id)
+      .select("id")
+      .single();
     if (error) throw new Error(error.message);
     return { ok: true };
   });
