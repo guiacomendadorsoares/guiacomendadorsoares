@@ -23,42 +23,27 @@ type Cat = {
   to2: string;
 };
 
+const GREEN = { from: "#1a4d3a", to2: "#34c781" };
+const RED = { from: "#7a1f1f", to2: "#d64545" };
+
 const cats: Cat[] = [
-  {
-    slug: "juridico-profissional",
-    label: "Advogados",
-    icon: Scale,
-    from: "#1f3a2e",
-    to2: "#3b6b54",
-  },
-  {
-    slug: "esportes-bem-estar",
-    label: "Academias",
-    icon: Dumbbell,
-    from: "#1a4d3a",
-    to2: "#34c781",
-  },
-  {
-    slug: "alimentacao",
-    label: "Alimentação",
-    icon: UtensilsCrossed,
-    from: "#b8842b",
-    to2: "#f0c068",
-  },
-  { slug: "imobiliario", label: "Imóveis", icon: Building2, from: "#1f3a2e", to2: "#4a8a6b" },
-  { slug: "educacao", label: "Educação", icon: GraduationCap, from: "#b8842b", to2: "#e8b85a" },
-  { slug: "saude", label: "Saúde", icon: HeartPulse, from: "#1a4d3a", to2: "#5dd6a1" },
-  { slug: "pets", label: "Pet Shop", icon: Dog, from: "#2a5444", to2: "#6ec79a" },
-  { slug: "beleza-estetica", label: "Beleza", icon: Scissors, from: "#8a5e1f", to2: "#e8b85a" },
-  { slug: "servicos-gerais", label: "Serviços", icon: Wrench, from: "#1f3a2e", to2: "#4a8a6b" },
+  { slug: "juridico-profissional", label: "Advogados", icon: Scale, ...GREEN },
+  { slug: "esportes-bem-estar", label: "Academias", icon: Dumbbell, ...GREEN },
+  { slug: "alimentacao", label: "Alimentação", icon: UtensilsCrossed, ...GREEN },
+  { slug: "imobiliario", label: "Imóveis", icon: Building2, ...GREEN },
+  { slug: "educacao", label: "Educação", icon: GraduationCap, ...GREEN },
+  { slug: "saude", label: "Saúde", icon: HeartPulse, ...GREEN },
+  { slug: "pets", label: "Pet Shop", icon: Dog, ...GREEN },
+  { slug: "beleza-estetica", label: "Beleza", icon: Scissors, ...GREEN },
+  { slug: "servicos-gerais", label: "Serviços", icon: Wrench, ...GREEN },
   {
     slug: "servicos-publicos",
     label: "Utilidade Pública",
     icon: LifeBuoy,
-    from: "#7a1f1f",
-    to2: "#d64545",
+    ...RED,
   },
 ];
+
 
 type Ripple = { id: number; x: number; y: number };
 
