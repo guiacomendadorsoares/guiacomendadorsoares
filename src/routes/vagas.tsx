@@ -1,10 +1,19 @@
 import { createFileRoute, Outlet, useMatch } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/ui-bits";
 import { JobCard } from "@/components/job-card";
-import { JOB_FILTERS, sampleJobs, type JobType } from "@/lib/jobs";
-import { Search, SlidersHorizontal, Briefcase } from "lucide-react";
+import {
+  JOB_FILTERS,
+  JOB_TYPE_LABELS,
+  jobRowToJob,
+  type Job,
+  type JobRow,
+  type JobType,
+} from "@/lib/jobs";
+import { supabase } from "@/integrations/supabase/client";
+import { Search, SlidersHorizontal, Briefcase, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/vagas")({
   head: () => ({
@@ -25,13 +34,36 @@ export const Route = createFileRoute("/vagas")({
   component: VagasPage,
 });
 
+async function fetchApprovedJobs(): Promise<Job[]> {
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("id,title,company,type,salary,location,description,urgent,posted_at,expires_at")
+    .eq("status", "approved")
+    .eq("active", true)
+    .order("posted_at", { ascending: false });
+  if (error) throw error;
+  const now = Date.now();
+  return ((data ?? []) as unknown as (JobRow & { expires_at: string | null })[])
+    .filter((row) => !row.expires_at || new Date(row.expires_at).getTime() > now)
+    .map(jobRowToJob);
+}
+
+const CATEGORY_ORDER: JobType[] = ["emprego", "estagio", "jovem-aprendiz", "freelancer"];
+
 function VagasPage() {
   const detailMatch = useMatch({ from: "/vagas/$id", shouldThrow: false });
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<JobType | "todos">("todos");
 
+  const { data: jobs = [], isLoading, isError } = useQuery({
+    queryKey: ["vagas", "approved"],
+    staleTime: 5 * 60_000,
+    gcTime: 30 * 60_000,
+    queryFn: fetchApprovedJobs,
+  });
+
   const filtered = useMemo(() => {
-    return sampleJobs.filter((j) => {
+    return jobs.filter((j) => {
       const matchesFilter = activeFilter === "todos" || j.type === activeFilter;
       const q = query.trim().toLowerCase();
       const matchesQuery =
@@ -41,7 +73,16 @@ function VagasPage() {
         j.location.toLowerCase().includes(q);
       return matchesFilter && matchesQuery;
     });
-  }, [activeFilter, query]);
+  }, [jobs, activeFilter, query]);
+
+  const grouped = useMemo(() => {
+    if (activeFilter !== "todos") return null;
+    return CATEGORY_ORDER.map((type) => ({
+      type,
+      label: JOB_TYPE_LABELS[type],
+      items: filtered.filter((j) => j.type === type),
+    })).filter((g) => g.items.length > 0);
+  }, [filtered, activeFilter]);
 
   if (detailMatch) return <Outlet />;
 
@@ -101,16 +142,46 @@ function VagasPage() {
       </div>
 
       {/* Jobs list */}
-      {filtered.length === 0 ? (
+      {isLoading ? (
+        <div className="grid place-items-center py-12">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : isError ? (
         <EmptyState
           icon={<Briefcase className="h-5 w-5" />}
-          title={sampleJobs.length === 0 ? "Nenhuma vaga publicada." : "Nenhuma vaga encontrada"}
+          title="Não foi possível carregar as vagas"
+          description="Verifique sua conexão e tente novamente em instantes."
+        />
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          icon={<Briefcase className="h-5 w-5" />}
+          title={jobs.length === 0 ? "Nenhuma vaga publicada." : "Nenhuma vaga encontrada"}
           description={
-            sampleJobs.length === 0
+            jobs.length === 0
               ? "As empresas parceiras ainda não publicaram oportunidades. Volte em breve."
               : "Tente ajustar os filtros ou a busca para encontrar oportunidades."
           }
         />
+      ) : grouped ? (
+        <div className="space-y-6 pb-2">
+          {grouped.map((group) => (
+            <section key={group.type}>
+              <div className="mb-3 flex items-center gap-2">
+                <h2 className="font-display text-base font-bold text-foreground">
+                  {group.label}
+                </h2>
+                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                  {group.items.length}
+                </span>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+                {group.items.map((job) => (
+                  <JobCard key={job.id} job={job} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       ) : (
         <div className="grid gap-3 pb-2 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((job) => (
