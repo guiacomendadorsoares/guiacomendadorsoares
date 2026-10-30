@@ -16,7 +16,7 @@ const LABELS = Object.fromEntries(NEWS_FILTERS.map((f) => [f.value, f.label])) a
 async function fetchNewsById(id: string) {
   const { data, error } = await supabase
     .from("news")
-    .select("id,title,summary,content,cover_url,category,published_at")
+    .select("id,title,summary,content,cover_url,category,published_at,source_url,source_name")
     .eq("id", id)
     .eq("published", true)
     .eq("status", "approved")
@@ -50,7 +50,7 @@ export const Route = createFileRoute("/noticias/$id")({
       { property: "og:url", content: url },
       { name: "twitter:card", content: image ? "summary_large_image" : "summary" },
     ];
-    if (image) {
+    if (image?.startsWith("https://")) {
       meta.push({ property: "og:image", content: image });
       meta.push({ name: "twitter:image", content: image });
     }
@@ -90,7 +90,7 @@ function NoticiaDetalhe() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("news")
-        .select("id,title,summary,content,cover_url,category,published_at")
+        .select("id,title,summary,content,cover_url,category,published_at,source_url,source_name")
         .eq("id", id)
         .eq("published", true)
         .eq("status", "approved")
@@ -147,6 +147,7 @@ function NoticiaDetalhe() {
               {data.content}
             </div>
           )}
+          {data.source_url?.startsWith("https://") && <p className="border-t border-border pt-4 text-sm text-muted-foreground">Fonte: <a href={data.source_url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{data.source_name || "Publicação original"}</a></p>}
         </article>
       )}
     </AppShell>

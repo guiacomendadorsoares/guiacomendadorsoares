@@ -38,7 +38,7 @@ export const approveContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => approveSchema.parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdminOrEditor(context, data.table !== "properties");
+    await assertAdminOrEditor(context, data.table !== "properties" && data.table !== "news");
     const { error } = await context.supabase
       .from(data.table)
       .update({
@@ -62,7 +62,7 @@ export const rejectContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => rejectSchema.parse(input))
   .handler(async ({ data, context }) => {
-    await assertAdminOrEditor(context, data.table !== "properties");
+    await assertAdminOrEditor(context, data.table !== "properties" && data.table !== "news");
     const { error } = await context.supabase
       .from(data.table)
       .update({
