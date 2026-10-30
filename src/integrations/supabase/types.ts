@@ -1025,6 +1025,9 @@ export type Database = {
           published_at: string
           rejection_reason: string | null
           slug: string | null
+          source_date: string | null
+          source_name: string | null
+          source_url: string | null
           status: Database["public"]["Enums"]["content_status"]
           submitted_by: string | null
           summary: string | null
@@ -1044,6 +1047,9 @@ export type Database = {
           published_at?: string
           rejection_reason?: string | null
           slug?: string | null
+          source_date?: string | null
+          source_name?: string | null
+          source_url?: string | null
           status?: Database["public"]["Enums"]["content_status"]
           submitted_by?: string | null
           summary?: string | null
@@ -1063,6 +1069,9 @@ export type Database = {
           published_at?: string
           rejection_reason?: string | null
           slug?: string | null
+          source_date?: string | null
+          source_name?: string | null
+          source_url?: string | null
           status?: Database["public"]["Enums"]["content_status"]
           submitted_by?: string | null
           summary?: string | null

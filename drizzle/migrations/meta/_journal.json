@@ -29,6 +29,13 @@
       "when": 1792452126836,
       "tag": "0003_enforce_property_admin_approval",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793393859092,
+      "tag": "0004_news_discovery_admin_publication",
+      "breakpoints": true
     }
   ]
 }
