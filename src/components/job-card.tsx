@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { MapPin, Clock, Banknote, Flame, ArrowUpRight, Briefcase } from "lucide-react";
 import type { Job } from "@/lib/jobs";
 import { GlassCard } from "@/components/cards";
@@ -76,20 +77,22 @@ export function JobCard({ job }: { job: Job }) {
 
         {/* Actions */}
         <div className="mt-4 flex gap-2.5">
-          <button
-            type="button"
+          <Link
+            to="/vagas/$id"
+            params={{ id: job.id }}
             className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-xl gradient-brand text-xs font-bold text-primary-foreground shadow-elegant transition-transform active:scale-[0.98]"
           >
             <Briefcase className="h-3.5 w-3.5" />
             Candidatar-se
-          </button>
-          <button
-            type="button"
+          </Link>
+          <Link
+            to="/vagas/$id"
+            params={{ id: job.id }}
             className="flex h-10 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-4 text-xs font-semibold text-foreground transition-colors active:bg-secondary"
           >
             Detalhes
             <ArrowUpRight className="h-3.5 w-3.5" />
-          </button>
+          </Link>
         </div>
       </div>
     </GlassCard>
