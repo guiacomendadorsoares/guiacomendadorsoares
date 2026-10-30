@@ -65,6 +65,15 @@ export const saveEditorialDraft = createServerFn({ method: "POST" })
     return { id: saved.id as string };
   });
 
+export const deleteEditorialNews = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth]).inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertNewsAdmin(context);
+    const { error } = await context.supabase.from("news").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 export const publishEditorialNews = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth]).inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
   .handler(async ({ data, context }) => {

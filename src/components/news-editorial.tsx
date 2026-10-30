@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Search, Plus, Pencil, Check, ExternalLink, Loader2, Save, Eye } from "lucide-react";
+import { Search, Plus, Pencil, Check, ExternalLink, Loader2, Save, Eye, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { SingleImageUploader } from "@/components/image-uploader";
 import { NEWS_FILTERS } from "@/lib/news";
 import { candidateToDraft, type EditorialDraft, type NewsCandidate } from "@/lib/news-editorial";
-import { searchLocalNews, listEditorialNews, saveEditorialDraft, publishEditorialNews } from "@/lib/news-editorial.functions";
+import { searchLocalNews, listEditorialNews, saveEditorialDraft, publishEditorialNews, deleteEditorialNews } from "@/lib/news-editorial.functions";
 
 export function NewsEditorial() {
   const search = useServerFn(searchLocalNews);
   const list = useServerFn(listEditorialNews);
   const save = useServerFn(saveEditorialDraft);
   const publish = useServerFn(publishEditorialNews);
+  const remove = useServerFn(deleteEditorialNews);
   const qc = useQueryClient();
   const [location, setLocation] = useState<"Comendador Soares" | "Nova Iguaçu">("Comendador Soares");
   const [period, setPeriod] = useState<"qdr:d" | "qdr:w" | "qdr:m" | "all">("qdr:w");
@@ -84,7 +85,13 @@ export function NewsEditorial() {
     </section>
     <Dialog open={!!draft} onOpenChange={open => { if (!open && !busy && !uploading) setDraft(null); }}><DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-2xl"><DialogHeader><DialogTitle>Redação · Guia Comendador Soares</DialogTitle></DialogHeader>
       {draft && <div className="space-y-4">
-        <Button variant="outline" size="sm" onClick={() => setPreview(!preview)}><Eye className="h-4 w-4" />{preview ? "Editar" : "Prévia"}</Button>
+        <div className="flex justify-between gap-2"><Button variant="outline" size="sm" onClick={() => setPreview(!preview)}><Eye className="h-4 w-4" />{preview ? "Editar" : "Prévia"}</Button>{draft.id && <Button variant="outline" size="sm" disabled={busy} onClick={async () => {
+          if (!draft.id || !window.confirm("Excluir esta notícia permanentemente?")) return;
+          setBusy(true);
+          try { await remove({ data: { id: draft.id } }); await qc.invalidateQueries(); setDraft(null); toast.success("Notícia excluída."); }
+          catch (e) { toast.error(e instanceof Error ? e.message : "Não foi possível excluir."); }
+          finally { setBusy(false); }
+        }}><Trash2 className="h-4 w-4 text-destructive" /> Excluir</Button>}</div>
         {preview ? <article className="space-y-4">{draft.cover_url && <img src={draft.cover_url} alt={draft.title} className="aspect-video w-full rounded-lg object-cover" />}<p className="text-xs font-semibold text-primary">Guia Comendador Soares</p><h2 className="font-display text-2xl font-bold">{draft.title}</h2><p className="text-muted-foreground">{draft.summary}</p><div className="whitespace-pre-wrap">{draft.content}</div>{draft.source_url && <a className="text-sm text-primary underline" href={draft.source_url} target="_blank" rel="noopener noreferrer">Fonte: {draft.source_name}</a>}</article> : <>
           <div className="space-y-1"><Label htmlFor="editor-title">Título</Label><Input id="editor-title" value={draft.title} maxLength={200} onChange={e => setDraft({ ...draft, title: e.target.value })} /></div>
           <div className="space-y-1"><Label htmlFor="editor-category">Categoria</Label><select id="editor-category" className={`${selectClass} w-full`} value={draft.category} onChange={e => setDraft({ ...draft, category: e.target.value as EditorialDraft["category"] })}>{NEWS_FILTERS.filter(f => f.value !== "todos").map(f => <option key={f.value} value={f.value}>{f.label}</option>)}</select></div>
