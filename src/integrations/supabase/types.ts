@@ -941,12 +941,15 @@ export type Database = {
           company: string
           created_at: string
           description: string | null
+          discovered: boolean
           expires_at: string | null
           id: string
           location: string
           posted_at: string
           rejection_reason: string | null
           salary: string | null
+          source_name: string | null
+          source_url: string | null
           status: Database["public"]["Enums"]["content_status"]
           submitted_by: string | null
           title: string
@@ -964,12 +967,15 @@ export type Database = {
           company: string
           created_at?: string
           description?: string | null
+          discovered?: boolean
           expires_at?: string | null
           id?: string
           location: string
           posted_at?: string
           rejection_reason?: string | null
           salary?: string | null
+          source_name?: string | null
+          source_url?: string | null
           status?: Database["public"]["Enums"]["content_status"]
           submitted_by?: string | null
           title: string
@@ -987,12 +993,15 @@ export type Database = {
           company?: string
           created_at?: string
           description?: string | null
+          discovered?: boolean
           expires_at?: string | null
           id?: string
           location?: string
           posted_at?: string
           rejection_reason?: string | null
           salary?: string | null
+          source_name?: string | null
+          source_url?: string | null
           status?: Database["public"]["Enums"]["content_status"]
           submitted_by?: string | null
           title?: string
