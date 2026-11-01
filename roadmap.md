@@ -8,3 +8,9 @@
 - [x] Preparar e salvar rascunhos no modelo do Guia com fonte original.
 - [x] Garantir revisão e publicação somente pelo administrador.
 - [x] Testar busca, rascunho e publicação.
+
+# Busca de empregos e estágios
+- [ ] Buscar vagas de Nova Iguaçu e bairros somente no painel do administrador.
+- [ ] Selecionar resultados, revisar dados e salvar rascunhos privados.
+- [ ] Publicar após aprovação na Home e em Vagas, preservando categorias.
+- [ ] Testar busca, publicação e bloqueio de acesso não administrativo.
