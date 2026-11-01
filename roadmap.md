@@ -10,7 +10,7 @@
 - [x] Testar busca, rascunho e publicação.
 
 # Busca de empregos e estágios
-- [ ] Buscar vagas de Nova Iguaçu e bairros somente no painel do administrador.
-- [ ] Selecionar resultados, revisar dados e salvar rascunhos privados.
-- [ ] Publicar após aprovação na Home e em Vagas, preservando categorias.
-- [ ] Testar busca, publicação e bloqueio de acesso não administrativo.
+- [x] Buscar vagas de Nova Iguaçu e bairros somente no painel do administrador.
+- [x] Selecionar resultados, revisar dados e salvar rascunhos privados.
+- [x] Publicar após aprovação na Home e em Vagas, preservando categorias.
+- [x] Testar busca, publicação e bloqueio de acesso não administrativo.
