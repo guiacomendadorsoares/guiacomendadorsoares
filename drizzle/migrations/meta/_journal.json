@@ -36,6 +36,13 @@
       "when": 1793393859092,
       "tag": "0004_news_discovery_admin_publication",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793546870598,
+      "tag": "0005_jobs_discovery_private_review",
+      "breakpoints": true
     }
   ]
 }
