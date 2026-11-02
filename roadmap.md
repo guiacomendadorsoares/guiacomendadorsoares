@@ -14,3 +14,8 @@
 - [x] Selecionar resultados, revisar dados e salvar rascunhos privados.
 - [x] Publicar após aprovação na Home e em Vagas, preservando categorias.
 - [x] Testar busca, publicação e bloqueio de acesso não administrativo.
+
+# Validação do sitemap
+- [x] Corrigir o endereço informado em robots.txt, preservando as restrições existentes.
+- [x] Validar paginação, erros de consulta e datas do mapa público existente.
+- [x] Executar testes e conferir o XML indicado aos buscadores.

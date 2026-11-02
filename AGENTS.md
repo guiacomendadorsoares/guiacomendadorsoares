@@ -4,3 +4,4 @@
 - News discovery uses authenticated administrator-only server functions and Firecrawl; candidates become unpublished drafts, and explicit publication is enforced at the database boundary to keep search results private until reviewed.
 - Job discovery uses authenticated administrator-only Firecrawl search and the existing jobs table; a database trigger keeps selected results as private drafts until explicit approval, preserving the existing manual submission flow.
 - Job discovery applies its source restriction in both the search query and server-side URL validation, so provider results cannot bypass the configured source allowlist.
+- The existing sitemap endpoint uses paginated public-credential reads and returns an uncached failure on query errors rather than partial XML; robots.txt must reference its actual router-generated path, and lastmod uses only content-specific updated_at values.
