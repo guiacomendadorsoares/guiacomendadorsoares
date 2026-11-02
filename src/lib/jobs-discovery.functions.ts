@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { canPublishJob, jobDraftSchema, type JobCandidate } from "./jobs-discovery";
+import { buildJobSearchQuery, isRioVagasSource, canPublishJob, jobDraftSchema, type JobCandidate } from "./jobs-discovery";
 
 async function assertAdmin(context: { supabase: any; userId: string }) {
   const {data,error} = await context.supabase.rpc("has_role",{_user_id:context.userId,_role:"admin"});
@@ -16,7 +16,7 @@ export const searchLocalJobs = createServerFn({method:"POST"}).middleware([requi
     const kinds={todos:"(emprego OR estágio OR vagas)",emprego:"vagas emprego",estagio:"vagas estágio","jovem-aprendiz":"vagas jovem aprendiz",freelancer:"vagas freelancer"};
     const response=await fetch("https://connector-gateway.lovable.dev/firecrawl/v2/search",{
       method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${lovableKey}`,"X-Connection-Api-Key":key},
-      body:JSON.stringify({query:`"Nova Iguaçu" ${data.neighborhood ? `"${data.neighborhood}"` : ""} ${kinds[data.type]} ${data.terms}`,limit:10,sources:[{type:"web"}],location:"Nova Iguaçu, Rio de Janeiro, Brazil",...(data.period==="all"?{}:{tbs:data.period})}),
+      body:JSON.stringify({query:buildJobSearchQuery(data.neighborhood,kinds[data.type],data.terms),limit:10,sources:[{type:"web"}],location:"Nova Iguaçu, Rio de Janeiro, Brazil",...(data.period==="all"?{}:{tbs:data.period})}),
       signal:AbortSignal.timeout(45000),
     });
     if(!response.ok){const body=await response.text();console.error(`Job search failed [${response.status}]: ${body}`);return {results:[] as JobCandidate[],error:`Busca indisponível (${response.status}): ${body}`,creditsUsed:0};}
@@ -24,7 +24,7 @@ export const searchLocalJobs = createServerFn({method:"POST"}).middleware([requi
     if(!result.success)return {results:[] as JobCandidate[],error:result.error||"Não foi possível buscar vagas.",creditsUsed:0};
     const results:JobCandidate[]=[], seen=new Set<string>();
     for(const row of (Array.isArray(result.data)?result.data:result.data?.web??[])){
-      if(!row.url?.startsWith("https://") || !row.title)continue;
+      if(!row.url || !isRioVagasSource(row.url) || !row.title)continue;
       try{const url=new URL(row.url);url.hash="";for(const param of [...url.searchParams.keys()]) if(param.startsWith("utm_"))url.searchParams.delete(param);const canonical=url.toString();if(seen.has(canonical))continue;seen.add(canonical);results.push({title:row.title,url:canonical,snippet:row.description??row.snippet??"",source:url.hostname.replace(/^www\./,"")});}catch{/* Ignore invalid source URLs. */}
     }
     return {results,error:null,creditsUsed:result.creditsUsed??0};

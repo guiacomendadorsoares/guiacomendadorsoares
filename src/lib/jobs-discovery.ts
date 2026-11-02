@@ -12,6 +12,16 @@ export const jobDraftSchema = z.object({
 });
 export type JobDraft = z.infer<typeof jobDraftSchema>;
 export type JobCandidate = { title: string; url: string; snippet: string; source: string };
+export function isRioVagasSource(value: string) {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && !url.username && !url.password &&
+      (url.hostname === "riovagas.com.br" || url.hostname === "www.riovagas.com.br");
+  } catch { return false; }
+}
+export function buildJobSearchQuery(neighborhood: string, kind: string, terms: string) {
+  return `site:riovagas.com.br "Nova Iguaçu" ${neighborhood ? `"${neighborhood}"` : ""} ${kind} ${terms}`;
+}
 export function canManageJobDiscovery(roles: string[]) { return roles.includes("admin"); }
 export function canPublishJob(draft: JobDraft, now = Date.now()) {
   return !!(draft.title.trim() && draft.company.trim() && draft.location.trim() && draft.description.trim() && (draft.apply_url || draft.whatsapp.trim()) && (!draft.expires_at || Date.parse(draft.expires_at) > now));
