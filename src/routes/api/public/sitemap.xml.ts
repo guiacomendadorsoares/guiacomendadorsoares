@@ -3,6 +3,7 @@ import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import { ACTIVE_CATEGORIES } from "@/lib/guia-taxonomy";
+import { readAllSitemapRows } from "@/lib/sitemap-pagination";
 
 const BASE_URL = "https://comendadorsoares.com.br";
 
@@ -57,7 +58,8 @@ export const Route = createFileRoute("/api/public/sitemap/xml")({
         try {
           const url = process.env.SUPABASE_URL;
           const key = process.env.SUPABASE_PUBLISHABLE_KEY;
-          if (url && key) {
+          if (!url || !key) throw new Error("Sitemap public database configuration unavailable");
+          {
             const supabase = createClient<Database>(url, key, {
               auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
               global: {
@@ -73,28 +75,28 @@ export const Route = createFileRoute("/api/public/sitemap/xml")({
             });
 
             const [biz, props, jobs, evts, news, curi] = await Promise.all([
-              supabase.from("businesses").select("id, updated_at").eq("status", "approved"),
-              supabase
+              readAllSitemapRows((from, to) => supabase.from("businesses").select("id, updated_at").eq("status", "approved").order("id").range(from, to)),
+              readAllSitemapRows((from, to) => supabase
                 .from("properties")
                 .select("id, updated_at")
                 .eq("status", "approved")
-                .eq("active", true),
-              supabase
+                .eq("active", true).order("id").range(from, to)),
+              readAllSitemapRows((from, to) => supabase
                 .from("jobs")
                 .select("id, updated_at")
                 .eq("status", "approved")
-                .eq("active", true),
-              supabase
+                .eq("active", true).order("id").range(from, to)),
+              readAllSitemapRows((from, to) => supabase
                 .from("events")
                 .select("id, updated_at")
                 .eq("status", "approved")
-                .eq("active", true),
-              supabase
+                .eq("active", true).order("id").range(from, to)),
+              readAllSitemapRows((from, to) => supabase
                 .from("news")
                 .select("id, updated_at")
                 .eq("status", "approved")
-                .eq("published", true),
-              supabase.from("curiosities").select("id, updated_at").eq("status", "approved"),
+                .eq("published", true).order("id").range(from, to)),
+              readAllSitemapRows((from, to) => supabase.from("curiosities").select("id, updated_at").eq("status", "approved").order("id").range(from, to)),
             ]);
 
             const push = (
@@ -112,16 +114,19 @@ export const Route = createFileRoute("/api/public/sitemap/xml")({
                 });
               }
             };
-            push(biz.data as any, "/empresa", "0.7", "weekly");
-            push(props.data as any, "/imoveis", "0.6", "weekly");
-            push(jobs.data as any, "/vagas", "0.7", "daily");
-            push(evts.data as any, "/eventos", "0.7", "weekly");
-            push(news.data as any, "/noticias", "0.7", "weekly");
-            push(curi.data as any, "/curiosidades", "0.5", "monthly");
+            push(biz, "/empresa", "0.7", "weekly");
+            push(props, "/imoveis", "0.6", "weekly");
+            push(jobs, "/vagas", "0.7", "daily");
+            push(evts, "/eventos", "0.7", "weekly");
+            push(news, "/noticias", "0.7", "weekly");
+            push(curi, "/curiosidades", "0.5", "monthly");
           }
         } catch (err) {
-          // If the dynamic fetch fails, still return the static sitemap
           console.error("sitemap dynamic fetch failed", err);
+          return new Response("Mapa do site temporariamente indisponível.", {
+            status: 503,
+            headers: { "Cache-Control": "no-store", "Retry-After": "300" },
+          });
         }
 
         const all = [...staticEntries, ...categoryEntries, ...dynamicEntries];
