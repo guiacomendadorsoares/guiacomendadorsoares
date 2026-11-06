@@ -939,6 +939,7 @@ export type Database = {
           approved_by: string | null
           business_id: string | null
           company: string
+          cover_url: string | null
           created_at: string
           description: string | null
           discovered: boolean
@@ -965,6 +966,7 @@ export type Database = {
           approved_by?: string | null
           business_id?: string | null
           company: string
+          cover_url?: string | null
           created_at?: string
           description?: string | null
           discovered?: boolean
@@ -991,6 +993,7 @@ export type Database = {
           approved_by?: string | null
           business_id?: string | null
           company?: string
+          cover_url?: string | null
           created_at?: string
           description?: string | null
           discovered?: boolean

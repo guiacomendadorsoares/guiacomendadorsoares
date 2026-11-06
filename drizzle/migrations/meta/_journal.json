@@ -43,6 +43,13 @@
       "when": 1793546870598,
       "tag": "0005_jobs_discovery_private_review",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793993686725,
+      "tag": "0006_add_job_cover_image",
+      "breakpoints": true
     }
   ]
 }
