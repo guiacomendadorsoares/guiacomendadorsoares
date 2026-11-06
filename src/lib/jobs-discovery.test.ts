@@ -1,7 +1,13 @@
 import { describe, test } from "node:test";
 import { strict as assert } from "node:assert";
-import { buildJobSearchQuery, isRioVagasSource, canManageJobDiscovery, canPublishJob, candidateToJobDraft, emptyJobDraft } from "./jobs-discovery";
+import { jobDraftSchema, buildJobSearchQuery, isRioVagasSource, canManageJobDiscovery, canPublishJob, candidateToJobDraft, emptyJobDraft } from "./jobs-discovery";
 describe("job discovery rules", () => {
+  test("a job can preserve its optional image without requiring one", () => {
+    const draft = {...emptyJobDraft(), title: "Atendente"};
+    assert.equal(jobDraftSchema.parse(draft).cover_url, null);
+    assert.equal(jobDraftSchema.parse({...draft, cover_url: "https://example.org/vaga.jpg"}).cover_url, "https://example.org/vaga.jpg");
+    assert.equal(jobDraftSchema.safeParse({...draft, cover_url: "javascript:alert(1)"}).success, false);
+  });
   test("search is restricted to RioVagas and rejects other sources", () => {
     assert.equal(buildJobSearchQuery("Comendador Soares", "vagas estágio", "administração"), 'site:riovagas.com.br "Nova Iguaçu" "Comendador Soares" vagas estágio administração');
     assert.equal(isRioVagasSource("https://riovagas.com.br/riovagas/vaga/"), true);

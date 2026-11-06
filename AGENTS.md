@@ -1,4 +1,5 @@
 # Project architecture
+- Job images use the shared image uploader and an optional jobs cover URL, so editorial saves and Home cards share the same persisted image.
 - Property publication is enforced by a dedicated database trigger and administrator-only approval actions; browser defaults cannot authorize publication.
 - The Home property feed reads only active, approved properties without consulting private owner profiles or subscription entitlements, so public visibility is independent of advertiser plans.
 - News discovery uses authenticated administrator-only server functions and Firecrawl; candidates become unpublished drafts, and explicit publication is enforced at the database boundary to keep search results private until reviewed.
