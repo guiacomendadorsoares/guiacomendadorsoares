@@ -31,7 +31,7 @@ export const searchLocalJobs = createServerFn({method:"POST"}).middleware([requi
   });
 export const listDiscoveredJobs=createServerFn({method:"POST"}).middleware([requireSupabaseAuth]).handler(async({context})=>{
   await assertAdmin(context);
-  const {data,error}=await context.supabase.from("jobs").select("id,title,company,location,type,description,salary,apply_url,whatsapp,source_url,source_name,expires_at,urgent,active,status,discovered").order("created_at",{ascending:false}).limit(200);
+  const {data,error}=await context.supabase.from("jobs").select("id,title,company,location,type,description,salary,apply_url,whatsapp,cover_url,source_url,source_name,expires_at,urgent,active,status,discovered").order("created_at",{ascending:false}).limit(200);
   if(error)throw new Error(error.message);return data??[];
 });
 export const saveJobDraft=createServerFn({method:"POST"}).middleware([requireSupabaseAuth]).inputValidator((input:unknown)=>jobDraftSchema.parse(input)).handler(async({data,context})=>{

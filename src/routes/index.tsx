@@ -389,7 +389,7 @@ function useApprovedItems(
         table === "businesses"
           ? "id,name,address,logo_url,banner_url,featured"
           : table === "jobs"
-            ? "id,title,company,urgent"
+            ? "id,title,company,urgent,cover_url"
             : table === "news"
               ? "id,title,summary,cover_url"
               : table === "properties"

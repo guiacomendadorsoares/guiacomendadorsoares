@@ -150,6 +150,7 @@ export const SCHEMAS: Record<ContentTable, TableSchema> = {
       { key: "location", label: "Local *", type: "text", required: true, max: 160, half: true },
       { key: "salary", label: "Salário", type: "text", max: 60, half: true },
       { key: "description", label: "Descrição", type: "textarea", max: 4000 },
+      { key: "cover_url", label: "Imagem da vaga", type: "image", folder: "jobs/cover", aspect: "wide" },
       { key: "apply_url", label: "Link para candidatura", type: "url", max: 500, half: true },
       { key: "whatsapp", label: "WhatsApp", type: "text", max: 40, half: true },
       { key: "urgent", label: "Urgente", type: "boolean" },

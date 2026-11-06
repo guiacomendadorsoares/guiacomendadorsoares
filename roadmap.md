@@ -1,3 +1,7 @@
+# Imagem da vaga
+- [x] Adicionar foto opcional ao cadastro e edição de vagas, exibindo-a no card da Home.
+- [x] Verificar envio, publicação e leitura da imagem.
+
 # Correção da publicação de imóveis
 - [x] Exibir imóveis aprovados e ativos na Home sem filtro de assinatura.
 - [x] Garantir publicação direta só para administradores e aprovação dos demais cadastros.
